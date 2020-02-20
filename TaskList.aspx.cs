@@ -368,14 +368,9 @@ public partial class TaskList : System.Web.UI.Page
             int min = now.Minute;
             int sec = now.Second;
             DateTime final = Format.AddHours(hours).AddMinutes(min).AddSeconds(sec);
-            
-          
+      
             try
             {
-
-               
-
-
                 sqlobj.ExecuteNonQuery("Proc_NewTasks",
                    new SqlParameter() { ParameterName = "@i", SqlDbType = SqlDbType.Int, Value = 1 },
                    new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Int, Value = cmbResident.SelectedValue },
