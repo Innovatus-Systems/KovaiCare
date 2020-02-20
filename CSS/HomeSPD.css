@@ -1,0 +1,141 @@
+﻿body {
+    margin: auto;
+    font-family: Calibri;
+    width: 100%;
+}
+
+/*body {
+    font-family: Arial;
+    background-color: #FFFFFF;
+    width: auto;
+    font-style: normal;
+    font-family: Calibri;
+    font-size: 12px;
+    font-weight: 900;
+    margin: 0 auto 0 auto;
+}*/
+
+/*.foot {
+    height: 30px;
+    width: 100%;
+    background-color: #E76532;
+    padding: 10px 5px 5px 15px;
+}*/
+
+.HD1 {
+    background-color: #7049BA;
+    min-height: 10px;
+    padding: 5px 20px;
+    color: White;
+    width: 100%;
+    margin: 0 auto auto auto;
+}
+
+.Footer {
+    background-color: #7049BA;
+    min-height: 10px;
+    font-size: 12px;
+    padding: 5px 20px;
+    color: White;
+    margin: 10px auto auto auto;
+    
+}
+
+.main_cnt {
+    width: 92%;
+    height: auto;
+    padding: 5px 2px 5px 2px;
+    background-color: #9c80cf;
+    margin: 0 auto 0 auto;
+    -webkit-box-shadow: 3px 5px 11px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow: 3px 5px 11px 0px rgba(50, 50, 50, 0.75);
+    box-shadow: 3px 5px 11px 0px rgba(50, 50, 50, 0.75);
+}
+
+.first_cnt {
+    width: 99%;
+    height: auto;
+    /*min-height: 480px;*/
+    margin: 5px 5px 5px auto;
+    padding: 5px 2px 5px 4px;
+    background-color: #F7F7F7;
+    border-radius: 5px;
+}
+
+.smallSection {
+    width: 99%;
+    height: auto;
+    margin: 5px auto 10px auto;
+    padding: 5px 15px 5px 15px;
+    background-color: #F0F0F0;
+    border-radius: 5px;
+}
+
+.pswmain_cnt {
+    width: 75%;
+    height: auto;
+    padding: 0 auto;
+    background-color: #FFFFFF;
+    margin: 5px auto 0 auto;
+}
+
+.pswfirst_cnt {
+    width: 75%;
+    height: auto;
+    min-height: 150px;
+    margin: 0px auto 5px Auto;
+    padding: 5px 10px 0px 10px;
+    background-color: #F7F7F7;
+    border: 2px solid #7049BA;
+    border-radius: 5px;
+}
+
+.thirdSection {
+    width: 99%;
+    height: auto;
+    margin: 5px auto 10px auto;
+    padding: 5px 15px 5px 15px;
+    background-color: #F0F0F0;
+    border-radius: 5px;
+}
+
+.login_IMG {
+}
+
+.txtboxx {
+    text-align: right;
+    text-align-last: right;
+}
+
+.page_title {
+    float: right;
+    margin-right: 200px;
+    margin-top: -50px;
+}
+
+#DropMenu {
+    width: 50%;
+    height: auto;
+    background-color: white;
+    float: none;
+}
+
+.ButtonRC
+       {
+       	background-color:#38ACEC;
+       	width:60px;
+        height:27px;
+       	padding:5px;
+       	color:white;
+       	cursor:pointer;
+       	text-align:center;
+       	 -moz-border-radius: 5px;
+       	 -webkit-border-radius: 5px;
+         -khtml-border-radius: 5px;
+          behavior: url(/border-radius.htc);  border-radius: 5px; }
+
+
+
+
+
+

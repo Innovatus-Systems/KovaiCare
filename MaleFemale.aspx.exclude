@@ -1,0 +1,69 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/CovaiSoft.master" AutoEventWireup="true" CodeFile="MaleFemale.aspx.cs" Inherits="MaleFemale" %>
+
+<%@ Register Assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
+
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+
+    <link href="Css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="Css/sb-admin.css" rel="stylesheet" type="text/css" />
+    <link href="CSS/CovaiSoft.css" rel="stylesheet" />
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+
+    <div class="main_cnt">
+
+        <div class="first_cnt">
+
+            <table style="border-color: blueviolet;">
+                <tr>
+                    <td>
+                        <b>Select Chart Type:</b>
+                    </td>
+                    <td>
+                        <asp:DropDownList ID="ddlChart" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlChart_SelectedIndexChanged" >
+                           
+
+                        </asp:DropDownList>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <asp:Chart ID="Chart1" runat="server">
+                            <%-- <Titles>
+                    <asp:Title "Male & Female Ratio">
+
+                    </asp:Title> </Titles>--%>
+                            <Series>
+                                <asp:Series Name="Series1" ChartArea="ChartArea1" YValuesPerPoint="2">
+                                    <%--<Points>
+                                        <asp:DataPoint AxisLabel="Male" YValues="46,0" />
+                                        <asp:DataPoint AxisLabel="Female" YValues="64,0" />
+                                    </Points>--%>
+                                </asp:Series>
+
+                            </Series>
+                            <ChartAreas>
+                                <asp:ChartArea Name="ChartArea1">
+                                    <AxisX Title="Gender"></AxisX>
+                                    <AxisY Title="Percentage"></AxisY>
+
+
+                                </asp:ChartArea>
+
+                            </ChartAreas>
+
+                        </asp:Chart>
+                    </td>
+                </tr>
+                
+
+            </table>
+
+
+
+        </div>
+    </div>
+</asp:Content>
+

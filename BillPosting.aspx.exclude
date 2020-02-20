@@ -1,0 +1,290 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/CovaiSoft.master" AutoEventWireup="true" CodeFile="BillPosting.aspx.cs" Inherits="BillPosting" %>
+
+<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+    <link href="Css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="Css/sb-admin.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" language="javascript">
+        $(window).scroll(function () {
+            if ($(window).scrollTop() >= 300) {
+                $('nav').addClass('fixed-header');
+            }
+            else {
+                $('nav').removeClass('fixed-header');
+            }
+        });
+
+
+        function ConfirmMsg() {
+
+            var result = confirm('Are you sure, you want to save?');
+
+            if (result) {
+
+                document.getElementById('<%=HResult.ClientID%>').value = "true";
+            }
+            else {
+                document.getElementById('<%=HResult.ClientID%>').value = "false";
+            }
+
+        }
+
+    </script>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <div class="main_cnt">
+        <div class="first_cnt">
+            <table>
+                <tr>
+                    <td style="width: 1200px; height: 40px; vertical-align: top; background-color: lightgray;">
+                        <table>
+                            <tr>
+                                <td style="width: 10px;"></td>
+                                <td style="width: 600px;" align="left">
+                                    <asp:Label ID="Label56" runat="Server" Text="Level D  - " ForeColor="#7049BA" Font-Names="Calibri" Font-Bold="true"
+                                        Font-Size="Large"></asp:Label>
+                                    <asp:Label ID="lblSelGInfrm" runat="server" CssClass="Font_lbl" Visible="true" Font-Bold="False"
+                                        ForeColor="Blue"></asp:Label>
+                                    <asp:Label ID="Label58" runat="server" CssClass="Font_lbl" Text=" " Width="50px"
+                                        ForeColor="BlueViolet"></asp:Label>
+
+                                    <asp:HiddenField ID="HResult" runat="server" />
+
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+
+
+                    <td style="width: 1200px; height: 200px; vertical-align: top; background-color: lightgray;">
+                        <table>
+
+                            <tr>
+                                <td>
+                                    <asp:Label ID="lblBCode" runat="Server" Text="Billing Code" ForeColor=" Black " Font-Names="Calibri" Font-Size="Small"></asp:Label>
+                                    <asp:Label ID="Label14" runat="Server" Text="*" Width="5px" ForeColor="Red" Font-Names="Calibri" Font-Size="Small"></asp:Label>
+                                </td>
+                                <td>
+
+                                    <asp:DropDownList ID="ddlBCode" Width="200px" ToolTip="*Select the Billing Code." Height="25px" runat="server"
+                                        Font-Names="Calibri" AutoPostBack="true" OnSelectedIndexChanged="ddlBCode_SelectedIndexChanged"  Font-Size="Small">
+                                    </asp:DropDownList>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <asp:Label ID="LblBillingDate" runat="Server" Text="Billing Date" ForeColor=" Black " Font-Names="Calibri" Font-Size="Small"></asp:Label>
+                                    <asp:Label ID="Label2" runat="Server" Text="*" Width="5px" ForeColor="Red" Font-Names="Calibri" Font-Size="Small"></asp:Label>
+                                </td>
+                                <td>
+                                    <telerik:RadDatePicker ID="BillingDate" runat="server" Font-Names="Calibri" Font-Size="Small" ToolTip="Pick the Billing Date."
+                                        Culture="English (United Kingdom)" Skin="Default" EnableTyping="False" DateInput-CausesValidation="true">
+                                        <DatePopupButton></DatePopupButton>
+                                        <DateInput ID="DateInput1" DateFormat="dd-MMM-yy ddd" runat="server" Font-Names="Calibri" Font-Size="Small" ReadOnly="True">
+                                        </DateInput>
+                                        <Calendar ID="Calendar1" UseRowHeadersAsSelectors="False" UseColumnHeadersAsSelectors="False" ViewSelectorText="x" runat="server">
+                                            <SpecialDays>
+                                                <telerik:RadCalendarDay Repeatable="Today">
+                                                    <ItemStyle BackColor="bisque" />
+                                                </telerik:RadCalendarDay>
+                                            </SpecialDays>
+                                        </Calendar>
+                                    </telerik:RadDatePicker>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <asp:Label ID="LblRate" runat="Server" Text="Rate" ForeColor=" Black " Font-Names="Calibri" Font-Size="Small"></asp:Label>
+                                    <asp:Label ID="Label3" runat="Server" Text="*" Width="5px" ForeColor="Red" Font-Names="Calibri" Font-Size="Small"></asp:Label>
+                                </td>
+                                <td>
+
+                                    <asp:DropDownList ID="ddlRate" Width="200px" ToolTip="*Select the Rate." Height="25px" runat="server"
+                                        Font-Names="Calibri" AutoPostBack="true" OnSelectedIndexChanged="ddlRate_SelectedIndexChanged" Font-Size="Small">
+                                    </asp:DropDownList>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <asp:Label ID="LblMPD" runat="Server" Text="Max Per Day" ForeColor=" Black " Font-Names="Calibri" Font-Size="Small"></asp:Label>
+                                    <asp:Label ID="Label4" runat="Server" Text="*" Width="5px" ForeColor="Red" Font-Names="Calibri" Font-Size="Small"></asp:Label>
+                                </td>
+                                <td>
+
+                                    <asp:DropDownList ID="ddlMPD" Width="200px" ToolTip="*Select the Maximum per day." Height="25px" runat="server"
+                                        Font-Names="Calibri" Font-Size="Small">
+                                    </asp:DropDownList>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    
+                                   <asp:Label ID="LblCount" runat="Server" Text="Count" ForeColor=" Black " Font-Names="Calibri" Font-Size="Small"></asp:Label>
+                                    <asp:Label ID="Label1" runat="Server" Text="*" Width="5px" ForeColor="Red" Font-Names="Calibri" Font-Size="Small"></asp:Label>
+                                </td>
+                                <td>
+                        <asp:TextBox ID="TxtCount" runat="Server" MaxLength="2" ToolTip="Enter the Count. " Width="100px" Height="25px" ForeColor=" DarkBlue" Font-Names="Calibri" Font-Size="Small"></asp:TextBox>
+                    </td>
+                                 <td>
+                        <asp:TextBox ID="TxtAmnt" runat="Server" MaxLength="10" Visible="false"  Width="150px" Height="25px" ForeColor=" DarkBlue" Font-Names="Calibri" Font-Size="Small"></asp:TextBox>
+                    </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <asp:Label ID="LblHelp" runat="Server" Text="Help" ForeColor=" Black " Font-Names="Calibri" Font-Size="Small"></asp:Label>
+                                </td>
+                                <td style="width: 300px">
+                        <asp:TextBox ID="TxtHelp" runat="Server" MaxLength="200" ToolTip="Enter the help text. " Width="300px" Height="50px" ForeColor=" DarkBlue" Font-Names="Calibri" Font-Size="Small"></asp:TextBox>
+                    </td>
+                                <td>
+                        <asp:Button ID="btnSave" runat="server" Text="View" ToolTip="Click here to View Billing Details." OnClick="btnSave_Click" ></asp:Button>
+                    </td>
+                            </tr>
+
+                           
+                            
+                        </table>
+                                            </td>                   
+                </tr>
+                  <tr>
+                    <td style="width: 1200px; height: 185px; vertical-align: top; background-color: lightgray;">
+                 <telerik:RadGrid ID="BillingListView" runat="server" AllowPaging="False" PageSize="10"
+                    AutoGenerateColumns="False" Skin="WebBlue" AllowSorting="True" AllowFilteringByColumn="False"
+                     OnPageIndexChanged="BillingListView_PageIndexChanged"
+                    OnPageSizeChanged="BillingListView_PageSizeChanged" OnSortCommand="BillingListView_SortCommand"
+                    CellSpacing="20" Width="80%"  
+                    MasterTableView-HierarchyDefaultExpanded="true">
+                    <HeaderContextMenu CssClass="table table-bordered table-hover">
+                    </HeaderContextMenu>
+                    <PagerStyle AlwaysVisible="true" Mode="NextPrevAndNumeric" />
+                    <MasterTableView AllowCustomPaging="false">
+                        <NoRecordsTemplate>
+                            No Records Found.
+                        </NoRecordsTemplate>
+                        <CommandItemSettings ExportToPdfText="Export to PDF"></CommandItemSettings>
+                        <RowIndicatorColumn>
+                            <HeaderStyle Width="10px"></HeaderStyle>
+                        </RowIndicatorColumn>                        
+                        <ExpandCollapseColumn>
+                            <HeaderStyle Width="10px"></HeaderStyle>
+                        </ExpandCollapseColumn>
+                        <Columns>                             
+                            <telerik:GridBoundColumn HeaderText="RTRSN" DataField="RTRSN" HeaderStyle-Wrap="false" Visible="false"
+                                ItemStyle-Wrap="false" AllowFiltering="true" ItemStyle-HorizontalAlign="Left" ItemStyle-Width="300px"
+                                ItemStyle-CssClass="Row1">
+                                <HeaderStyle Wrap="False"></HeaderStyle>
+                                <ItemStyle Wrap="False"></ItemStyle>
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn HeaderText="Villa No" DataField="RTVILLANO" HeaderStyle-Wrap="false"  
+                                ItemStyle-Wrap="false" AllowFiltering="true" Visible="false" ItemStyle-HorizontalAlign="Left" ItemStyle-Width="100px"
+                                ItemStyle-CssClass="Row1">
+                                <HeaderStyle Wrap="False"></HeaderStyle>
+                                <ItemStyle Wrap="False"></ItemStyle>
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn HeaderText="Status" DataField="RTRSTATUS" HeaderStyle-Wrap="false" ItemStyle-Width="100px"
+                                ItemStyle-Wrap="false" AllowFiltering="true" ItemStyle-HorizontalAlign="Left" Visible="False"
+                                ItemStyle-CssClass="Row1" >
+                                <HeaderStyle Wrap="False"></HeaderStyle>
+                                <ItemStyle Wrap="False"></ItemStyle>
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn HeaderText="Name" DataField="RTName" HeaderStyle-Wrap="false" Visible="False"
+                                ItemStyle-Wrap="false" AllowFiltering="true" ItemStyle-HorizontalAlign="Left" ItemStyle-Width="200px"
+                                ItemStyle-CssClass="Row1">
+                                <HeaderStyle Wrap="False"></HeaderStyle>
+                                <ItemStyle Wrap="False"></ItemStyle>
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn HeaderText="Date" DataField="Date" HeaderStyle-Wrap="false" 
+                                ItemStyle-Wrap="false" AllowFiltering="true" Visible="True" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="75px"
+                                ItemStyle-CssClass="Row1">
+                                <HeaderStyle Wrap="False"></HeaderStyle>
+                                <ItemStyle Wrap="False"></ItemStyle>
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn HeaderText="BillingCode" DataField="BCode" HeaderStyle-Wrap="false" ItemStyle-Width="75px"
+                                ItemStyle-Wrap="false" AllowFiltering="true" ItemStyle-HorizontalAlign="Left" Visible="True"
+                                ItemStyle-CssClass="Row1" >
+                                <HeaderStyle Wrap="False"></HeaderStyle>
+                                <ItemStyle Wrap="False"></ItemStyle>
+                            </telerik:GridBoundColumn>
+                             <telerik:GridBoundColumn HeaderText="Rate" DataField="BRate" HeaderStyle-Wrap="false" 
+                                ItemStyle-Wrap="false" AllowFiltering="true" Visible="True" ItemStyle-HorizontalAlign="Right" ItemStyle-Width="50px"
+                                ItemStyle-CssClass="Row1">
+                                <HeaderStyle Wrap="False"></HeaderStyle>
+                                <ItemStyle Wrap="False"></ItemStyle>
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn HeaderText="Count" DataField="BCount" HeaderStyle-Wrap="false" ItemStyle-Width="50px"
+                                ItemStyle-Wrap="false" AllowFiltering="true" ItemStyle-HorizontalAlign="Center" Visible="True"
+                                ItemStyle-CssClass="Row1" >
+                                <HeaderStyle Wrap="False"></HeaderStyle>
+                                <ItemStyle Wrap="False"></ItemStyle>
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn HeaderText="Amount" DataField="BAmount" HeaderStyle-Wrap="false" ItemStyle-Width="50px"
+                                ItemStyle-Wrap="false" AllowFiltering="true" ItemStyle-HorizontalAlign="Right" Visible="True"
+                                ItemStyle-CssClass="Row1" >
+                                <HeaderStyle Wrap="False"></HeaderStyle>
+                                <ItemStyle Wrap="False"></ItemStyle>
+                            </telerik:GridBoundColumn>
+                             <telerik:GridBoundColumn HeaderText="Narration" DataField="BNarration" HeaderStyle-Wrap="false" ItemStyle-Width="100px"
+                                ItemStyle-Wrap="false" AllowFiltering="true" ItemStyle-HorizontalAlign="Left" Visible="True"
+                                ItemStyle-CssClass="Row1" >
+                                <HeaderStyle Wrap="False"></HeaderStyle>
+                                <ItemStyle Wrap="False"></ItemStyle>
+                            </telerik:GridBoundColumn>
+                             <telerik:GridTemplateColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5px">                                            
+                                            <ItemTemplate>
+                                                <asp:CheckBox ID="ChkConfirm" ToolTip="Tick here for confirm billing." runat="server"></asp:CheckBox>
+                                            </ItemTemplate>
+                                        </telerik:GridTemplateColumn>
+                             <telerik:GridTemplateColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5px"
+                                            HeaderText="" HeaderStyle-Font-Names="Calibri" AllowFiltering="false" UniqueName="Viewresident" SortExpression="View">
+                                            <ItemTemplate>
+                                                <asp:LinkButton ID="LnkbtnDelete" runat="server" ToolTip="Click here to delete record." Text="Delete" Font-Bold="true" Font-Size="XX-Small" ForeColor="Blue" OnClick="LnkbtnDelete_Click">Delete</asp:LinkButton>
+                                            </ItemTemplate>
+                                        </telerik:GridTemplateColumn>
+                        </Columns>
+                        <EditFormSettings>
+                            <EditColumn FilterControlAltText="Filter EditCommandColumn column">
+                            </EditColumn>
+                        </EditFormSettings>
+                        <PagerStyle AlwaysVisible="True"></PagerStyle>
+                    </MasterTableView>
+                    <ClientSettings>                       
+                        <Selecting AllowRowSelect="True" />
+                    </ClientSettings>
+                    <FilterMenu Skin="WebBlue" EnableTheming="True">
+                        <CollapseAnimation Type="OutQuint" Duration="200"></CollapseAnimation>
+                    </FilterMenu>
+                </telerik:RadGrid>
+                        
+                        <asp:Button ID="BtnnSave" runat="server"  ToolTip="Click here to Save Billing Details." Text="Save" ForeColor="White" BackColor="Blue" width="75px" Height="25px" OnClick="BtnnSave_Click" OnClientClick="ConfirmMsg()"></asp:Button>
+                   
+            </td>
+                      </tr>
+                     
+                                     <%-- </tr>
+                 <tr style="width: 1200px; height: 30px; vertical-align: top; background-color: lightgray;">
+                   
+                </tr>--%>
+
+               
+               
+
+
+            </table>
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+</asp:Content>
+

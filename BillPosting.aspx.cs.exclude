@@ -1,0 +1,334 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+using System.Globalization;
+using System.Drawing;
+using Telerik.Web.UI;
+using System.IO;
+
+public partial class BillPosting : System.Web.UI.Page
+{
+    SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.AppSettings["constring"].ToString());
+    protected void Page_Load(object sender, EventArgs e)
+    {
+           if(!IsPostBack)
+              {
+               BindGeneralInfrm();
+               LoadBillingCode();
+               LoadTempGrid();
+
+               }
+    }
+
+
+    protected void BindGeneralInfrm()
+    {
+        int RSN = Convert.ToInt32(Session["ResidentRSN"]);
+        try
+        {
+            DataSet dsProfile = new DataSet();
+            DataSet dsKTSection = new DataSet();
+            SqlProcsNew proc = new SqlProcsNew();
+            dsProfile = proc.ExecuteSP("[SP_FetchVSNDet]", new SqlParameter() { ParameterName = "@RTRSN", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Int, Value = RSN });
+            //string TotAmount2;
+
+            if (dsProfile.Tables[0].Rows.Count > 0)
+            {
+
+
+                lblSelGInfrm.Text = " Villa Number : " + dsProfile.Tables[0].Rows[0]["RTVILLANO"].ToString() + " || Status :  " + dsProfile.Tables[0].Rows[0]["RStatus"].ToString() + " || Name : " + dsProfile.Tables[0].Rows[0]["Name"].ToString();
+
+            }
+        }
+        catch (Exception ex)
+        {
+            WebMsgBox.Show(ex.Message.ToString());
+        }
+    }
+    #region Load Billing Code drop down
+    protected void LoadBillingCode()
+    {
+        try
+        {
+            SqlProcsNew sqlobj = new SqlProcsNew();
+            DataSet ddlistBCode = new DataSet();
+
+            ddlistBCode = sqlobj.ExecuteSP("SP_FetchBillingCodeDropDown",
+                 new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 1 });
+            ddlBCode.DataSource = ddlistBCode.Tables[0];
+            ddlBCode.DataValueField = "BCode";
+            ddlBCode.DataTextField = "BCodeDescription";
+            ddlBCode.DataBind();
+            ddlBCode.Dispose();
+            ddlBCode.Items.Insert(0, new ListItem("--Select--", "0"));
+
+        }
+        catch (Exception ex)
+        {
+            WebMsgBox.Show(ex.Message.ToString());
+        }
+    }
+    #endregion
+
+
+   
+    protected void ddlBCode_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+
+        try
+        {
+            if (ddlBCode.SelectedValue != "0" && ddlBCode.SelectedValue != "")
+            {
+                SqlProcsNew sqlobj = new SqlProcsNew();
+                DataSet ddlistRate = new DataSet();
+
+                ddlistRate = sqlobj.ExecuteSP("[SP_FetchBillingRateDropDown]",
+                     new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 1 },
+                     new SqlParameter() { ParameterName = "@BCode", SqlDbType = SqlDbType.NVarChar, Value = ddlBCode.SelectedValue });
+                ddlRate.DataSource = ddlistRate.Tables[0];
+                ddlRate.DataValueField = "Rate";
+                ddlRate.DataTextField = "RateD";
+                ddlRate.DataBind();
+                ddlRate.Dispose();
+                ddlRate.Items.Insert(0, new ListItem("--Select--", "0"));
+            }
+
+        }
+        catch (Exception ex)
+        {
+            WebMsgBox.Show(ex.Message.ToString());
+        }
+       
+    }
+
+    protected void ddlRate_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            if (ddlRate.SelectedValue != "0" && ddlRate.SelectedValue != "")
+            {
+                SqlProcsNew sqlobj = new SqlProcsNew();
+                DataSet ddlistRate = new DataSet();
+
+                ddlistRate = sqlobj.ExecuteSP("[SP_FetchBillingRateDropDown]",
+                     new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 1 },
+                     new SqlParameter() { ParameterName = "@BCode", SqlDbType = SqlDbType.NVarChar, Value = ddlBCode.SelectedValue });
+                ddlMPD.DataSource = ddlistRate.Tables[0];
+                ddlMPD.DataValueField = "Rate";
+                ddlMPD.DataTextField = "RateD";
+                ddlMPD.DataBind();
+                ddlMPD.Dispose();
+                ddlMPD.Items.Insert(0, new ListItem("--Select--", "0"));
+            }
+            {
+                SqlProcsNew sqlobj = new SqlProcsNew();
+                DataSet ddlistMPD = new DataSet();
+
+                ddlistMPD = sqlobj.ExecuteSP("[SP_FetchMPDDropDown]",
+                     new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 1 },
+                     new SqlParameter() { ParameterName = "@BCode", SqlDbType = SqlDbType.NVarChar, Value = ddlBCode.SelectedValue });
+                ddlMPD.DataSource = ddlistMPD.Tables[0];
+                ddlMPD.DataValueField = "MPD";
+                ddlMPD.DataTextField = "MPD1";
+                ddlMPD.DataBind();
+                ddlMPD.Dispose();
+                ddlMPD.Items.Insert(0, new ListItem("--Select--", "0"));
+
+            }
+
+        }
+        catch (Exception ex)
+        {
+            WebMsgBox.Show(ex.Message.ToString());
+        }
+       
+    }
+
+    protected void ClearScr()
+    {
+
+        BillingDate.SelectedDate = DateTime.Now;
+        LoadBillingCode();
+        TxtCount.Text = String.Empty;
+        TxtHelp.Text = String.Empty;
+        TxtAmnt.Text = String.Empty;
+        //ddlRate.SelectedValue = String.Empty;
+        //ddlMPD.SelectedValue = String.Empty;
+        this.BillingDate.Focus();
+
+    }    
+
+
+   
+    protected void btnSave_Click(object sender, EventArgs e)
+    {
+
+        int RSN = Convert.ToInt32(Session["ResidentRSN"]);
+        //SqlProcsNew sqlobj = new SqlProcsNew();
+            try
+            {
+
+                //int Count = ((Convert.ToInt32(TxtNOG.Text.Trim())) + (Convert.ToInt32(TxtNOR.Text.Trim())));
+                //lblValue.Text = (Convert.ToInt32(lblResidentRate.Text) * (Convert.ToInt32(TxtNOR.Text);
+                Decimal a = Convert.ToDecimal(TxtCount.Text);
+                Decimal b = Convert.ToDecimal(ddlRate.SelectedValue);
+
+                decimal c = Math.Round((a * b), 0);
+
+                TxtAmnt.Text = c.ToString();
+                SqlProcsNew sqlobj = new SqlProcsNew();
+                sqlobj.ExecuteSQLNonQuery("[SP_InsertTempFoodBillingDtls]",
+                                new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 1 },
+                                   new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Int, Value = RSN },
+                                   //new SqlParameter() { ParameterName = "@Date", SqlDbType = SqlDbType.DateTime, Value = BillingDate.SelectedDate },
+                                   new SqlParameter() { ParameterName = "@BCode", SqlDbType = SqlDbType.NVarChar, Value = ddlBCode.SelectedValue.ToString() },
+                                   new SqlParameter() { ParameterName = "@BRate", SqlDbType = SqlDbType.Decimal, Value = ddlRate.SelectedValue },
+                                   new SqlParameter() { ParameterName = "@Date", SqlDbType = SqlDbType.DateTime, Direction = ParameterDirection.Input, Value = BillingDate.SelectedDate },
+                                   new SqlParameter() { ParameterName = "@BDate", SqlDbType = SqlDbType.DateTime, Direction = ParameterDirection.Input, Value = DateTime.Now },
+                                    new SqlParameter() { ParameterName = "@Bcount", SqlDbType = SqlDbType.Int, Value = TxtCount.Text },
+                                      new SqlParameter() { ParameterName = "@BAmount", SqlDbType = SqlDbType.Int, Value = TxtAmnt.Text },
+                                  new SqlParameter() { ParameterName = "@BNarration", SqlDbType = SqlDbType.NVarChar, Value = TxtHelp.Text},
+                                  new SqlParameter() { ParameterName = "@BStatus", SqlDbType = SqlDbType.Int, Value = 1 }
+                                  );
+
+              
+                ClearScr();
+                LoadTempGrid();
+                //LoadCustDet();
+                WebMsgBox.Show("Bill Detail Received.");
+            }
+            catch (Exception ex)
+            {
+                WebMsgBox.Show(ex.Message.ToString());
+            }
+        }
+    protected void BillingListView_PageIndexChanged(object sender, GridPageChangedEventArgs e)
+    {
+        LoadTempGrid();
+    }
+    protected void BillingListView_PageSizeChanged(object sender, GridPageSizeChangedEventArgs e)
+    {
+        LoadTempGrid();
+
+    }
+    protected void BillingListView_SortCommand(object sender, GridSortCommandEventArgs e)
+    {
+
+        LoadTempGrid();
+
+    }
+    protected void LoadTempGrid()
+    {
+          int RSN = Convert.ToInt32(Session["ResidentRSN"]);
+          SqlCommand Cmd = new SqlCommand("SP_InsertTempFoodBillingDtls", con);
+        Cmd.CommandType = CommandType.StoredProcedure;
+        Cmd.Parameters.Add("@IMODE", SqlDbType.Int).Value = 2;
+        Cmd.Parameters.Add("@RTRSN", SqlDbType.Int).Value = RSN;
+        DataSet dsGrid = new DataSet();
+        BillingListView.DataBind();
+
+
+       
+
+        SqlDataAdapter da = new SqlDataAdapter(Cmd);
+        da.Fill(dsGrid);
+        if (dsGrid != null && dsGrid.Tables.Count > 0 && dsGrid.Tables[0].Rows.Count > 0)
+        {
+            BillingListView.DataSource = dsGrid.Tables[0];
+            BillingListView.DataBind();
+            BillingListView.AllowPaging = true;
+            //btnSendMail.Visible = true;
+        }
+
+        else
+        {
+
+
+            BillingListView.DataSource = new String[] { };
+            BillingListView.DataBind();
+            //btnSendMail.Visible = false;
+        }
+
+    }
+
+
+    protected void LnkbtnDelete_Click(object sender, EventArgs e)
+    {
+
+    }
+    protected void BtnnSave_Click(object sender, EventArgs e)
+    {
+        if (HResult.Value == "true")
+        {
+            foreach (GridItem rw in BillingListView.Items)
+            {
+                CheckBox ChkConfirm = rw.FindControl("ChkConfirm") as CheckBox;
+                if (ChkConfirm != null && ChkConfirm.Checked)
+                {
+                    int RTRSN = Convert.ToInt32(rw.Cells[2].Text);
+                    DateTime date = Convert.ToDateTime(rw.Cells[6].Text);
+                    string BCode = rw.Cells[7].Text;
+                    Decimal Rate = Convert.ToDecimal(rw.Cells[8].Text);
+                    string Count = rw.Cells[9].Text;
+                    Decimal Amnt = Convert.ToDecimal(rw.Cells[10].Text);
+                    string Narration = rw.Cells[11].Text;
+                    try
+                    {
+
+                        SqlProcsNew sqlobj = new SqlProcsNew();
+                        sqlobj.ExecuteSQLNonQuery("[SP_InsertFoodBillingDtls]",
+                                        new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 1 },
+                                           new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Int, Value = RTRSN },
+                            //new SqlParameter() { ParameterName = "@Date", SqlDbType = SqlDbType.DateTime, Value = BillingDate.SelectedDate },
+                                           new SqlParameter() { ParameterName = "@BCode", SqlDbType = SqlDbType.NVarChar, Value = BCode },
+                                           new SqlParameter() { ParameterName = "@BRate", SqlDbType = SqlDbType.Decimal, Value = Rate },
+                                           new SqlParameter() { ParameterName = "@Date", SqlDbType = SqlDbType.DateTime, Direction = ParameterDirection.Input, Value = date },
+                                           new SqlParameter() { ParameterName = "@BDate", SqlDbType = SqlDbType.DateTime, Direction = ParameterDirection.Input, Value = DateTime.Now },
+                                            new SqlParameter() { ParameterName = "@Bcount", SqlDbType = SqlDbType.Int, Value = Count },
+                                              new SqlParameter() { ParameterName = "@BAmount", SqlDbType = SqlDbType.Decimal, Value = Amnt },
+                                          new SqlParameter() { ParameterName = "@BNarration", SqlDbType = SqlDbType.NVarChar, Value = Narration },
+                                          new SqlParameter() { ParameterName = "@BStatus", SqlDbType = SqlDbType.Int, Value = 1 }
+                                          );
+
+                        sqlobj.ExecuteSQLNonQuery("SP_TrucatetblTempFoodBillTxns",
+                                              new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 1 });
+
+
+                        ClearScr();
+                        LoadTempGrid();
+                        //LoadCustDet();
+
+
+                    }
+
+                    catch (Exception ex)
+                    {
+                        WebMsgBox.Show(ex.Message.ToString());
+
+                    }
+
+                }
+            }
+            WebMsgBox.Show("Bill Detail Saved.");
+        }
+        else
+        {
+
+        }
+       
+        }
+   
+
+
+
+   
+
+   
+}

@@ -1,0 +1,119 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/CovaiSoft.master" AutoEventWireup="true" CodeFile="MFChart.aspx.cs" Inherits="MFChart" %>
+
+<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+
+    <link href="Css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="Css/sb-admin.css" rel="stylesheet" type="text/css" />
+    <link href="CSS/CovaiSoft.css" rel="stylesheet" />
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+
+     <div class="main_cnt">
+        <div class="first_cnt">
+            <div style="width:98%;background-color:white"  >
+
+            <table>
+                <tr>
+                    <td>
+                    <asp:label ID="lblGender" runat="server" visible="true" Text="Gender Summary" Font-Bold="true" Font-Names="Verdana" Font-Size="Medium" ForeColor="Black" BackColor="White"></asp:label>
+                        </td>
+                </tr>
+                <tr>
+                    
+                    <td >
+                        <telerik:RadGrid ID="GenderGrid" runat="server" Height="100%"
+                            AutoGenerateColumns="False" Skin="Outlook"
+                            OnPageIndexChanged="GenderGrid_PageIndexChanged" OnItemCommand="GenderGrid_ItemCommand"
+                            OnPageSizeChanged="GenderGrid_PageSizeChanged" OnSortCommand="GenderGrid_SortCommand" 
+                            MasterTableView-HierarchyDefaultExpanded="true">
+                            <HeaderContextMenu CssClass="table table-bordered table-hover">
+                            </HeaderContextMenu>
+                            <PagerStyle AlwaysVisible="true" Mode="NextPrevAndNumeric" />
+                            <MasterTableView AllowCustomPaging="false">
+                                <NoRecordsTemplate>
+                                    No Records Found.
+                                </NoRecordsTemplate>
+                                <CommandItemSettings ExportToPdfText="Export to PDF"></CommandItemSettings>
+                                <RowIndicatorColumn>
+                                    <HeaderStyle Width="10px"></HeaderStyle>
+                                </RowIndicatorColumn>
+                                <ExpandCollapseColumn>
+                                    <HeaderStyle Width="10px"></HeaderStyle>
+                                </ExpandCollapseColumn>
+                                <Columns>
+                                    <telerik:GridBoundColumn HeaderText="Gender" DataField="RGender" HeaderStyle-Wrap="false" Visible="True"
+                                        ItemStyle-Wrap="false" AllowFiltering="true" ItemStyle-HorizontalAlign="left" ItemStyle-Width="150px"
+                                        ItemStyle-CssClass="Row1">
+                                        <HeaderStyle Wrap="False"></HeaderStyle>
+                                        <ItemStyle Wrap="False"></ItemStyle>
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn HeaderText="Count" DataField="Count" HeaderStyle-Wrap="true"
+                                        ItemStyle-Wrap="false" AllowFiltering="true" ItemStyle-HorizontalAlign="center" ItemStyle-Width="100px"
+                                        ItemStyle-CssClass="Row1">
+                                        <HeaderStyle Wrap="False"></HeaderStyle>
+                                        <ItemStyle Wrap="False"></ItemStyle>
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn HeaderText="Percentage(%)" DataField="Percentage" HeaderStyle-Wrap="false"
+                                        ItemStyle-Wrap="false" AllowFiltering="true" Visible="true" ItemStyle-HorizontalAlign="Center" AllowSorting="true" ItemStyle-Width="150px"
+                                        ItemStyle-CssClass="Row1">
+                                        <HeaderStyle Wrap="False"></HeaderStyle>
+                                        <ItemStyle Wrap="False"></ItemStyle>
+                                    </telerik:GridBoundColumn>                                    
+                                </Columns>
+                                <EditFormSettings>
+                                    <EditColumn FilterControlAltText="Filter EditCommandColumn column">
+                                    </EditColumn>
+                                </EditFormSettings>
+                                <PagerStyle AlwaysVisible="True"></PagerStyle>
+                            </MasterTableView>
+                            <ClientSettings>
+                                <Selecting AllowRowSelect="True" />
+                            </ClientSettings>
+                            <FilterMenu Skin="Outlook" EnableTheming="True">
+                                <CollapseAnimation Type="OutQuint" Duration="200"></CollapseAnimation>
+                            </FilterMenu>
+                        </telerik:RadGrid>
+                        <asp:HiddenField ID="CnfResult" runat="server" />
+                    </td>
+                    <td>
+
+
+                        <telerik:RadHtmlChart runat="server" ID="GenderChart" Skin="WebBlue" Height="300px" Width="400px" Legend-Appearance-Visible="true" Legend-Appearance-Position="left">
+                            <PlotArea>
+                                <Series>
+                                    <telerik:PieSeries DataFieldY="Percentage" Name="Ratio" NameField="RGender">
+                                        <LabelsAppearance DataFormatString="{0}%">
+                                        </LabelsAppearance>
+                                        <TooltipsAppearance>
+
+                                            <ClientTemplate>
+                                                                                          #=dataItem.RGender#<br />
+                                                                                           #=dataItem.Percentage# % 
+                                            </ClientTemplate>
+                                        </TooltipsAppearance>
+
+                                    </telerik:PieSeries>
+
+                                </Series>
+                                <YAxis Name="Gender">
+                                </YAxis>
+                            </PlotArea>
+               <%--             <ChartTitle Text="Gender Summary">
+                                <Appearance Align="Center" BackgroundColor="white" Position="Top">--%>
+                                  <%--  <TextStyle Color="White" FontSize="14" FontFamily="Verdana" Margin="5" Bold="true" Padding="10" />--%>
+                                <%--</Appearance>
+
+                            </ChartTitle>--%>
+                        </telerik:RadHtmlChart>
+                    </td>
+                </tr>
+                </table>
+
+                </div>
+
+        </div>
+    </div>
+
+</asp:Content>
+

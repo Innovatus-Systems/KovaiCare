@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Child Webform</title>
+    <script language="javascript">
+function Done() {
+var ParmA = tbParamA.value;
+var ParmB = tbParamB.value;
+var ParmC = tbParamC.value;
+var MyArgs = new Array(ParmA, ParmB, ParmC);
+window.returnValue = MyArgs;
+window.close();
+}
+function doInit() {
+var ParmA = "Aparm";
+var ParmB = "Bparm";
+var ParmC = "Cparm";
+var MyArgs = new Array(ParmA, ParmB, ParmC);
+MyArgs = window.dialogArguments;
+tbParamA.value = MyArgs[0].toString();
+tbParamB.value = MyArgs[1].toString();
+tbParamC.value = MyArgs[2].toString();
+}
+    </script>
+</head>
+<body onload="doInit()">
+    <p>Param A:<input id="tbParamA" type="text"></p>
+    <p>Param B:<input id="tbParamB" type="text"></p>
+    <p>Param C:<input id="tbParamC" type="text"></p>
+    <button onclick="Done()" type="button">OK</button>
+</body>
+</html>

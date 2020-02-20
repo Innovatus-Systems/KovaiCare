@@ -1,0 +1,3 @@
+create table tblTasks (RSN numeric(18,0) identity(1,1),RTRSN numeric(18,0),SerCategory char(2),SerType nvarchar(40),Task nvarchar(2400),
+TaskDate date,TaskTime varchar(8),TaskCount int,Urgency char(1),TaskStatus varchar(5),StatusDate datetime,StatusRemarks nvarchar(2400),TargetDate datetime,
+C_By nvarchar(8),C_On datetime,M_By nvarchar(8),M_On datetime)

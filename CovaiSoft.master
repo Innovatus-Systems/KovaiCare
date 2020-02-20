@@ -1,0 +1,256 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="CovaiSoft.master.cs" Inherits="CovaiSoft" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>CovaiSmart</title>
+    <link href="CSS/HomeSPD.css" rel="stylesheet" />
+    <script src="JQuery/jquery1.9.1.js" type="text/javascript"></script>
+    <script src="JQuery/jquery-1.10.3.js" type="text/javascript"></script>
+    <%-- <link href="Css/bootstrap.css" rel="stylesheet" type="text/css" />--%>
+    <%--<link href="CSS/MenuCSS.css" rel="stylesheet" />--%>
+    <link href="CSS/Fix.css" rel="stylesheet" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+
+    <script type="text/javascript" language="javascript">
+        $(window).scroll(function () {
+            if ($(window).scrollBottom() >= 300) {
+                $('nav').addClass('fixed-header');
+            }
+            else {
+                $('nav').removeClass('fixed-header');
+            }
+        });
+
+       <%-- window.onload = function ()  
+        {  
+            var myMenu = <%= masterquicklinks.ClientID %>; // Obtain the client-side object.      
+            myMenu.FixListWidth(myMenu);     
+        } --%>
+        function NavigateDir2() {
+            var iMyWidth;
+            var iMyHeight;
+            iMyWidth = (window.screen.width / 2) - (540 + 50);
+            iMyHeight = (window.screen.height / 2) - (275 + 25);
+            var Y = 'LevelSFilter.aspx';
+            <%--//var Y = 'AdditionalParticulars.aspx?SResult=' + document.getElementById('<%#txtNSearch.ClientID%>').value;--%>
+            var win = window.open(Y, "Construction Status - Block Level", "status=no,height=450,width=1150,resizable=yes,left=" + iMyWidth + ",top=" + iMyHeight + ",screenX=" + iMyWidth + ",screenY=" + iMyHeight + ",toolbar=no,menubar=no,scrollbars=yes,'Fullscreen=yes',location=no,directories=no");
+
+            win.focus();
+
+        }
+
+    </script>
+
+    <style type="text/css">
+        .main_menu, .main_menu:hover {
+            width: 120px;
+            font-family: Verdana;
+            font-size: smaller;
+            background-color: darkblue;
+            color: white;
+            text-align: left;
+            height: 30px;
+            line-height: 30px;
+            margin-right: 5px;
+            display: block;
+            float: left !important;
+            position: relative;
+            padding-left:5px;
+            border-radius: 5px;
+        }
+
+            .main_menu:hover {
+                background-color: darkblue;
+            }
+
+        .level_menu, .level_menu:hover {
+            width: 200px;
+            font-family: Verdana;
+            font-size: smaller;
+            background-color: #746a6a;
+            color: #000;
+            text-align: left;
+            height: 30px;
+            line-height: 30px;
+            margin-top: 5px;
+            position: relative;
+            z-index: 9000;
+            border-radius: 5px;
+            padding-left:5px;
+            border-color:darkblue;
+            border-width:medium;
+        }
+
+            .level_menu:hover {
+                background-color: #4D94DB;
+            }
+
+        .selected, .selected:hover {
+            /*background-color: #A6A6A6 !important;
+        color: #fff;*/
+        }
+
+        .level2 {
+            background-color: #C4D8F6;
+            display: none;
+        }
+    </style>
+
+</head>
+<body>
+
+    <form id="form1" runat="server">
+
+        <asp:ToolkitScriptManager ID="toolscrmgr" runat="server" EnableScriptGlobalization="true"></asp:ToolkitScriptManager>
+        <div style="background-color: darkblue; width: 100%">
+
+            <table style="width: 100%">
+                <tr>
+                    <td style="width: 20%">
+
+                        <asp:Label ID="lblcomName" runat="server" Text="" Font-Bold="true" Font-Names="Cooper Black" Font-Size="Large" ForeColor="White"></asp:Label>
+
+                    </td>
+                    <td style="text-align: center; width: 60%">
+
+                        <asp:Label ID="LblOris" runat="server" Text="CovaiSmart" Font-Bold="true" Font-Names="Cooper Black" Font-Size="Large" ForeColor="White"></asp:Label>
+                        <br />
+                        <asp:Label ID="LblSubTitle" runat="server" Text="Online Residents Information System  for Retirement Communities" ForeColor="White" Font-Bold="false" Font-Names="Calibri" Font-Size="Medium"></asp:Label>
+
+                    </td>
+                    <td style="width: 20%; text-align: right">
+
+                        <asp:Label ID="lblversionnumber" runat="server" Text="" Font-Bold="true" Font-Names="Cooper Black" Font-Size="Large" ForeColor="White"></asp:Label>
+                        <br />
+                        <asp:Label ID="lblcompanycode" runat="server" Text="" Font-Bold="true" Font-Names="Cooper Black" Font-Size="Medium" ForeColor="White"></asp:Label>
+
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+
+
+
+        <table align="center">
+            <tr>
+                <td>
+                    <table style="width: 100%;">
+                        <tr style="width: 100%;">
+                            <%-- <td style="width: 25%;"></td>--%>
+
+
+                            <td align="left">
+                                <asp:Label ID="lblCurrBillPeriod" Visible="true" Font-Bold="false" Font-Names="Verdana" ForeColor="Black" Font-Size="Smaller" runat="server" />
+                                &nbsp; 
+                        <asp:Label ID="lblBilledPeriod" Visible="false" Font-Bold="false" Font-Names="Verdana" ForeColor="Black" Font-Size="Smaller" runat="server" />
+                                &nbsp;
+                        
+                        
+                            </td>
+                            <td align="left">
+                                <asp:Label ID="lblsignin" Visible="true" Font-Bold="false" Font-Names="Verdana" ForeColor="Black" Font-Size="Smaller" runat="server" />
+                            </td>
+
+                            <td align="left">
+                                <asp:Label ID="GetserverDateTime" Height="10px" Font-Bold="false" Font-Names="Verdana" Font-Size="Smaller" ForeColor="Black" runat="server" />
+                            </td>
+
+                            <td style="vertical-align: central" align="right">
+
+                                <%--<asp:ImageButton ID="ImgBHome" runat="server" ImageUrl="~/Images/house_3.png" OnClick="ImgBHome_Click" ToolTip="Click here to view home page" Visible="false" />--%>
+                                <%--<asp:ImageButton ID="imgSignOut" runat="server" ImageUrl="~/Images/quit.png" ToolTip="Click here to Sign Out" OnClick="lblSignOut_Click" />--%>
+                                <%--<asp:ImageButton ID="ImgCalendar" runat="server" Height="25px" ImageUrl="~/Images/Calendar.png" ToolTip="Click here to view the Events / Requests calendar" OnClick="ImgCalendart_Click" />&nbsp;&nbsp;&nbsp;&nbsp;--%>
+                                <asp:LinkButton ID="lnkCalendar" Height="10px" Font-Bold="true" Font-Names="Verdana" Font-Size="Small" Text="Calendar" OnClick="ImgCalendart_Click" Font-Underline="true" ForeColor="DarkBlue" runat="server" Visible="false" ToolTip="Click here to view the Events / Requests calendar" />
+
+                                <asp:LinkButton ID="lnkControlPanel" Height="10px" Font-Bold="true" Font-Names="Verdana" Font-Size="Small" Text="Alert" OnClick="lnkControlPanel_Click" Font-Underline="true" ForeColor="#cc0000" runat="server" ToolTip="Click to view Control Panel" />&nbsp;&nbsp;&nbsp;
+                        <asp:LinkButton ID="lnkSearch" runat="server" Text="Search" OnClick="lnkSearch_Click1" Height="10px" Font-Bold="true" Font-Names="Verdana" Font-Size="Small" Font-Underline="true" ForeColor="DarkBlue" ToolTip="Click here to Search Menu" />&nbsp;&nbsp;&nbsp; 
+                        <asp:LinkButton ID="lnkvegPrice" Height="10px" Font-Bold="true" Font-Names="Verdana" Font-Size="Small" Text="Veg. Price" OnClick="lnkvegPrice_Click" Font-Underline="true" ForeColor="DarkBlue" runat="server" ToolTip="Today's vegetable price." />&nbsp;&nbsp;&nbsp;
+                        <asp:LinkButton ID="lnkSnapshot" Height="10px" Font-Bold="true" Font-Names="Verdana" Font-Size="Small" Text="At a Glance" OnClick="lnkSnapshot_Click" Font-Underline="true" ForeColor="DarkBlue" runat="server" Visible="false" ToolTip="Click here to view at a glance a management summary" />
+                                <asp:LinkButton ID="lbSignOut" Height="10px" Font-Bold="true" Font-Names="Verdana" Font-Underline="true" Font-Size="Small" Text="Sign Out" OnClick="lbSignOut_Click" ForeColor="DarkBlue" runat="server" Visible="true" ToolTip="Click to Sign Out" />
+                            </td>
+                            <%-- <td style="width: 3%;" align="right">
+                        
+                    </td>
+                    <td style="width: 2%;" align="right">
+                        
+                    </td>
+                       <td style="width: 4%;" align="right">
+                        
+                    </td>--%>
+                        </tr>
+
+
+                    </table>
+                    <table style="width: 100%">
+                        <tr>
+                            <td>
+                                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                                    <ContentTemplate>
+                                        <table cellpadding="0" cellspacing="0" style="width: 100%">
+
+                                            <tr>
+                                                <td style="width: 100%">
+                                                    <asp:Menu ID="Menu1" runat="server" Orientation="Horizontal" Width="100%" OnMenuItemDataBound="Menu1_MenuItemDataBound" zindex="1000">
+                                                        <LevelMenuItemStyles>
+                                                            <asp:MenuItemStyle CssClass="main_menu" />
+                                                            <asp:MenuItemStyle CssClass="level_menu" />
+                                                        </LevelMenuItemStyles>
+                                                        <StaticSelectedStyle CssClass="selected" />
+                                                    </asp:Menu>
+
+                                                </td>
+
+                                            </tr>
+                                        </table>
+
+
+
+                                    </ContentTemplate>
+                                    <Triggers>
+                                        <asp:AsyncPostBackTrigger ControlID="Menu1" />
+
+                                    </Triggers>
+                                </asp:UpdatePanel>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+
+        <div>
+
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+
+        </div>
+
+
+
+        <%--<div style="background-color: darkblue; align-items: center">
+            <asp:Panel ID="Panel2" runat="server" Width="100%" HorizontalAlign="left">
+                <table style="width: 100%">
+                    <tr>
+                        <td style="width: 50%" align="left">
+                            <asp:Label ID="lblTrial" runat="server" Font-Names="Verdana" Font-Size="Small" ForeColor="White"></asp:Label>
+                        </td>
+                        <td style="width: 40%" align="right">
+                           
+                            <asp:LinkButton ID="LinkButton1" runat="server" Text="Software designed with care by Innovatus Systems for Retirement Communities." ForeColor="White" Font-Bold="false" Font-Names="Calibri" Font-Size="Medium" Font-Underline="false" OnClick="LinkButton1_Click"></asp:LinkButton>
+                            &nbsp;&nbsp;                             
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+        </div>--%>
+    </form>
+</body>
+</html>

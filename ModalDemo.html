@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Parent Webform</title>
+    <script language="javascript">
+function OpenChild()
+{
+var ParmA = retvalA.value;
+var ParmB = retvalB.value;
+var ParmC = retvalC.value;
+var MyArgs = new Array(ParmA, ParmB, ParmC);
+var WinSettings = "center:yes;resizable:no;dialogHeight:300px"
+// ALTER BELOW LINE - supply correct URL for Child Form
+var MyArgs = window.showModalDialog("ModelDemoChild.html", MyArgs, WinSettings);
+if (MyArgs == null)
+{
+window.alert("Nothing returned from child. No changes made to input boxes");
+}
+else
+{
+retvalA.value=MyArgs[0].toString();
+retvalB.value=MyArgs[1].toString();
+retvalC.value=MyArgs[2].toString();
+}
+}
+    </script>
+</head>
+<body>
+    <p><input id="retvalA" type="text" value="AAA"></p>
+    <p><input id="retvalB" type="text" value="BBB"></p>
+    <p><input id="retvalC" type="text" value="CCC"></p>
+    <p><button onclick="OpenChild()" type="button">Open Child Window</button></p>
+</body>
+</html>

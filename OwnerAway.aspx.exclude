@@ -1,0 +1,242 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/CovaiSoft.master" AutoEventWireup="true" CodeFile="OwnerAway.aspx.cs" Inherits="OwnerAway" %>
+<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    
+       <link href="Css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="Css/sb-admin.css" rel="stylesheet" type="text/css" />
+    <link href="CSS/CovaiSoft.css" rel="stylesheet" />
+    <%--<script src="//code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>--%>
+    <script type="text/javascript" language="javascript">
+        $(window).scroll(function () {
+            if ($(window).scrollTop() >= 300) {
+                $('nav').addClass('fixed-header');
+            }
+            else {
+                $('nav').removeClass('fixed-header');
+            }
+        });
+
+
+
+        function askConfirm() {
+            if (confirm("Are you sure, you want to save?"))
+                alert(" ")
+            else {
+                //alert(" ")
+
+                return false;
+            }
+        }
+       
+    </script>
+
+     <div class="main_cnt">
+
+        <div class="first_cnt">
+            <div style="width:98%";>
+
+                  <telerik:RadGrid ID="OwnerAwayGridView" runat="server" AllowPaging="True" PageSize="20"
+                                AutoGenerateColumns="False" Skin="WebBlue" AllowSorting="true"
+                                OnPageIndexChanged="OwnerAwayGridView_PageIndexChanged" OnItemDataBound="OwnerAwayGridView_ItemDataBound" 
+                                OnPageSizeChanged="OwnerAwayGridView_PageSizeChanged" OnSortCommand="OwnerAwayGridView_SortCommand" OnItemCommand="OwnerAwayGridView_ItemCommand"
+                                CellSpacing="0" Width="90%" AllowFilteringByColumn="true"
+                                MasterTableView-HierarchyDefaultExpanded="true">
+                                <ClientSettings>
+                                    <Scrolling AllowScroll="True" UseStaticHeaders="true" />
+                                </ClientSettings>
+                                <HeaderContextMenu CssClass="table table-bordered table-hover">
+                                </HeaderContextMenu>
+                                <PagerStyle AlwaysVisible="true" Mode="NextPrevAndNumeric" />
+                                <MasterTableView AllowCustomPaging="false">
+                                    <NoRecordsTemplate>
+                                        No Records Found.
+                                    </NoRecordsTemplate>
+                                    <CommandItemSettings ExportToPdfText="Export to PDF"></CommandItemSettings>
+                                    <RowIndicatorColumn>
+                                        <HeaderStyle Width="10px"></HeaderStyle>
+                                    </RowIndicatorColumn>
+                                    <ExpandCollapseColumn>
+                                        <HeaderStyle Width="10px"></HeaderStyle>
+                                    </ExpandCollapseColumn>
+                                    <Columns>
+
+                                        <telerik:GridTemplateColumn HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" ItemStyle-Width="5px"
+                                            HeaderText="" HeaderStyle-Font-Names="Calibri" AllowFiltering="false" UniqueName="Viewresident" SortExpression="View">
+                                            <ItemTemplate>
+                                                <asp:LinkButton ID="Lnkbtnview" runat="server" ToolTip="Click here to View profile" Text="View" Font-Bold="true" Font-Size="XX-Small" ForeColor="Blue" OnClick="Lnkbtnview_Click">View</asp:LinkButton>
+                                            </ItemTemplate>
+                                        </telerik:GridTemplateColumn>
+                                        <telerik:GridTemplateColumn HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" ItemStyle-Width="5px"
+                                            HeaderText="" HeaderStyle-Font-Names="Calibri" AllowFiltering="false" UniqueName="Editresident" SortExpression="View">
+                                            <ItemTemplate>
+                                                <asp:LinkButton ID="Lnkbtnedit" runat="server" ToolTip="Click here to Edit profile" Text="Edit" Font-Bold="true" Font-Size="XX-Small" ForeColor="Blue" OnClick="Lnkbtnedit_Click">Edit</asp:LinkButton>
+                                                <%--<asp:ImageButton ID="ImagBtnnEdit" Height="15px" ToolTip="Click here to Edit resident details" Width="25px" ImageUrl="~/App_Theme/edit-icon1.png" OnClick="ImagBtnnEdit_Click" runat="server" />--%>
+                                            </ItemTemplate>
+                                        </telerik:GridTemplateColumn>
+                                        <telerik:GridTemplateColumn HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" ItemStyle-Width="5px"
+                                            HeaderText="" HeaderStyle-Font-Names="Calibri" AllowFiltering="false" UniqueName="AddOn" SortExpression="AddOn">
+                                            <ItemTemplate>
+                                                <asp:LinkButton ID="LnkbtnAddOn" runat="server" Text="++" ToolTip="Click to manage additional particulars of the profile" Font-Bold="true" Font-Size="XX-Small" ForeColor="Blue" OnClick="LnkbtnAddOn_Click">++</asp:LinkButton>
+                                                <%--<asp:ImageButton ID="ImagBtnnEdit" Height="15px" ToolTip="Click here to Edit resident details" Width="25px" ImageUrl="~/App_Theme/edit-icon1.png" OnClick="ImagBtnnEdit_Click" runat="server" />--%>
+                                            </ItemTemplate>
+                                        </telerik:GridTemplateColumn>
+
+                                        <telerik:GridBoundColumn HeaderText="#" DataField="RTRSN" HeaderStyle-Wrap="true"
+                                            ItemStyle-Wrap="false" AllowFiltering="false" Visible="True" ItemStyle-HorizontalAlign="Left" AllowSorting="false" ItemStyle-ForeColor="Gray" ItemStyle-Width="10px"
+                                            ItemStyle-CssClass="Row1">
+                                            <HeaderStyle Wrap="False"></HeaderStyle>
+                                            <ItemStyle Wrap="False"></ItemStyle>
+                                        </telerik:GridBoundColumn>
+
+                                        <telerik:GridBoundColumn HeaderText="Villa No." DataField="RTVILLANO" HeaderStyle-Wrap="false" HeaderStyle-HorizontalAlign="Center"
+                                            ItemStyle-Wrap="false" AllowFiltering="true" Visible="True" ItemStyle-HorizontalAlign="center" AllowSorting="true"
+                                            ItemStyle-CssClass="Row1">
+                                            <HeaderStyle Wrap="False"></HeaderStyle>
+                                            <ItemStyle Wrap="False"></ItemStyle>
+                                        </telerik:GridBoundColumn>
+                                        <telerik:GridBoundColumn HeaderText="Status" DataField="RTSTATUS" HeaderStyle-Wrap="false"
+                                            ItemStyle-Wrap="false" AllowFiltering="true" Visible="true" ItemStyle-HorizontalAlign="Left" AllowSorting="true"
+                                            ItemStyle-CssClass="Row1">
+                                            <HeaderStyle Wrap="False"></HeaderStyle>
+                                            <ItemStyle Wrap="False"></ItemStyle>
+                                        </telerik:GridBoundColumn>
+                                        <telerik:GridBoundColumn HeaderText="Title" DataField="RTTitle" HeaderStyle-Wrap="false"
+                                            ItemStyle-Wrap="false" AllowFiltering="true" Visible="false" ItemStyle-HorizontalAlign="Left" AllowSorting="true"
+                                            ItemStyle-CssClass="Row1">
+                                            <HeaderStyle Wrap="False"></HeaderStyle>
+                                            <ItemStyle Wrap="False"></ItemStyle>
+                                        </telerik:GridBoundColumn>
+
+                                        <telerik:GridTemplateColumn HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" ItemStyle-Width="250px"
+                                            HeaderText="Name" HeaderStyle-Font-Names="Calibri" UniqueName="Name2" SortExpression="Name">
+                                            <ItemTemplate>
+                                                <asp:LinkButton ID="lbtnName" runat="server" CausesValidation="false" CssClass="CustLbl"
+                                                    Text='<%# Eval("RTName")%>' Font-Underline="true"
+                                                    ForeColor="#7049BA" Font-Bold="true" OnClick="lbtnName_Click" ToolTip="Click here to add a transaction">
+                                                </asp:LinkButton>
+                                            </ItemTemplate>
+                                        </telerik:GridTemplateColumn>
+                                        <%--<telerik:GridBoundColumn HeaderText="Name" DataField="RTName" HeaderStyle-Wrap="false"
+                                            ItemStyle-Wrap="false" AllowFiltering="true" Visible="true" ItemStyle-HorizontalAlign="Left"
+                                            ItemStyle-CssClass="Row1">
+                                            <HeaderStyle Wrap="False"></HeaderStyle>
+                                            <ItemStyle Wrap="False" ForeColor="#7049BA" Font-Bold="true"></ItemStyle>
+                                        </telerik:GridBoundColumn>--%>
+                                        <telerik:GridBoundColumn HeaderText="Gender" DataField="Gender" HeaderStyle-Wrap="false"
+                                            ItemStyle-Wrap="false" AllowFiltering="true" ItemStyle-HorizontalAlign="Left" Visible="false"
+                                            ItemStyle-CssClass="Row1">
+                                            <HeaderStyle Wrap="False"></HeaderStyle>
+                                            <ItemStyle Wrap="False"></ItemStyle>
+                                        </telerik:GridBoundColumn>
+
+
+                                        <telerik:GridBoundColumn HeaderText="Address" DataField="RTAddress1" HeaderStyle-Wrap="false"
+                                            ItemStyle-Wrap="false" AllowFiltering="true" Visible="false" ItemStyle-HorizontalAlign="Left"
+                                            ItemStyle-CssClass="Row1">
+                                            <HeaderStyle Wrap="False"></HeaderStyle>
+                                            <ItemStyle Wrap="False"></ItemStyle>
+                                        </telerik:GridBoundColumn>
+                                        <telerik:GridBoundColumn HeaderText="City" DataField="CityName" HeaderStyle-Wrap="false"
+                                            ItemStyle-Wrap="false" AllowFiltering="true" Visible="false" ItemStyle-HorizontalAlign="Left"
+                                            ItemStyle-CssClass="Row1">
+                                            <HeaderStyle Wrap="False"></HeaderStyle>
+                                            <ItemStyle Wrap="False"></ItemStyle>
+                                        </telerik:GridBoundColumn>
+                                        <telerik:GridBoundColumn HeaderText="PinCode" DataField="Pincode" HeaderStyle-Wrap="false"
+                                            ItemStyle-Wrap="false" AllowFiltering="true" Visible="false" ItemStyle-HorizontalAlign="Left"
+                                            ItemStyle-CssClass="Row1">
+                                            <HeaderStyle Wrap="False"></HeaderStyle>
+                                            <ItemStyle Wrap="False"></ItemStyle>
+                                        </telerik:GridBoundColumn>
+                                        <telerik:GridBoundColumn HeaderText="Country" DataField="Country" HeaderStyle-Wrap="false"
+                                            ItemStyle-Wrap="false" AllowFiltering="true" Visible="false" ItemStyle-HorizontalAlign="Left"
+                                            ItemStyle-CssClass="Row1">
+                                            <HeaderStyle Wrap="False"></HeaderStyle>
+                                            <ItemStyle Wrap="False"></ItemStyle>
+                                        </telerik:GridBoundColumn>
+
+
+                                       <%-- <telerik:GridTemplateColumn HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" ItemStyle-Width="250px"
+                                            HeaderText="Mobile No." HeaderStyle-Font-Names="Calibri" UniqueName="MobileNo" SortExpression="Mobile No">
+                                            <ItemTemplate>
+                                                <asp:LinkButton ID="lbtnMobileNo" runat="server" CausesValidation="false" CssClass="CustLbl"
+                                                    Text='<%# Eval("Contactcellno")%>' Font-Underline="true"
+                                                    ForeColor="Black" Font-Bold="false" OnClick="lbtnMobileNo_Click" ToolTip="Click here to add a Billing">
+                                                </asp:LinkButton>
+                                            </ItemTemplate>
+                                        </telerik:GridTemplateColumn>--%>
+                                        <telerik:GridBoundColumn HeaderText="Mobile No" DataField="Contactcellno" HeaderStyle-Wrap="false"
+                                            ItemStyle-Wrap="false" AllowFiltering="true" Visible="true" ItemStyle-HorizontalAlign="left"
+                                            ItemStyle-CssClass="Row1">
+                                            <HeaderStyle Wrap="False"></HeaderStyle>
+                                            <ItemStyle Wrap="False"></ItemStyle>
+                                        </telerik:GridBoundColumn>
+                                        <telerik:GridBoundColumn HeaderText="MailID" DataField="Contactmail" HeaderStyle-Wrap="false"
+                                            ItemStyle-Wrap="false" AllowFiltering="true" Visible="true" ItemStyle-HorizontalAlign="Left"
+                                            ItemStyle-CssClass="Row1">
+                                            <HeaderStyle Wrap="False"></HeaderStyle>
+                                            <ItemStyle Wrap="False"></ItemStyle>
+                                        </telerik:GridBoundColumn>
+                                        <%--<telerik:GridBoundColumn HeaderText="AlternateEMAILID" DataField="AlternateEMAILID" HeaderStyle-Wrap="false"
+                                ItemStyle-Wrap="false" AllowFiltering="true" Visible="true" >
+                                <HeaderStyle Wrap="False"></HeaderStyle>
+                                <ItemStyle Wrap="False"></ItemStyle>
+                            </telerik:GridBoundColumn>--%>
+                                        <telerik:GridBoundColumn HeaderText="Date of Birth" DataField="DOB" HeaderStyle-Wrap="false"
+                                            ItemStyle-Wrap="false" AllowFiltering="true" Visible="true" ItemStyle-HorizontalAlign="right"
+                                            ItemStyle-CssClass="Row1">
+                                            <HeaderStyle Wrap="False"></HeaderStyle>
+                                            <ItemStyle Wrap="False"></ItemStyle>
+                                        </telerik:GridBoundColumn>
+                                        <%--<telerik:GridBoundColumn HeaderText="BloodGroup" DataField="BloodGroup" HeaderStyle-Wrap="false"
+                                            ItemStyle-Wrap="false" AllowFiltering="true" Visible="false" ItemStyle-HorizontalAlign="Left"
+                                            ItemStyle-CssClass="Row1">
+                                            <HeaderStyle Wrap="False"></HeaderStyle>
+                                            <ItemStyle Wrap="False"></ItemStyle>
+                                        </telerik:GridBoundColumn>--%>
+                                        <telerik:GridBoundColumn HeaderText="Occupants" DataField="Occupants" HeaderStyle-Wrap="false"
+                                            ItemStyle-Wrap="false" AllowFiltering="false" Visible="true" ItemStyle-HorizontalAlign="Center"
+                                            ItemStyle-CssClass="Row1">
+                                            <HeaderStyle Wrap="False"></HeaderStyle>
+                                            <ItemStyle Wrap="False"></ItemStyle>
+                                        </telerik:GridBoundColumn>
+                                         <telerik:GridBoundColumn HeaderText="OutStanding" DataField="Outstanding" HeaderStyle-Wrap="false"
+                                            ItemStyle-Wrap="false" AllowFiltering="false" Visible="true" ItemStyle-HorizontalAlign="Right"
+                                            ItemStyle-CssClass="Row1">
+                                            <HeaderStyle Wrap="False"></HeaderStyle>
+                                            <ItemStyle Wrap="False"></ItemStyle>
+                                        </telerik:GridBoundColumn>
+                                        <%--<telerik:GridBoundColumn HeaderText="Remarks" DataField="Remarks" HeaderStyle-Wrap="false"
+                                ItemStyle-Wrap="false" AllowFiltering="true" Visible="true" >
+                                <HeaderStyle Wrap="False"></HeaderStyle>
+                                <ItemStyle Wrap="False"></ItemStyle>
+                            </telerik:GridBoundColumn>
+                                        <%--<telerik:GridTemplateColumn HeaderText="" HeaderButtonType="TextButton"
+                             HeaderStyle-HorizontalAlign ="Left" ItemStyle-HorizontalAlign="Right" ItemStyle-Font-Italic="false">
+                                <ItemTemplate>
+                                       <asp:LinkButton ID="LnkRemove" runat="server" Text="Remove" 
+                                       Font-Names="Verdana" Font-Size="Small" Font-Italic="false"></asp:LinkButton>
+                                </ItemTemplate>
+                            </telerik:GridTemplateColumn>--%>
+                                    </Columns>
+                                    <EditFormSettings>
+                                        <EditColumn FilterControlAltText="Filter EditCommandColumn column">
+                                        </EditColumn>
+                                    </EditFormSettings>
+                                    <PagerStyle AlwaysVisible="True"></PagerStyle>
+                                </MasterTableView>
+                                <ClientSettings>
+                                    <Selecting AllowRowSelect="True" />
+                                </ClientSettings>
+                                <FilterMenu Skin="WebBlue" EnableTheming="True">
+                                    <CollapseAnimation Type="OutQuint" Duration="200"></CollapseAnimation>
+                                </FilterMenu>
+                            </telerik:RadGrid>
+
+                </div>
+            </div>
+         </div>
+</asp:Content>
+

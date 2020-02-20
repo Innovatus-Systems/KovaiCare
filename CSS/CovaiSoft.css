@@ -1,0 +1,58 @@
+﻿body 
+{
+	
+ margin-top:0px;	
+}
+
+
+.Container
+{
+	height:auto;
+	width:90%;
+	margin:0 auto;
+}
+.HD
+{
+	background-color:#7049BA;
+	min-height:90px;
+	width:98%;
+	padding:10px 10px ;
+	color:White;
+	border-radius:5px;
+	font-style:normal;
+	font-family:Calibri;
+    font-size:large;
+}
+
+
+.Form
+{
+	padding:5px 10px 5px 10px;
+	margin:5px auto;
+	width:92%;
+	height:auto;
+	
+
+border-radius:8px;
+	
+	
+	}
+
+.ALleft {
+
+     width:100%;
+       height:auto;
+      
+
+}
+.ALright {
+
+     width:40%;
+       height:10%;
+       
+
+}
+
+
+
+	

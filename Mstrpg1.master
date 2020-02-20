@@ -1,0 +1,37 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Mstrpg1.master.cs" Inherits="Mstrpg1" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <div style="width: 100%; margin: 0px; height: auto;">
+                <div id="Header">
+                    <style type="text/css">
+                        #Header {
+                            width: 100%;
+                            height: 105px;
+                            /*background-color: #9999FF;*/
+                            color: White;
+                            font-size: large;
+                            font-family: Verdana;
+                            text-align: center;
+                            background-image: url('image/MoseMasoVerticalSmall.png');
+
+                            background-repeat: no-repeat;
+                        }
+                    </style>
+                </div>
+            </div>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+</body>
+</html>
