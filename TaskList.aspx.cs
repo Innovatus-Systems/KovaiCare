@@ -386,9 +386,9 @@ public partial class TaskList : System.Web.UI.Page
                    new SqlParameter() { ParameterName = "@StatusRemarks", SqlDbType = SqlDbType.VarChar, Value = txtStatusRemarks.Text.ToString() == null ? null : txtStatusRemarks.Text },
                    new SqlParameter() { ParameterName = "@Targetdate", SqlDbType = SqlDbType.DateTime, Value = dtpTargetDt.SelectedDate }
                    );
-
+              
+                SentSMS();
                 ClearTaskDet();
-
                 WebMsgBox.Show("Service Request details saved");
                
                 pnlSecond.Visible = false;
@@ -408,77 +408,62 @@ public partial class TaskList : System.Web.UI.Page
 
     }
 
-    //public  void SentSMS()
-    //{
-    //    string constring = @"data source=111.118.188.128\SQLEXPRESS;initial catalog=CovaiSoft;persist security info=True;user id=cpc;password=C0vaipr0p";
+    public void SentSMS()
+    {
+        //string constring = @"data source=111.118.188.128\SQLEXPRESS;initial catalog=CovaiSoft;persist security info=True;user id=cpc;password=C0vaipr0p";
+       string constring = ConfigurationManager.AppSettings["constring"].ToString();
+       SqlConnection con = new SqlConnection(constring);
+        SqlCommand cmd = new SqlCommand(string.Concat("SELECT * FROM SendSMS where status='NotSen'"), con);
+        SqlDataAdapter da = new SqlDataAdapter(cmd);
+        DataSet dsCredential = new DataSet();
+        da.Fill(dsCredential);
 
-    //    SqlConnection con = new SqlConnection(constring);
+        if (dsCredential.Tables[0].Rows.Count > 0)
+        {
+            for (int i = 0; i < dsCredential.Tables[0].Rows.Count; i++)
+            {
+                string strMobileNo = dsCredential.Tables[0].Rows[i]["MobileNo"].ToString();
+                string strSmsText = dsCredential.Tables[0].Rows[i]["smstext"].ToString();
+                string strUrl = "http://sms.innovatussystems.com/api/sendmsg.php?user=innsys&pass=India123&sender=ORISTS&phone=" + strMobileNo + "&text=" + strSmsText + "&priority=ndnd&stype=normal";
+                // Create a request object  
+                WebRequest request = HttpWebRequest.Create(strUrl);
+                // Get the response back  
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                Stream s = (Stream)response.GetResponseStream();
+                StreamReader readStream = new StreamReader(s);
+                string dataString = readStream.ReadToEnd();
+                response.Close();
+                s.Close();
+                readStream.Close();
+                con.Open();
+                cmd = new SqlCommand(string.Concat("update sendsms set status='Sent' WHERE RSN=" + dsCredential.Tables[0].Rows[i]["RSN"].ToString()), con);
+                cmd.ExecuteNonQuery();
+                con.Close();
 
-    //    SqlCommand cmd = new SqlCommand(string.Concat("SELECT * FROM SendSMS where status='NotSent'"), con);
+            }
+            //return (response.ToString());
+        }
 
-    //    SqlDataAdapter da = new SqlDataAdapter(cmd);
-    //    DataSet dsCredential = new DataSet();
+    }
 
-    //    da.Fill(dsCredential);
+    public String SentSMS(String MobileNumber, String SmsText)
+    {
 
-    //    if (dsCredential.Tables[0].Rows.Count > 0)
-    //    {
+        string strUrl = "http://sms.innovatussystems.com/api/sendmsg.php?user=innsys&pass=India123&sender=ORISTS&phone=" + MobileNumber + "&text=" + SmsText + "&priority=ndnd&stype=normal";
+        // Create a request object  
+        WebRequest request = HttpWebRequest.Create(strUrl);
+        // Get the response back  
+        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+        Stream s = (Stream)response.GetResponseStream();
+        StreamReader readStream = new StreamReader(s);
+        string dataString = readStream.ReadToEnd();
+        response.Close();
+        s.Close();
+        readStream.Close();
 
+        return (response.ToString());
 
-    //        for (int i = 0; i < dsCredential.Tables[0].Rows.Count; i++)
-    //        {
-
-    //            string strMobileNo = dsCredential.Tables[0].Rows[i]["MobileNo"].ToString();
-    //            string strSmsText = dsCredential.Tables[0].Rows[i]["smstext"].ToString();
-
-
-    //            string strUrl = "http://sms.innovatussystems.com/api/sendmsg.php?user=innsys&pass=India123&sender=ORISTS&phone=" + strMobileNo + "&text=" + strSmsText + "&priority=ndnd&stype=normal";
-    //            // Create a request object  
-    //            WebRequest request = HttpWebRequest.Create(strUrl);
-    //            // Get the response back  
-    //            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-    //            Stream s = (Stream)response.GetResponseStream();
-    //            StreamReader readStream = new StreamReader(s);
-    //            string dataString = readStream.ReadToEnd();
-    //            response.Close();
-    //            s.Close();
-    //            readStream.Close();
-
-    //            con.Open();
-    //            cmd = new SqlCommand(string.Concat("update sendsms set status='Sent' WHERE RSN=" + dsCredential.Tables[0].Rows[i]["RSN"].ToString()), con);
-    //            cmd.ExecuteNonQuery();
-    //            con.Close();
-
-    //        }
-
-    //        //return (response.ToString());
-
-    //    }
-
-
-
-    //}
-
-
-
-    //public String SentSMS(String MobileNumber, String SmsText)
-    //{
-
-    //    string strUrl = "http://sms.innovatussystems.com/api/sendmsg.php?user=innsys&pass=India123&sender=ORISTS&phone=" + MobileNumber + "&text=" + SmsText + "&priority=ndnd&stype=normal";
-    //    // Create a request object  
-    //    WebRequest request = HttpWebRequest.Create(strUrl);
-    //    // Get the response back  
-    //    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-    //    Stream s = (Stream)response.GetResponseStream();
-    //    StreamReader readStream = new StreamReader(s);
-    //    string dataString = readStream.ReadToEnd();
-    //    response.Close();
-    //    s.Close();
-    //    readStream.Close();
-
-    //    return (response.ToString());
-
-    //}
+    }
 
     protected void btnUpdate_Click(object sender, EventArgs e)
     {

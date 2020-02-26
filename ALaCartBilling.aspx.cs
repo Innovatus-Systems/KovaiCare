@@ -64,7 +64,7 @@ public partial class ALaCartBilling : System.Web.UI.Page
             catch (Exception ex)
             {
 
-                
+
             }
             dtpfordate.SelectedDate = DateTime.Now;
             LoadResidentDet();
@@ -108,8 +108,8 @@ public partial class ALaCartBilling : System.Web.UI.Page
             DataSet dsmenuitem = new DataSet();
             if (chkTCM.Checked == true)
             {
-                 dsmenuitem = sqlobj.ExecuteSP("SP_FetchItem",
-                 new SqlParameter() { ParameterName = "@IMODE", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Int, Value = 1 });
+                dsmenuitem = sqlobj.ExecuteSP("SP_FetchItem",
+                new SqlParameter() { ParameterName = "@IMODE", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Int, Value = 1 });
             }
             else
             {
@@ -273,8 +273,8 @@ public partial class ALaCartBilling : System.Web.UI.Page
                     Amount = Convert.ToDouble(lblAmount1.Text);
                     CGST = Convert.ToDouble(CGST1.ToString());
                     SGST = Convert.ToDouble(SGST1.ToString());
-                   
-                    if(dstxnCode.Tables[0].Rows[0]["IorE"].ToString()=="E")
+
+                    if (dstxnCode.Tables[0].Rows[0]["IorE"].ToString() == "E")
                     {
                         lblAmount1.Text = iatop.ToString();
                         CalCGST = (Amount * (CGST / 100));
@@ -286,16 +286,16 @@ public partial class ALaCartBilling : System.Web.UI.Page
                     else
                     {
                         double ttlCGST = 100 + CGST;
-                        double ttlSGST= 100 + SGST;
-                        double gstC=(Amount-(((Amount)*100)/ ttlCGST));
-                        double gsts =(Amount- (((Amount) * 100) / ttlSGST));
+                        double ttlSGST = 100 + SGST;
+                        double gstC = (Amount - (((Amount) * 100) / ttlCGST));
+                        double gsts = (Amount - (((Amount) * 100) / ttlSGST));
                         //CalCGST = (Amount * (CGST / 100));
                         //CalSGST = (Amount * (SGST / 100));
                         lblAmount1.Text = (Amount - gstC - gsts).ToString("F");
                         decimal adj1 = (Convert.ToDecimal((Convert.ToDouble(lblAmount1.Text) + gstC + gsts).ToString("F")));
                         decimal adj2 = adj1 - Convert.ToDecimal(Amount);
                         decimal adj3 = 0;
-                        if(iatop >= Convert.ToDecimal(adj1))
+                        if (iatop >= Convert.ToDecimal(adj1))
                         {
                             adj3 = Convert.ToDecimal(lblAmount1.Text);
                         }
@@ -308,7 +308,7 @@ public partial class ALaCartBilling : System.Web.UI.Page
                         lblSGST1.Text = gsts.ToString("F");
                         txtBMAmounttopay.Text = (Amount).ToString("F");
                     }
-                    
+
                 }
                 dstxnCode.Dispose();
             }
@@ -354,6 +354,8 @@ public partial class ALaCartBilling : System.Web.UI.Page
             rgBookingameal.DataSource = string.Empty;
             rgBookingameal.DataBind();
             cmbResident.Enabled = true;
+            dt.Rows.Clear();
+            ViewState["dt"] = null;
             /// btnpaynow.Visible = false;
         }
         catch (Exception ex)
@@ -372,7 +374,7 @@ public partial class ALaCartBilling : System.Web.UI.Page
                 new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 2 },
                new SqlParameter() { ParameterName = "@TxnCode", SqlDbType = SqlDbType.NVarChar, Value = "AC" });
             if (dsTxn.Tables[0].Rows.Count > 0)
-            {               
+            {
                 lblhelp1.Text = dsTxn.Tables[0].Rows[0]["Help"].ToString();
                 string msg = dsTxn.Tables[0].Rows[0]["StdDescription"].ToString();
                 string CGST = dsTxn.Tables[0].Rows[0]["CGST"].ToString();
@@ -394,24 +396,24 @@ public partial class ALaCartBilling : System.Web.UI.Page
     {
         try
         {
-            if(cmbResident.SelectedValue=="0"||ddlItemName.SelectedIndex==0)
+            if (cmbResident.SelectedValue == "0" || ddlItemName.SelectedIndex == 0)
             {
                 WebMsgBox.Show("Please select Resident");
                 return;
             }
-            if(string.IsNullOrEmpty(txtBMAmounttopay.Text)||string.IsNullOrEmpty(txtBMRate.Text)||string.IsNullOrEmpty(txtBMTotQty.Text))
+            if (string.IsNullOrEmpty(txtBMAmounttopay.Text) || string.IsNullOrEmpty(txtBMRate.Text) || string.IsNullOrEmpty(txtBMTotQty.Text))
             {
                 WebMsgBox.Show("Please make sure all the fields are filled.");
                 return;
             }
-            
+
             string struntildate = "";
             DateTime fdate = Convert.ToDateTime(dtpfordate.SelectedDate);
             DataRow dr = dt.NewRow();
             dr["ItemCode"] = ddlItemName.SelectedValue;
             dr["ItemName"] = ddlItemName.SelectedItem.Text;
             dr["Rate"] = Convert.ToDecimal(txtBMRate.Text);
-            dr["Persons"] = 0;
+            dr["Persons"] = Convert.ToInt32(txtBMTotQty.Text);
             dr["Unit"] = "Nos.";
             //dr["Qty"] = Convert.ToInt32(ddlBMQuantiry.SelectedValue) ;
             dr["Qty"] = Convert.ToInt32(txtBMTotQty.Text);
@@ -445,13 +447,13 @@ public partial class ALaCartBilling : System.Web.UI.Page
             lblCGST1.Visible = false;
             lblSGST.Visible = false;
             lblSGST1.Visible = false;
-            if(chkPastDate.Checked==false)
-            { dtpfordate.SelectedDate = DateTime.Now;}
+            if (chkPastDate.Checked == false)
+            { dtpfordate.SelectedDate = DateTime.Now; }
 
-                btnPreparetobill.Visible = true;
+            btnPreparetobill.Visible = true;
             txtBMAmounttopay.Text = "";
             txtBMRate.Text = "";
-            cmbResident.Enabled = false;
+           // cmbResident.Enabled = false;
             //Added by Bala on 19.02.2020
             txtBMRate.Text = string.Empty;
             txtBMQuantity.Text = string.Empty;
@@ -521,14 +523,14 @@ public partial class ALaCartBilling : System.Web.UI.Page
                         new SqlParameter() { ParameterName = "@Rate", SqlDbType = SqlDbType.Decimal, Value = dRate },
                         new SqlParameter() { ParameterName = "@Persons", SqlDbType = SqlDbType.Int, Value = ipersons },
                         new SqlParameter() { ParameterName = "@Qty", SqlDbType = SqlDbType.Int, Value = iQty },
-                        new SqlParameter() { ParameterName = "@Amounttopay", SqlDbType = SqlDbType.Decimal, Value = damounttopay },                        
+                        new SqlParameter() { ParameterName = "@Amounttopay", SqlDbType = SqlDbType.Decimal, Value = damounttopay },
                         new SqlParameter() { ParameterName = "@BillNo", SqlDbType = SqlDbType.NVarChar, Value = strBillNo.ToString() }
 
                         );
 
                 }
                 string Check = "No";
-                if(chkPastDate.Checked==true)
+                if (chkPastDate.Checked == true)
                 {
                     Check = "True";
                 }
@@ -559,7 +561,7 @@ public partial class ALaCartBilling : System.Web.UI.Page
                 //txtNoOfPersons.Text="0";
                 txtBMAmounttopay.Text = "";
                 //ddlBMQuantiry.SelectedValue = "0";
-                txtBMQuantity.Text= "0";
+                txtBMQuantity.Text = "0";
                 txtBMRate.Text = "";
                 txtBMTotQty.Text = "";
 
@@ -573,6 +575,7 @@ public partial class ALaCartBilling : System.Web.UI.Page
                 cmbResident.SelectedValue = "0";
                 btnClearAll_Click(sender, e);
                 dt.Rows.Clear();
+                ViewState["dt"] = null;
                 cmbResident.Enabled = true;
                 //ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Credit transaction updated');", true);
 
@@ -597,50 +600,61 @@ public partial class ALaCartBilling : System.Web.UI.Page
     protected void cmbResident_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
     {
         DataSet dsDetails;
-        if (ChkGR.SelectedValue=="R")
+        if (cmbResident.SelectedIndex != -1)
         {
-            dsDetails = sqlobj.ExecuteSP("SP_TxnDropDownList", new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 3 },
-               new SqlParameter() { ParameterName = "@SelectedValue", SqlDbType = SqlDbType.NVarChar, Value = cmbResident.SelectedValue.ToString() });
-            if (dsDetails.Tables[0].Rows.Count > 0)
+            if (ChkGR.SelectedValue == "R")
             {
-                lblnm.Text = dsDetails.Tables[0].Rows[0]["RtName"].ToString();
-                lblDrNo.Text = dsDetails.Tables[0].Rows[0]["RTVillaNo"].ToString();
-                lblAccNo.Text = dsDetails.Tables[0].Rows[0]["GLAccount"].ToString();
-                lblOtSt.Text = dsDetails.Tables[0].Rows[0]["Outstanding"].ToString();
-                lblnm.Visible = true;
-                //LabelName.Visible = true;
-                //LabelDrNo.Visible = true;
-                lblSpace.Visible = true;
-                lblDrNo.Visible = true;
-                LabelAccNo.Visible = true;
-                lblAccNo.Visible = true;
-                LabelOutSt.Visible = true;
-                lblOtSt.Visible = true;
+                dsDetails = sqlobj.ExecuteSP("SP_TxnDropDownList", new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 3 },
+                   new SqlParameter() { ParameterName = "@SelectedValue", SqlDbType = SqlDbType.NVarChar, Value = cmbResident.SelectedValue.ToString() });
+                if (dsDetails.Tables[0].Rows.Count > 0)
+                {
+                    lblnm.Text = dsDetails.Tables[0].Rows[0]["RtName"].ToString();
+                    lblDrNo.Text = dsDetails.Tables[0].Rows[0]["RTVillaNo"].ToString();
+                    lblAccNo.Text = dsDetails.Tables[0].Rows[0]["GLAccount"].ToString();
+                    lblOtSt.Text = dsDetails.Tables[0].Rows[0]["Outstanding"].ToString();
+                    lblnm.Visible = true;
+                    //LabelName.Visible = true;
+                    //LabelDrNo.Visible = true;
+                    lblSpace.Visible = true;
+                    lblDrNo.Visible = true;
+                    LabelAccNo.Visible = true;
+                    lblAccNo.Visible = true;
+                    LabelOutSt.Visible = true;
+                    lblOtSt.Visible = true;
+                }
             }
+            else
+            {
+                dsDetails = sqlobj.ExecuteSP("SP_TxnDropDownList", new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 9 },
+                    new SqlParameter() { ParameterName = "@SelectedValue", SqlDbType = SqlDbType.NVarChar, Value = cmbResident.SelectedValue.ToString() },
+                     new SqlParameter() { ParameterName = "@TxnCode", SqlDbType = SqlDbType.NVarChar, Value = "" });
+                if (dsDetails.Tables[0].Rows.Count > 0)
+                {
+                    lblnm.Text = dsDetails.Tables[0].Rows[0]["Name"].ToString();
+                    lblDrNo.Text = dsDetails.Tables[0].Rows[0]["BookingFor"].ToString();
+                    lblAccNo.Text = dsDetails.Tables[0].Rows[0]["AccountCode"].ToString();
+                    lblOtSt.Text = dsDetails.Tables[0].Rows[0]["Outstanding"].ToString();
+                    lblnm.Visible = true;
+                    //LabelName.Visible = true;
+                    //LabelDrNo.Visible = true;
+                    lblSpace.Visible = true;
+                    lblDrNo.Visible = true;
+                    LabelAccNo.Visible = true;
+                    lblAccNo.Visible = true;
+                    LabelOutSt.Visible = true;
+                    lblOtSt.Visible = true;
+                }
+            }
+
         }
         else
         {
-            dsDetails = sqlobj.ExecuteSP("SP_TxnDropDownList", new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 9 },
-                new SqlParameter() { ParameterName = "@SelectedValue", SqlDbType = SqlDbType.NVarChar, Value = cmbResident.SelectedValue.ToString() },
-                 new SqlParameter() { ParameterName = "@TxnCode", SqlDbType = SqlDbType.NVarChar, Value = "" });
-            if (dsDetails.Tables[0].Rows.Count > 0)
-            {
-                lblnm.Text = dsDetails.Tables[0].Rows[0]["Name"].ToString();
-                lblDrNo.Text = dsDetails.Tables[0].Rows[0]["BookingFor"].ToString();
-                lblAccNo.Text = dsDetails.Tables[0].Rows[0]["AccountCode"].ToString();
-                lblOtSt.Text = dsDetails.Tables[0].Rows[0]["Outstanding"].ToString();
-                lblnm.Visible = true;
-                //LabelName.Visible = true;
-                //LabelDrNo.Visible = true;
-                lblSpace.Visible = true;
-                lblDrNo.Visible = true;
-                LabelAccNo.Visible = true;
-                lblAccNo.Visible = true;
-                LabelOutSt.Visible = true;
-                lblOtSt.Visible = true;
-            }
+            rwDinCount.Visible = false;
+            WebMsgBox.Show("Please select the Resident");
+
+            return;
         }
-        
+
     }
 
     protected void lnkDinCount_Click(object sender, EventArgs e)
@@ -667,9 +681,9 @@ public partial class ALaCartBilling : System.Web.UI.Page
             rwDinCount.Visible = true;
             LoaddrpItem();
             LoadCount();
-           
+
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
 
         }
@@ -696,16 +710,16 @@ public partial class ALaCartBilling : System.Web.UI.Page
             }
         }
     }
-   
+
     protected void LoadCount()
     {
         try
-        {                      
+        {
             DataSet dsDetails = sqlobj.ExecuteSP("CC_ALACARTECOUNT",
                  new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 1 },
                  new SqlParameter() { ParameterName = "@FROMDATE", SqlDbType = SqlDbType.DateTime, Value = rdFrom.SelectedDate },
                  new SqlParameter() { ParameterName = "@TILLDATE", SqlDbType = SqlDbType.DateTime, Value = rdTill.SelectedDate },
-                new SqlParameter() { ParameterName = "@ITEM", SqlDbType = SqlDbType.NVarChar, Value = drpItem.SelectedValue.ToString()});
+                new SqlParameter() { ParameterName = "@ITEM", SqlDbType = SqlDbType.NVarChar, Value = drpItem.SelectedValue.ToString() });
             if (dsDetails.Tables[0].Rows.Count > 0)
             {
                 rgCount.DataSource = dsDetails.Tables[0];
@@ -720,13 +734,13 @@ public partial class ALaCartBilling : System.Web.UI.Page
 
             if (dsDetails.Tables[0].Rows.Count > 0)
             {
-                lblQty.Text = "Total Qty - "+ dsDetails.Tables[2].Rows[0]["Qty"].ToString();
+                lblQty.Text = "Total Qty - " + dsDetails.Tables[2].Rows[0]["Qty"].ToString();
             }
             else
             {
                 lblQty.Text = "Total Qty - 0.";
             }
-            
+
             dsDetails.Dispose();
         }
         catch (Exception ex)
@@ -744,13 +758,13 @@ public partial class ALaCartBilling : System.Web.UI.Page
                  new SqlParameter() { ParameterName = "@TILLDATE", SqlDbType = SqlDbType.DateTime, Value = rdTill.SelectedDate },
                   new SqlParameter() { ParameterName = "@ITEM", SqlDbType = SqlDbType.NVarChar, Value = "All" });
             if (dsDetails.Tables[0].Rows.Count > 0)
-            {               
+            {
                 drpItem.DataSource = dsDetails.Tables[1];
                 drpItem.DataValueField = "ItemName";
                 drpItem.DataTextField = "ItemName";
                 drpItem.DataBind();
             }
-            drpItem.Items.Insert(0, new ListItem("All", "All"));         
+            drpItem.Items.Insert(0, new ListItem("All", "All"));
             dsDetails.Dispose();
         }
         catch (Exception ex)
@@ -782,15 +796,15 @@ public partial class ALaCartBilling : System.Web.UI.Page
         LoadResidentDet();
     }
 
-    
 
-        protected void chkTCM_CheckedChanged(object sender, EventArgs e)
+
+    protected void chkTCM_CheckedChanged(object sender, EventArgs e)
     {
         LoadMenus();
     }
 
     protected void ddlItemName_SelectedIndexChanged(object sender, EventArgs e)
     {
-       
+
     }
 }
