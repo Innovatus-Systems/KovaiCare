@@ -156,7 +156,7 @@
                     <td style="width: 5px;"></td>
                     <td id="tdTab" style="width: 1100px; vertical-align: central;" visible="true" runat="server">
                         <telerik:RadTabStrip ID="RadTabStrip1" runat="server" MultiPageID="RadMultiPage1"
-                            Skin="Sunset" BorderColor="LightGray" BorderStyle="Ridge" BorderWidth="0px" SelectedIndex="4" Style="margin-bottom: 0">
+                            Skin="Sunset" BorderColor="LightGray" BorderStyle="Ridge" BorderWidth="0px" SelectedIndex="5" Style="margin-bottom: 0">
                             <Tabs>
                                 <telerik:RadTab runat="server" Text="TXN Posting" PageViewID="Transactions" CssClass="Font_lbl"
                                     ForeColor="Black" ToolTip="Click here to post the transaction(s)">
@@ -171,10 +171,10 @@
                                     ForeColor="Black" ToolTip="Click here to view the past bills">
                                 </telerik:RadTab>
                                 <telerik:RadTab runat="server" Text="Diary" PageViewID="Diary"
-                                    CssClass="Font_lbl" ForeColor="Black" ToolTip=" " Selected="True">
+                                    CssClass="Font_lbl" ForeColor="Black" ToolTip=" ">
                                 </telerik:RadTab>
                                  <telerik:RadTab runat="server" Text="Monthly Bill Payment" PageViewID="MBPayment"
-                                    CssClass="Font_lbl" ForeColor="Black" ToolTip="">
+                                    CssClass="Font_lbl" ForeColor="Black" ToolTip="" Selected="True">
                                 </telerik:RadTab>
                             </Tabs>
                         </telerik:RadTabStrip>
@@ -213,7 +213,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <telerik:RadMultiPage ID="RadMultiPage1" runat="server" SelectedIndex="3" Width="1100px"
+                        <telerik:RadMultiPage ID="RadMultiPage1" runat="server" SelectedIndex="4" Width="1100px"
                             Height="100%" Visible="true" BorderColor="#E3E4FA" BorderStyle="Ridge" BorderWidth="1">
                             <telerik:RadPageView ID="Transactions" runat="server">
                                 <div>

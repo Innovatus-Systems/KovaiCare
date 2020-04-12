@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using iTextSharp.text;
+using iTextSharp.text.html.simpleparser;
+using iTextSharp.text.pdf;
+using System;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Net.Mail;
+using System.Text;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Data;
-using System.IO;
-using System.Net.Mail;
-using System.Data.SqlClient;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.html.simpleparser;
-using System.Configuration;
-using System.Text;
 using Telerik.Web.UI;
 
 public partial class MonthEndBilling : System.Web.UI.Page
@@ -42,7 +40,7 @@ public partial class MonthEndBilling : System.Web.UI.Page
     static decimal Total;
     static decimal CGSTAmt;
     static decimal SGSTAmt;
-    static string RTRSN ;
+    static string RTRSN;
     static string Villa;
     static string Resident;
     static string Adress;
@@ -826,9 +824,9 @@ public partial class MonthEndBilling : System.Web.UI.Page
     public void SendMail(DataTable dt, DataTable dtPersonal, DataTable dtGST)
     {
         try
-        {           
+        {
             System.Web.HttpResponse Response = System.Web.HttpContext.Current.Response;
-            HttpContext.Current.Response.Clear();           
+            HttpContext.Current.Response.Clear();
 
             string mailserver = string.Empty;
             string user = string.Empty;
@@ -866,7 +864,7 @@ public partial class MonthEndBilling : System.Web.UI.Page
             mySmtpClient.Credentials = basicauth;
             mySmtpClient.EnableSsl = false;
             mySmtpClient.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
-            mySmtpClient.Timeout = 400000;            
+            mySmtpClient.Timeout = 400000;
             myMail.SubjectEncoding = System.Text.Encoding.UTF8;
             myMail.BodyEncoding = System.Text.Encoding.UTF8;
 
@@ -909,11 +907,11 @@ public partial class MonthEndBilling : System.Web.UI.Page
                 {
                     var query = drfilService.Select(x => x.Field<String>("InvoiceNo")).Distinct();
                     DataRow[] drInvoiceNo;
-                    InvCount = query.ToArray().Length;                    
+                    InvCount = query.ToArray().Length;
                     foreach (var value in query)
                     {
                         count += 1;
-                        drInvoiceNo = dt.Select("InvoiceNo = '" + value + "'");                        
+                        drInvoiceNo = dt.Select("InvoiceNo = '" + value + "'");
 
                         //dtservice = drfilService.CopyToDataTable();
                         dtservice = drInvoiceNo.CopyToDataTable();
@@ -1031,7 +1029,7 @@ public partial class MonthEndBilling : System.Web.UI.Page
             sbBody.Append("</td></tr>");
             sbBody.Append("<tr><td>The Invoice(s) are attached.</b>");
             sbBody.Append("</td></tr>");
-            
+
             sbBody.Append("<tr><td>With Best Regards,");
             sbBody.Append("</td></tr>");
             sbBody.Append("<tr><td><b>" + commnty + "</b></td></tr>");
@@ -1045,12 +1043,12 @@ public partial class MonthEndBilling : System.Web.UI.Page
             sbBody.Append("<tr><td></td></tr>");
             sbBody.Append("<tr style='font-family:Verdana;font-size:13px;'><td><b>This is an automatically generated mail from <a href='http://www.covaiseniorliving.com/' title='Click here to open ORIS'>CovaiSmart</a>, the software for Retirement Communities.</b></td></tr>");
             sbBody.Append("</table>");
-            myMail.Subject ="Month End Billing Invoice(s) for the month of " +Bmonth ;
+            myMail.Subject = "Month End Billing Invoice(s) for the month of " + Bmonth;
             //myMail.Subject = "Month End Billing Invoice(s) for the month of Dec18";
             myMail.Body = sbBody.ToString();
             mySmtpClient.Send(myMail);
             dt.Dispose();
-            dtPersonal.Dispose();            
+            dtPersonal.Dispose();
             //HttpContext.Current.ApplicationInstance.CompleteRequest();
             //AdminMail();
         }
@@ -1074,7 +1072,7 @@ public partial class MonthEndBilling : System.Web.UI.Page
         readStream.Close();
         writeStream.Close();
     }
-    protected void UpdateTxn(string rtrsn, string mailID, string file,string Amt)
+    protected void UpdateTxn(string rtrsn, string mailID, string file, string Amt)
     {
         try
         {
@@ -1473,7 +1471,10 @@ public partial class MonthEndBilling : System.Web.UI.Page
             WebMsgBox.Show(ex.Message);
         }
     }
+    protected void btnPreviewInvoice_Click(object sender, EventArgs e)
+    {
 
+    }
     protected void btnStatus_Click(object sender, EventArgs e)
     {
         try
@@ -1494,7 +1495,7 @@ public partial class MonthEndBilling : System.Web.UI.Page
         }
     }
 
-    protected void  btnProcess_Click(object sender, EventArgs e)
+    protected void btnProcess_Click(object sender, EventArgs e)
     {
         try
         {
@@ -1533,7 +1534,7 @@ public partial class MonthEndBilling : System.Web.UI.Page
                  new SqlParameter() { ParameterName = "@WCCharges", SqlDbType = SqlDbType.Decimal, Value = wc.ToString() },
                  new SqlParameter() { ParameterName = "@TLCharges", SqlDbType = SqlDbType.Decimal, Value = tl.ToString() }
                  );
-              
+
                 DataSet dsTtlAccount = sqlobj.ExecuteSP("SP_TotalAccountBilled",
                      new SqlParameter() { ParameterName = "@Imode", SqlDbType = SqlDbType.Int, Value = 1 });
                 string TtlAccount = dsTtlAccount.Tables[0].Rows[0]["Total"].ToString();
@@ -1546,7 +1547,7 @@ public partial class MonthEndBilling : System.Web.UI.Page
             btnStatus.Visible = false;
         }
         catch (Exception ex)
-            {
+        {
             ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "alert", "alert('" + ex.Message.ToString() + "');", true);
         }
     }
@@ -1557,18 +1558,18 @@ public partial class MonthEndBilling : System.Web.UI.Page
             DataSet ds = sqlobj.ExecuteSP("SP_TotalAccountBilled",
               new SqlParameter() { ParameterName = "@IMode", SqlDbType = SqlDbType.Int, Value = 4 });
             ViewState["InvoiceEnd"] = Convert.ToDecimal(ds.Tables[0].Rows[0]["Invoicecode"].ToString());
-           
+
             DataSet dsTtlAccount = sqlobj.ExecuteSP("SP_TotalAccountBilled",
                     new SqlParameter() { ParameterName = "@Imode", SqlDbType = SqlDbType.Int, Value = 2 });
             string BillingMonth = dsTtlAccount.Tables[0].Rows[0]["BillingMonth"].ToString();
             string NoOfInvoice = dsTtlAccount.Tables[0].Rows[0]["NoOfInvoice"].ToString();
-            string AmountBilled = dsTtlAccount.Tables[0].Rows[0]["AmountBilled"].ToString(); 
+            string AmountBilled = dsTtlAccount.Tables[0].Rows[0]["AmountBilled"].ToString();
             string NextMonth = dsTtlAccount.Tables[0].Rows[0]["NextMonth"].ToString();
             string Resident = dsTtlAccount.Tables[0].Rows[0]["Resident"].ToString();
             string Tenant = dsTtlAccount.Tables[0].Rows[0]["Tenant"].ToString();
-            string Away = dsTtlAccount.Tables[0].Rows[0]["Away"].ToString(); 
+            string Away = dsTtlAccount.Tables[0].Rows[0]["Away"].ToString();
             string NoOfResident = dsTtlAccount.Tables[0].Rows[0]["NoOfResident"].ToString();
-             //DataTable dtservice = dsTtlAccount.Tables[1];
+            //DataTable dtservice = dsTtlAccount.Tables[1];
 
 
             System.Web.HttpResponse Response = System.Web.HttpContext.Current.Response;
@@ -1623,10 +1624,10 @@ public partial class MonthEndBilling : System.Web.UI.Page
                     sbBody.Append("<tr><td >5.Resident-(OR): " + Resident + ".</tr>");
                     sbBody.Append("<tr><td >6.Tenant-(T): " + Tenant + ".</tr>");
                     sbBody.Append("<tr><td >7.Away-(OA): " + Away + ".</tr>");
-                    sbBody.Append("<tr><td >8.Total-(OR,T,OA): " + NoOfResident + ".</tr>");                    
+                    sbBody.Append("<tr><td >8.Total-(OR,T,OA): " + NoOfResident + ".</tr>");
                     sbBody.Append("<tr><td>The Invoice(s) are archived as PDF files in '<b><u>covaiproprarch@gmail.com</u></b>'.</td></tr>");
                     sbBody.Append("<tr><td>Invoice File Name:- <b>DoorNo_Name_MMMYY.pdf</b>.</td></tr>");
-                    sbBody.Append("<tr><td>New Billing Month:- "+ NextMonth + ".</td></tr>");
+                    sbBody.Append("<tr><td>New Billing Month:- " + NextMonth + ".</td></tr>");
                     sbBody.Append("</table>");
                     myMail.IsBodyHtml = true;
                     myMail.Subject = "Month end Billing Snapshot For " + BillingMonth + ".";
@@ -1655,7 +1656,7 @@ public partial class MonthEndBilling : System.Web.UI.Page
 
     protected void btnPro_Click(object sender, EventArgs e)
     {
-        
+
         //DataSet dsMonthEndDashBoard = sqlobj.ExecuteSP("CC_PROCESSTXNSFORMEB");
         btnDashboard.Visible = true;
         btnPro.Visible = false;

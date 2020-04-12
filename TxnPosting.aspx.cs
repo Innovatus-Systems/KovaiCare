@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
-using System.Globalization;
-using System.Drawing;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 public partial class TxnPosting : System.Web.UI.Page
@@ -53,7 +47,7 @@ public partial class TxnPosting : System.Web.UI.Page
     {
         try
         {
-            
+
             DataSet dsTxn = sqlobj.ExecuteSP("SP_TxnDropDownList",
                 new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 2 },
                new SqlParameter() { ParameterName = "@TxnCode", SqlDbType = SqlDbType.NVarChar, Value = drpTxn.SelectedValue.ToString() });
@@ -86,7 +80,7 @@ public partial class TxnPosting : System.Web.UI.Page
     {
         try
         {
-            DataSet dsTxn = sqlobj.ExecuteSP("SP_TxnDropDownList", 
+            DataSet dsTxn = sqlobj.ExecuteSP("SP_TxnDropDownList",
                 new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 14 },
                 new SqlParameter() { ParameterName = "@TxnType", SqlDbType = SqlDbType.NVarChar, Value = ddlTransType.SelectedValue });
             if (dsTxn.Tables[0].Rows.Count > 0)
@@ -113,7 +107,7 @@ public partial class TxnPosting : System.Web.UI.Page
             if (!chkAll.Checked)
             {
                 dsResident = sqlobj.ExecuteSP("SP_GenDropDownList",
-                  //new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 1 },
+                 //new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 1 },
                  new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 19 },
                  new SqlParameter() { ParameterName = "@Phase", SqlDbType = SqlDbType.NVarChar, Value = ddlPhase.SelectedValue });
             }
@@ -124,7 +118,7 @@ public partial class TxnPosting : System.Web.UI.Page
                  new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 20 },
                  new SqlParameter() { ParameterName = "@Phase", SqlDbType = SqlDbType.NVarChar, Value = ddlPhase.SelectedValue });
             }
-            
+
             cmbResident.DataSource = dsResident.Tables[0];
             cmbResident.DataValueField = "RTRSN";
             cmbResident.DataTextField = "RName";
@@ -232,7 +226,7 @@ public partial class TxnPosting : System.Web.UI.Page
             LabelCGST1.Visible = false;
             LabelSGST1.Visible = false;
             lblnarration.Visible = false;
-            lblstdnarr.Visible = false;           
+            lblstdnarr.Visible = false;
             LabelOutSt2.Visible = false;
             lbloutstd2.Visible = false;
             LabelNewBal.Visible = false;
@@ -255,147 +249,147 @@ public partial class TxnPosting : System.Web.UI.Page
         try
         {
 
-       
-        if (string.IsNullOrEmpty(txtCAmount.Text))
-        {
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Script", "Sys.Application.add_load(HideUpdateProgress);", true);
-            
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please Enter valid amount.');", true);
-            return;
-        }
 
-        if (cmbResident.SelectedValue.ToString()=="0")
-        {
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Script", "Sys.Application.add_load(HideUpdateProgress);", true);
-           
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please select resident.');", true);
-            return;
-        }
-        LabelNewBal.Visible = true;
-        lblNewBal.Visible = true;
-        DataSet dsDetails = sqlobj.ExecuteSP("SP_TxnDropDownList", new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 3 },
-               new SqlParameter() { ParameterName = "@SelectedValue", SqlDbType = SqlDbType.NVarChar, Value = cmbResident.SelectedValue.ToString() });
-        double otst = 0.00;
-        otst = Convert.ToDouble(dsDetails.Tables[0].Rows[0]["otst"].ToString());
-        if (dsDetails.Tables[0].Rows.Count > 0)
-        {
-            lbloutstd2.Text = dsDetails.Tables[0].Rows[0]["Outstanding"].ToString();
-            LabelOutSt2.Visible = true;
-            lbloutstd2.Visible = true;
-        }
-        Double Amount = Convert.ToDouble(txtCAmount.Text);
-        Double CGST = 0.00;
-        Double SGST = 0.00;
-        Double CalCGST = 0.00;
-        Double CalSGST = 0.00;
+            if (string.IsNullOrEmpty(txtCAmount.Text))
+            {
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Script", "Sys.Application.add_load(HideUpdateProgress);", true);
 
-        if (drpTxn.SelectedValue == "DP" || drpTxn.SelectedValue == "DR")
-        {
-            LabelNewBal.Visible = false;
-            lblNewBal.Visible = false;
-            LabelOutSt2.Visible = false;
-            lbloutstd2.Visible = false;
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please Enter valid amount.');", true);
+                return;
+            }
 
-        }
-        if (!string.IsNullOrEmpty(lblCgst1.Text) && !string.IsNullOrEmpty(lblSgst1.Text))
-        {
-            CGST = Convert.ToDouble(lblCgst1.Text);
-            SGST = Convert.ToDouble(lblSgst1.Text);
-            CalCGST = (Amount * (CGST / 100));
-            CalSGST = (Amount * (SGST / 100));
-            lblSGST2.Visible = true;
-            lblCGST2.Visible = true;
-            LabelCGST.Visible = true;
-            LabelSGST.Visible = true;
-            lblCGST2.Text = CalCGST.ToString();
-            lblSGST2.Text = CalSGST.ToString();
-        }
-        else
-        {
+            if (cmbResident.SelectedValue.ToString() == "0")
+            {
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Script", "Sys.Application.add_load(HideUpdateProgress);", true);
 
-        }
-        String outst ="0.00";
-        DataSet ds = sqlobj.ExecuteSP("SP_TxnDropDownList", new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 13 },
-        new SqlParameter() { ParameterName = "@SelectedValue", SqlDbType = SqlDbType.NVarChar, Value = drpTxn.SelectedValue.ToString() });
-           if(ds.Tables[0].Rows.Count>0)
-           {             
-               if(ds.Tables[0].Rows[0]["DrCr"].ToString()=="DR")
-               {
-                   
-                   outst = (Convert.ToDouble(otst) + (Amount + CalCGST + CalSGST)).ToString("F");
-                   if(Convert.ToDouble(outst)<0)
-                   {
-                       outst = Convert.ToString(outst).Replace("-", "");
-                       outst = outst + " CR";
-                   }
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please select resident.');", true);
+                return;
+            }
+            LabelNewBal.Visible = true;
+            lblNewBal.Visible = true;
+            DataSet dsDetails = sqlobj.ExecuteSP("SP_TxnDropDownList", new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 3 },
+                   new SqlParameter() { ParameterName = "@SelectedValue", SqlDbType = SqlDbType.NVarChar, Value = cmbResident.SelectedValue.ToString() });
+            double otst = 0.00;
+            otst = Convert.ToDouble(dsDetails.Tables[0].Rows[0]["otst"].ToString());
+            if (dsDetails.Tables[0].Rows.Count > 0)
+            {
+                lbloutstd2.Text = dsDetails.Tables[0].Rows[0]["Outstanding"].ToString();
+                LabelOutSt2.Visible = true;
+                lbloutstd2.Visible = true;
+            }
+            Double Amount = Convert.ToDouble(txtCAmount.Text);
+            Double CGST = 0.00;
+            Double SGST = 0.00;
+            Double CalCGST = 0.00;
+            Double CalSGST = 0.00;
 
-                   lblNewBal.Text = outst;
-               }
-               if (ds.Tables[0].Rows[0]["DrCr"].ToString() == "CR")
-               {
-                   outst = (Convert.ToDouble(otst) - (Amount + CalCGST + CalSGST)).ToString("F");
-                   if (Convert.ToDouble(outst) < 0)
-                   {
-                       outst = Convert.ToString(outst).Replace("-", "");
-                       outst = outst + " CR";
-                   }
-                   lblNewBal.Text = outst;
-               }
-           }       
-             }
-        catch(Exception ex)
+            if (drpTxn.SelectedValue == "DP" || drpTxn.SelectedValue == "DR")
+            {
+                LabelNewBal.Visible = false;
+                lblNewBal.Visible = false;
+                LabelOutSt2.Visible = false;
+                lbloutstd2.Visible = false;
+
+            }
+            if (!string.IsNullOrEmpty(lblCgst1.Text) && !string.IsNullOrEmpty(lblSgst1.Text))
+            {
+                CGST = Convert.ToDouble(lblCgst1.Text);
+                SGST = Convert.ToDouble(lblSgst1.Text);
+                CalCGST = (Amount * (CGST / 100));
+                CalSGST = (Amount * (SGST / 100));
+                lblSGST2.Visible = true;
+                lblCGST2.Visible = true;
+                LabelCGST.Visible = true;
+                LabelSGST.Visible = true;
+                lblCGST2.Text = CalCGST.ToString();
+                lblSGST2.Text = CalSGST.ToString();
+            }
+            else
+            {
+
+            }
+            String outst = "0.00";
+            DataSet ds = sqlobj.ExecuteSP("SP_TxnDropDownList", new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 13 },
+            new SqlParameter() { ParameterName = "@SelectedValue", SqlDbType = SqlDbType.NVarChar, Value = drpTxn.SelectedValue.ToString() });
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                if (ds.Tables[0].Rows[0]["DrCr"].ToString() == "DR")
+                {
+
+                    outst = (Convert.ToDouble(otst) + (Amount + CalCGST + CalSGST)).ToString("F");
+                    if (Convert.ToDouble(outst) < 0)
+                    {
+                        outst = Convert.ToString(outst).Replace("-", "");
+                        outst = outst + " CR";
+                    }
+
+                    lblNewBal.Text = outst;
+                }
+                if (ds.Tables[0].Rows[0]["DrCr"].ToString() == "CR")
+                {
+                    outst = (Convert.ToDouble(otst) - (Amount + CalCGST + CalSGST)).ToString("F");
+                    if (Convert.ToDouble(outst) < 0)
+                    {
+                        outst = Convert.ToString(outst).Replace("-", "");
+                        outst = outst + " CR";
+                    }
+                    lblNewBal.Text = outst;
+                }
+            }
+        }
+        catch (Exception ex)
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('"+ex.Message.ToString()+"');", true);
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('" + ex.Message.ToString() + "');", true);
         }
 
     }
     protected void cmbResident_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
     {
-        if(cmbResident.SelectedValue!="0")
-        {       
-        rdbResident_CheckedChanged(sender, e);       
-        DataSet dsDetails = sqlobj.ExecuteSP("SP_TxnDropDownList", new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 3 },
-                new SqlParameter() { ParameterName = "@SelectedValue", SqlDbType = SqlDbType.NVarChar, Value = cmbResident.SelectedValue.ToString() },
-                 new SqlParameter() { ParameterName = "@TxnCode", SqlDbType = SqlDbType.NVarChar, Value = drpTxn.SelectedValue.ToString() });
-        if (dsDetails.Tables[0].Rows.Count > 0)
+        if (cmbResident.SelectedValue != "0")
         {
-            lblnm.Text = dsDetails.Tables[0].Rows[0]["RtName"].ToString();
-            lblDrNo.Text = dsDetails.Tables[0].Rows[0]["RTVillaNo"].ToString();
-            lblAccNo.Text = dsDetails.Tables[0].Rows[0]["GLAccount"].ToString();
-            Session["GLAccount"] = dsDetails.Tables[0].Rows[0]["GLAccount"].ToString();
-            lblOtSt.Text = dsDetails.Tables[0].Rows[0]["Outstanding"].ToString();
-            lblnm.Visible = true;
-            //LabelName.Visible = true;
-            //LabelDrNo.Visible = true;
-            lblSpace.Visible = true;
-            lblDrNo.Visible = true;
-            LabelAccNo.Visible = true;
-            lblAccNo.Visible = true;
-            LabelOutSt.Visible = true;
-            lblOtSt.Visible = true;
-        }
-        else
-        {
-            gvTransactions.DataSource = string.Empty;
-            gvTransactions.DataBind();
-            //ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Script", "Sys.Application.add_load(HideUpdateProgress);", true);
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please Select Resident, And Try Again.');", true);
-            return;               
-        }
+            rdbResident_CheckedChanged(sender, e);
+            DataSet dsDetails = sqlobj.ExecuteSP("SP_TxnDropDownList", new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 3 },
+                    new SqlParameter() { ParameterName = "@SelectedValue", SqlDbType = SqlDbType.NVarChar, Value = cmbResident.SelectedValue.ToString() },
+                     new SqlParameter() { ParameterName = "@TxnCode", SqlDbType = SqlDbType.NVarChar, Value = drpTxn.SelectedValue.ToString() });
+            if (dsDetails.Tables[0].Rows.Count > 0)
+            {
+                lblnm.Text = dsDetails.Tables[0].Rows[0]["RtName"].ToString();
+                lblDrNo.Text = dsDetails.Tables[0].Rows[0]["RTVillaNo"].ToString();
+                lblAccNo.Text = dsDetails.Tables[0].Rows[0]["GLAccount"].ToString();
+                Session["GLAccount"] = dsDetails.Tables[0].Rows[0]["GLAccount"].ToString();
+                lblOtSt.Text = dsDetails.Tables[0].Rows[0]["Outstanding"].ToString();
+                lblnm.Visible = true;
+                //LabelName.Visible = true;
+                //LabelDrNo.Visible = true;
+                lblSpace.Visible = true;
+                lblDrNo.Visible = true;
+                LabelAccNo.Visible = true;
+                lblAccNo.Visible = true;
+                LabelOutSt.Visible = true;
+                lblOtSt.Visible = true;
+            }
+            else
+            {
+                gvTransactions.DataSource = string.Empty;
+                gvTransactions.DataBind();
+                //ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Script", "Sys.Application.add_load(HideUpdateProgress);", true);
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please Select Resident, And Try Again.');", true);
+                return;
+            }
         }
     }
     protected void rdbResident_CheckedChanged(object sender, EventArgs e)
     {
         try
-        {            
+        {
             if (cmbResident.SelectedValue == "0")
             {
                 gvTransactions.DataSource = string.Empty;
                 gvTransactions.DataBind();
                 //ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Script", "Sys.Application.add_load(HideUpdateProgress);", true);
-                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please Select Resident, And Try Again.');", true);               
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please Select Resident, And Try Again.');", true);
                 return;
-               
+
             }
             if (cmbResident.SelectedValue != "0")
             {
@@ -409,7 +403,7 @@ public partial class TxnPosting : System.Web.UI.Page
                 WebMsgBox.Show("Please Select Resident, And Try Again.");
                 return;
             }
-          
+
 
         }
         catch (Exception ex)
@@ -448,7 +442,7 @@ public partial class TxnPosting : System.Web.UI.Page
     {
         cmbResident.SelectedValue = "0";
         txtCAmount.Text = "";
-        txtRemarks.Text = "";         
+        txtRemarks.Text = "";
         rdbResident.Checked = true;
         lblDisable();
     }
@@ -474,47 +468,47 @@ public partial class TxnPosting : System.Web.UI.Page
     protected void btnTransSave_Click(object sender, EventArgs e)
     {
         try
-        { 
-        if (drpTxn.SelectedValue == "0")
         {
-            WebMsgBox.Show("Please Select Transaction.");
-            return;
-        }
-        if (cmbResident.SelectedValue == "0")
-        {
-            WebMsgBox.Show("Please Select Resident.");
-            return;
-        }
-        if (string.IsNullOrEmpty(txtCAmount.Text) || txtCAmount.Text == "0")
-        {
-            WebMsgBox.Show("Please Enter Valid Amount.");
-            return;
-        }
-        if (string.IsNullOrEmpty(txtRemarks.Text))
-        {
-            WebMsgBox.Show("Please Enter Remarks.");
-            return;
-        }
-        DateTime bdate = DateTime.Now;
+            if (drpTxn.SelectedValue == "0")
+            {
+                WebMsgBox.Show("Please Select Transaction.");
+                return;
+            }
+            if (cmbResident.SelectedValue == "0")
+            {
+                WebMsgBox.Show("Please Select Resident.");
+                return;
+            }
+            if (string.IsNullOrEmpty(txtCAmount.Text) || txtCAmount.Text == "0")
+            {
+                WebMsgBox.Show("Please Enter Valid Amount.");
+                return;
+            }
+            if (string.IsNullOrEmpty(txtRemarks.Text))
+            {
+                WebMsgBox.Show("Please Enter Remarks.");
+                return;
+            }
+            DateTime bdate = DateTime.Now;
 
-        string strday = bdate.ToString("dd");
-        string strmonth = bdate.ToString("MM");
-        string stryear = bdate.ToString("yyyy");
-        string strhour = bdate.ToString("HH");
-        string strmin = bdate.ToString("mm");
-        string strsec = bdate.ToString("ss");
+            string strday = bdate.ToString("dd");
+            string strmonth = bdate.ToString("MM");
+            string stryear = bdate.ToString("yyyy");
+            string strhour = bdate.ToString("HH");
+            string strmin = bdate.ToString("mm");
+            string strsec = bdate.ToString("ss");
 
-        string strBillNo = stryear.ToString() + strmonth.ToString() + strday.ToString() + strhour.ToString() + strmin.ToString() + strsec.ToString();
+            string strBillNo = stryear.ToString() + strmonth.ToString() + strday.ToString() + strhour.ToString() + strmin.ToString() + strsec.ToString();
 
-        //if (!string.IsNullOrEmpty(txtCAmount.Text) || txtCAmount.Text == "0" && !string.IsNullOrEmpty(txtCAmount.Text) || txtCAmount.Text == "0" && txtRemarks.Text != "")
-        //{
-             if(lblCGST2.Text=="-"|| lblSGST2.Text=="-")
+            //if (!string.IsNullOrEmpty(txtCAmount.Text) || txtCAmount.Text == "0" && !string.IsNullOrEmpty(txtCAmount.Text) || txtCAmount.Text == "0" && txtRemarks.Text != "")
+            //{
+            if (lblCGST2.Text == "-" || lblSGST2.Text == "-")
             {
                 lblCGST2.Text = "0.00";
                 lblSGST2.Text = "0.00";
             }
             //if(drpTxn.SelectedValue=="SP"|| drpTxn.SelectedValue=="CP")
-            if(ddlTransType.SelectedValue=="DR")
+            if (ddlTransType.SelectedValue == "DR")
             {
                 DataSet dsRSN = sqlobj.ExecuteSP("SP_InsertUNBILLEDTxnPosting",
                              new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Decimal, Value = cmbResident.SelectedValue.ToString() },
@@ -532,7 +526,8 @@ public partial class TxnPosting : System.Web.UI.Page
                              new SqlParameter() { ParameterName = "@SGST", SqlDbType = SqlDbType.Decimal, Value = lblSGST2.Text.ToString() }
                                );
             }
-            else { 
+            else
+            {
                 DataSet dsRSN = sqlobj.ExecuteSP("SP_InsertTxnPosting",
                               new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Decimal, Value = cmbResident.SelectedValue.ToString() },
                               new SqlParameter() { ParameterName = "@BGroup", SqlDbType = SqlDbType.NVarChar, Value = drpTxn.SelectedValue.ToString() },
@@ -551,10 +546,10 @@ public partial class TxnPosting : System.Web.UI.Page
             }
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Transaction amount posted successfully');", true);
             SClear();
-        //btnCClear_Click(sender, e);
-        //}
+            //btnCClear_Click(sender, e);
+            //}
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Something went worng!!!');", true);
         }

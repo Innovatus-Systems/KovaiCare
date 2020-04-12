@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data;
-using System.Data.SqlClient; 
+﻿using System.Data;
+using System.Data.SqlClient;
 
 
 /// <summary>
@@ -13,12 +9,12 @@ public class Permission
 {
     SqlProcsNew sqlobj = new SqlProcsNew();
 
-	public Permission()
-	{
-		//
-		// TODO: Add constructor logic here
-		//
-	}
+    public Permission()
+    {
+        //
+        // TODO: Add constructor logic here
+        //
+    }
 
     public string GetPermission(string userid, string module)
     {

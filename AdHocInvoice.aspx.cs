@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using iTextSharp.text;
+using iTextSharp.text.html.simpleparser;
+using iTextSharp.text.pdf;
+using System;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Data;
-using System.IO;
-using System.Net.Mail;
-using System.Data.SqlClient;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.html.simpleparser;
-using System.Configuration;
-using System.Text;
 using Telerik.Web.UI;
-using System.Threading;
 
 public partial class AdHocInvoice : System.Web.UI.Page
 {
@@ -46,7 +42,6 @@ public partial class AdHocInvoice : System.Web.UI.Page
     static decimal SGSTAmt;
     static string MailId;
     static string File;
-    StringBuilder UpS = new StringBuilder();
     StringBuilder SB1 = new StringBuilder();
     StringBuilder SB = new StringBuilder();
 
@@ -346,7 +341,6 @@ public partial class AdHocInvoice : System.Web.UI.Page
         try
         {
 
-            
             DataSet ds = new DataSet();
             string sb = string.Empty;
             DateTime bdate = DateTime.Now;
@@ -376,18 +370,18 @@ public partial class AdHocInvoice : System.Web.UI.Page
                 {
                     if (rw.Selected)
                     {
-                         Ref = Convert.ToString(rw.GetDataKeyValue("Ref").ToString());
+                        Ref = Convert.ToString(rw.GetDataKeyValue("Ref").ToString());
                         SB.Clear();
                         SB.Append(Ref);
                         SB.Remove(SB.Length - 3, 3);
                         sb = " BillNo Like '" + SB + "%'" + " or ";
                         SB1.Append(sb);
-                        string upsb="REF like '"+ Ref + "'";
+                        string upsb = "REF like '" + Ref + "'";
 
                     }
                 }
                 SB1.Remove(SB1.Length - 3, 3);
-               
+
                 DataSet dsDetails = sqlobj.ExecuteSP("SP_DebitFromUnbilled",
                             new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Decimal, Value = Convert.ToDecimal(cmbResident.SelectedValue) },
                             new SqlParameter() { ParameterName = "@RefNo", SqlDbType = SqlDbType.NVarChar, Value = strBillNo.ToString() },
@@ -406,32 +400,32 @@ public partial class AdHocInvoice : System.Web.UI.Page
                     //}
                     //else
                     //{
-                        commnty = dsDetails.Tables[2].Rows[0]["CommunityName"].ToString();
-                        Address1 = dsDetails.Tables[2].Rows[0]["Name"].ToString();
-                        Address2 = dsDetails.Tables[2].Rows[0]["Add1"].ToString();
-                        Address3 = dsDetails.Tables[2].Rows[0]["City"].ToString() + " , " + dsDetails.Tables[2].Rows[0]["pincode"].ToString();
-                        gstin = dsDetails.Tables[2].Rows[0]["gstin_UIN"].ToString();
-                        Pan = dsDetails.Tables[2].Rows[0]["pan_NO"].ToString();
-                        Jurisdiction = dsDetails.Tables[2].Rows[0]["Jurisdiction"].ToString();
-                        BankName = dsDetails.Tables[2].Rows[0]["BankName"].ToString();
-                        BranchName = dsDetails.Tables[2].Rows[0]["BranchName"].ToString();
-                        AccountNo = dsDetails.Tables[2].Rows[0]["AccountNo"].ToString();
-                        IFSCCode = dsDetails.Tables[2].Rows[0]["IFSCCode"].ToString();
-                        if (drpService.SelectedValue == "DI")
-                        {
-                            DiningInv(dsDetails.Tables[0], dsDetails.Tables[1]);                           
-                            HttpContext.Current.ApplicationInstance.CompleteRequest();
-                        }
-                        if (drpService.SelectedValue == "MC")
-                        {
-                            MaintaningInv(dsDetails.Tables[0], dsDetails.Tables[1]);                           
-                            HttpContext.Current.ApplicationInstance.CompleteRequest();
-                        }
-                        if (drpService.SelectedValue == "CB")
-                        {
-                            CabInv(dsDetails.Tables[0], dsDetails.Tables[1]);                         
-                            HttpContext.Current.ApplicationInstance.CompleteRequest();
-                        }
+                    commnty = dsDetails.Tables[2].Rows[0]["CommunityName"].ToString();
+                    Address1 = dsDetails.Tables[2].Rows[0]["Name"].ToString();
+                    Address2 = dsDetails.Tables[2].Rows[0]["Add1"].ToString();
+                    Address3 = dsDetails.Tables[2].Rows[0]["City"].ToString() + " , " + dsDetails.Tables[2].Rows[0]["pincode"].ToString();
+                    gstin = dsDetails.Tables[2].Rows[0]["gstin_UIN"].ToString();
+                    Pan = dsDetails.Tables[2].Rows[0]["pan_NO"].ToString();
+                    Jurisdiction = dsDetails.Tables[2].Rows[0]["Jurisdiction"].ToString();
+                    BankName = dsDetails.Tables[2].Rows[0]["BankName"].ToString();
+                    BranchName = dsDetails.Tables[2].Rows[0]["BranchName"].ToString();
+                    AccountNo = dsDetails.Tables[2].Rows[0]["AccountNo"].ToString();
+                    IFSCCode = dsDetails.Tables[2].Rows[0]["IFSCCode"].ToString();
+                    if (drpService.SelectedValue == "DI")
+                    {
+                        DiningInv(dsDetails.Tables[0], dsDetails.Tables[1]);
+                        HttpContext.Current.ApplicationInstance.CompleteRequest();
+                    }
+                    if (drpService.SelectedValue == "MC")
+                    {
+                        MaintaningInv(dsDetails.Tables[0], dsDetails.Tables[1]);
+                        HttpContext.Current.ApplicationInstance.CompleteRequest();
+                    }
+                    if (drpService.SelectedValue == "CB")
+                    {
+                        CabInv(dsDetails.Tables[0], dsDetails.Tables[1]);
+                        HttpContext.Current.ApplicationInstance.CompleteRequest();
+                    }
 
                     //}
 
@@ -449,7 +443,7 @@ public partial class AdHocInvoice : System.Web.UI.Page
                 ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please select atleast one Entry.');", true);
             }
             //HttpContext.Current.Response.End();
-            
+
         }
         catch (Exception ex)
         {
@@ -460,7 +454,6 @@ public partial class AdHocInvoice : System.Web.UI.Page
     {
         try
         {
-
             string outstd = "";
             Amount = 0;
             Total = 0;
@@ -550,16 +543,16 @@ public partial class AdHocInvoice : System.Web.UI.Page
                         decimal Calc = 0;
                         decimal sp = 0;
                         //string whr1 = strQuery + " and txncode in (" + txncode + ") ";
-                        string whr1 = strQuery ;
+                        string whr1 = strQuery;
                         DataRow[] drfilService = dt.Select(whr1);
 
                         if (drfilService.Any())
                         {
-                            DataSet dsINVOICE = new DataSet();                           
+                            DataSet dsINVOICE = new DataSet();
                             dtservice = drfilService.CopyToDataTable();
                             invNo = dtservice.Rows[0]["InvoiceNo"].ToString();
-                            
-                            string NARATION= dtservice.Rows[0]["Particulars"].ToString();                                                       
+
+                            string NARATION = dtservice.Rows[0]["Particulars"].ToString();
                             StringBuilder sb1 = new StringBuilder();
                             sb1.Append("<table width='100%' padding='-5PX'  style='font-family:Verdana;margin-left:15px;'>");
                             sb1.Append("<tr><td align='center' colspan='4' style='font-size:10px;'><b> " + commnty + " </b> </td></tr>");
@@ -567,7 +560,7 @@ public partial class AdHocInvoice : System.Web.UI.Page
                             sb1.Append("<tr><td align='center' colspan='4' style='font-size:9px;'> " + Address2 + "  </td></tr>");
                             sb1.Append("<tr><td align='center' colspan='4' style='font-size:9px;'> " + Address3 + "  </td></tr>");
                             sb1.Append("<tr><td align='center' colspan='4' style='font-size:9px;'> GSTIN/UIN: " + gstin + " / Pan: " + Pan + "  </td></tr>");
-                            sb1.Append("</table>");                           
+                            sb1.Append("</table>");
                             sb1.Append("<table  width='100%' style='margin-left:15px;opacity:0.5;border:0.1px solid black'>");
                             sb1.Append("<tr >");
                             sb1.Append("<td align='Left' style='font-size:10px;'>");
@@ -576,7 +569,7 @@ public partial class AdHocInvoice : System.Web.UI.Page
                             sb1.Append("<td align='RIGHT' style='font-size:10px;'>");
                             sb1.Append("Date: " + date + "");
                             sb1.Append("</td>");
-                            sb1.Append("</tr>");                            
+                            sb1.Append("</tr>");
                             sb1.Append("</table>");
 
 
@@ -717,7 +710,7 @@ public partial class AdHocInvoice : System.Web.UI.Page
                                                         }
                                                         else if (column.ToString() == "CGST Amt")
                                                         {
-                                                            CGSTAmt =CGSTAmt+ Convert.ToDecimal(row[column]);                                                           
+                                                            CGSTAmt = CGSTAmt + Convert.ToDecimal(row[column]);
                                                             sb1.Append("<td style = 'font-size:8px;font-family:Verdana;' align='right'>");
                                                         }
                                                         else if (column.ToString() == "SGST Amt")
@@ -725,10 +718,10 @@ public partial class AdHocInvoice : System.Web.UI.Page
                                                             SGSTAmt = SGSTAmt + Convert.ToDecimal(row[column]);
                                                             sb1.Append("<td style = 'font-size:8px;font-family:Verdana;' align='right'>");
                                                         }
-                                                       
+
                                                         else if (column.ToString() == "Total")
                                                         {
-                                                            Total=Total + Convert.ToDecimal(row[column]);                                                           
+                                                            Total = Total + Convert.ToDecimal(row[column]);
                                                             sb1.Append("<td style = 'font-size:8px;font-family:Verdana;' align='right'>");
                                                         }
                                                         //else
@@ -752,16 +745,16 @@ public partial class AdHocInvoice : System.Web.UI.Page
                             count = count + 1;
                             sb1.Append("<tr>");
                             sb1.Append("<td  align='left' colspan='3' style='font-size:8px;'>Total");
-                            sb1.Append("</td>");                           
+                            sb1.Append("</td>");
                             sb1.Append("<td  align='Right' style='font-size:8px;'>" + Amount + "");
                             sb1.Append("</td>");
-                            sb1.Append("<td  align='Right' style='font-size:8px;'>"+CGSTAmt+"");
+                            sb1.Append("<td  align='Right' style='font-size:8px;'>" + CGSTAmt + "");
                             sb1.Append("</td>");
                             sb1.Append("<td  align='Right' style='font-size:8px;'>" + SGSTAmt + "");
-                            sb1.Append("</td>");                           
+                            sb1.Append("</td>");
                             sb1.Append("<td  align='Right' style='font-size:8px;'>" + Total + "");
                             sb1.Append("</td>");
-                            sb1.Append("</tr>");                           
+                            sb1.Append("</tr>");
                             sb1.Append("<tr>");
                             sb1.Append("<td align='left' style='font-size:8px;' colspan='6'>Amount chargeable (in words)");
                             sb1.Append("</td>");
@@ -786,7 +779,7 @@ public partial class AdHocInvoice : System.Web.UI.Page
                             sb1.Append("<tr>");
                             sb1.Append("<td align='left' colspan='2' style='font-size:8px;'><b>Company’s bank details</b>");
                             sb1.Append("</td>");
-                          
+
                             sb1.Append("</tr>");
                             sb1.Append("<tr>");
                             sb1.Append("<td align='left' colspan='1' style='font-size:8px;'>Bank name");
@@ -881,11 +874,11 @@ public partial class AdHocInvoice : System.Web.UI.Page
                             Document pdfDoc2 = new Document(PageSize.A4, 60f, 30f, 10f, 5f);
                             HttpContext.Current.Response.Clear();
                             HttpContext.Current.Response.ContentType = "application/pdf";
-                            HttpContext.Current.Response.AddHeader("content-disposition", "attachment;filename="+FileName1+"");
+                            HttpContext.Current.Response.AddHeader("content-disposition", "attachment;filename=" + FileName1 + "");
                             HttpContext.Current.Response.Cache.SetCacheability(HttpCacheability.NoCache);
                             //HTMLWorker htmlparser1 = new HTMLWorker(pdfDoc1);
                             HTMLWorker htmlparser2 = new HTMLWorker(pdfDoc2);
-                           
+
                             using (MemoryStream memoryStream1 = new MemoryStream())
                             {
 
@@ -918,7 +911,7 @@ public partial class AdHocInvoice : System.Web.UI.Page
                 }
                 dt.Dispose();
                 dtPersonal.Dispose();
-                
+
             }
             ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "alert", "alert('Invoice(s) generated successfully');", true);
         }
@@ -1020,7 +1013,7 @@ public partial class AdHocInvoice : System.Web.UI.Page
                         int drows = dsDetails.Tables[0].Rows.Count;
 
                         //string whr1 = strQuery + " and txncode in (" + txncode + ") ";
-                        string whr1 = strQuery ;
+                        string whr1 = strQuery;
                         DataRow[] drfilService = dt.Select(whr1);
 
                         if (drfilService.Any())
@@ -2212,4 +2205,21 @@ public partial class AdHocInvoice : System.Web.UI.Page
     {
         Response.Redirect("InvoiceAuditLog.aspx", false);
     }
+
+    protected void btnPreview_Click(object sender, EventArgs e)
+    {
+
+        if (cmbResident.SelectedValue.ToString() != "0")
+        {
+            { Response.Redirect("PreviewInvoiceNew.aspx?Resident=" + cmbResident.SelectedValue.ToString()); }
+
+        }
+        else
+        {
+            WebMsgBox.Show("No data exists for the selected Resident!");
+            return;
+        }
+
+    }
+
 }

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 public partial class SendSmsView : System.Web.UI.Page
@@ -19,11 +15,11 @@ public partial class SendSmsView : System.Web.UI.Page
             if (Session["UserID"] == null)
             {
                 Response.Redirect("Login.aspx");
-            }          
+            }
             if (!IsPostBack)
             {
                 LoadTitle();
-                LoadSendSMS();                
+                LoadSendSMS();
             }
         }
         catch (Exception ex)
@@ -41,7 +37,7 @@ public partial class SendSmsView : System.Web.UI.Page
             if (dsCategory.Tables[0].Rows.Count > 0)
             {
                 gvSendSMS.DataSource = dsCategory;
-                gvSendSMS.DataBind();                
+                gvSendSMS.DataBind();
             }
             else
             {

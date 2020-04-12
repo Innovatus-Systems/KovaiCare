@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
-using System.Globalization;
-using System.Drawing;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
-using System.IO;
 
 public partial class MonthlyBilling : System.Web.UI.Page
 {
@@ -23,10 +16,10 @@ public partial class MonthlyBilling : System.Web.UI.Page
         DataSet dsDT = null;
         if (!IsPostBack)
         {
-           // LoadTitle();
-      
+            // LoadTitle();
 
-            
+
+
             string Value = Request.QueryString["MBVal"];
             if (Value == "1")
             {
@@ -40,7 +33,7 @@ public partial class MonthlyBilling : System.Web.UI.Page
 
                 btnRetReport.Visible = true;
             }
-           
+
         }
         LoadGrid();
     }
@@ -128,7 +121,7 @@ public partial class MonthlyBilling : System.Web.UI.Page
             string CDate = Convert.ToDateTime(dsDT.Tables[0].Rows[0][0].ToString()).ToString("ddMMyyyyhhmmtt");
             string FileName = "BillingSummary_" + CDate;
 
-            
+
             rdgMonthBill.ExportSettings.ExportOnlyData = true;
             rdgMonthBill.ExportSettings.FileName = FileName;
             rdgMonthBill.ExportSettings.IgnorePaging = true;
@@ -175,15 +168,15 @@ public partial class MonthlyBilling : System.Web.UI.Page
         {
             lnkShowDet.Text = "Less <<<";
             lnkShowDet.ToolTip = "Click to view 'Open','Billed' and 'Closed' periods";
-        }       
+        }
         LoadGrid();
-    
+
     }
 
     protected void lnkbtnHelp_Click(object sender, EventArgs e)
     {
         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Function", "NavigateDir();", true);
-    
+
     }
 
     protected void rdgCSEdit_Click(object sender, EventArgs e)
@@ -231,8 +224,8 @@ public partial class MonthlyBilling : System.Web.UI.Page
         SqlProcsNew proc = new SqlProcsNew();
 
         LinkButton lnkOpenProjBtn = (LinkButton)sender;
-        GridDataItem row = (GridDataItem)lnkOpenProjBtn.NamingContainer;       
-        String BPRSN = row.Cells[2].Text;  
+        GridDataItem row = (GridDataItem)lnkOpenProjBtn.NamingContainer;
+        String BPRSN = row.Cells[2].Text;
 
         DS = proc.ExecuteSP("SP_ChkResTxnSummary",
         new SqlParameter() { ParameterName = "@BPRSN", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Decimal, Value = Convert.ToDecimal(BPRSN) });
@@ -244,7 +237,7 @@ public partial class MonthlyBilling : System.Web.UI.Page
         }
         else
         {
-            WebMsgBox.Show("No records found for the selected period");        
+            WebMsgBox.Show("No records found for the selected period");
         }
     }
 
@@ -258,7 +251,7 @@ public partial class MonthlyBilling : System.Web.UI.Page
         String BPRSN3 = row.Cells[5].Text;
         String BPRSN4 = row.Cells[6].Text;
         hdnRSNMsg.Value = BPRSN;
-        
+
         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Function", "NavigateDir2();", true);
     }
     protected void btnRetBillRec_Click(object sender, EventArgs e)

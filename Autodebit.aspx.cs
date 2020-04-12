@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
-using System.Web;
+using System.Reflection;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
-using System.IO;
-using System.Net.Mail;
-using System.Data.SqlClient;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.html.simpleparser;
-using System.Configuration;
-using System.Text;
 using Telerik.Web.UI;
-using System.Reflection;
 
 public partial class Autodebit : System.Web.UI.Page
 {
@@ -67,8 +58,8 @@ public partial class Autodebit : System.Web.UI.Page
                  new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 9 },
                  new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Decimal, Value = 1 });
             }
-            
-            
+
+
             cmbResident.DataSource = dsResident.Tables[0];
             cmbResident.DataValueField = "RTRSN";
             cmbResident.DataTextField = "RName";
@@ -114,17 +105,17 @@ public partial class Autodebit : System.Web.UI.Page
             DataSet dsAutodebits = new DataSet();
             if (chkstatus.Checked == true)
             {
-                 dsAutodebits = sqlobj.ExecuteSP("SP_GetResidentAutoDebits",
-                  new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.BigInt, Value = cmbResident.SelectedValue == "0" || cmbResident.SelectedValue == "" ? null : cmbResident.SelectedValue },
-                   new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 2 }
-                  );
+                dsAutodebits = sqlobj.ExecuteSP("SP_GetResidentAutoDebits",
+                 new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.BigInt, Value = cmbResident.SelectedValue == "0" || cmbResident.SelectedValue == "" ? null : cmbResident.SelectedValue },
+                  new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 2 }
+                 );
             }
             else
             {
-                 dsAutodebits = sqlobj.ExecuteSP("SP_GetResidentAutoDebits",
-                  new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.BigInt, Value = cmbResident.SelectedValue == "0" || cmbResident.SelectedValue == "" ? null : cmbResident.SelectedValue },
-                   new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 1 }
-                  );
+                dsAutodebits = sqlobj.ExecuteSP("SP_GetResidentAutoDebits",
+                 new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.BigInt, Value = cmbResident.SelectedValue == "0" || cmbResident.SelectedValue == "" ? null : cmbResident.SelectedValue },
+                  new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 1 }
+                 );
             }
             if (dsAutodebits.Tables[0].Rows.Count > 0)
             {
@@ -161,7 +152,7 @@ public partial class Autodebit : System.Web.UI.Page
                     GridDataItem ditem = (GridDataItem)e.Item;
 
                     LinkButton lnkRSN = (LinkButton)e.Item.FindControl("lnkRSN");
-                    Session["RSN"] = lnkRSN.Text;                   
+                    Session["RSN"] = lnkRSN.Text;
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "win",
            "<script language='javascript'> var iMyWidth;var iMyHeight;  window.open('PostMMTEdit.aspx?NO=" + Session["RSN"] + "','NewWin','status=no,height=300,width=500 ,resizable=No,left=200,top=100,screenX=250,screenY=250,toolbar=no,menubar=no,scrollbars=yes,location=no,directories=no,   NewWin.focus()')</script>", false);
                 }
@@ -220,7 +211,7 @@ public partial class Autodebit : System.Web.UI.Page
                 new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.BigInt, Value = hbtnRSN.Value },
                 new SqlParameter() { ParameterName = "@MMC", SqlDbType = SqlDbType.Decimal, Value = txtMCharge.Text },
                 new SqlParameter() { ParameterName = "@KOC", SqlDbType = SqlDbType.Decimal, Value = txtkoc.Text },
-                new SqlParameter() { ParameterName = "@DType", SqlDbType = SqlDbType.NVarChar, Value =ddlDType.SelectedValue.ToString() },
+                new SqlParameter() { ParameterName = "@DType", SqlDbType = SqlDbType.NVarChar, Value = ddlDType.SelectedValue.ToString() },
                 //new SqlParameter() { ParameterName = "@StartDate", SqlDbType = SqlDbType.DateTime, Value = dtpstartdate.SelectedDate == null ? null : dtpstartdate.SelectedDate },
                 //new SqlParameter() { ParameterName = "@EndDate", SqlDbType = SqlDbType.DateTime, Value = dtpenddate.SelectedDate == null ? null : dtpenddate.SelectedDate },
                 new SqlParameter() { ParameterName = "@Status", SqlDbType = SqlDbType.NVarChar, Value = ddlStatus.SelectedValue }
@@ -229,7 +220,7 @@ public partial class Autodebit : System.Web.UI.Page
                 ClearUpdate();
                 WebMsgBox.Show("Resident auto debit details successfully updated.");
                 rwEditAutoDebits.Visible = false;
-               
+
                 // ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Resident auto debit details successfully updated.');", true);
             }
         }

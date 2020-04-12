@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Web.UI;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
+using System.Web.UI;
 using Telerik.Web.UI;
 
 
@@ -28,7 +28,7 @@ public partial class DeleteUnbilledTxn : System.Web.UI.Page
             LabelAccNo.Visible = false;
             lblAccNo.Visible = false;
             rgAdHoc.DataSource = string.Empty;
-            rgAdHoc.DataBind();            
+            rgAdHoc.DataBind();
         }
     }
     protected void LoadResidentDet()
@@ -167,9 +167,9 @@ public partial class DeleteUnbilledTxn : System.Web.UI.Page
                 DataSet dsTitle = sqlobj.ExecuteSP("SP_DELETEUNBILLEDTXN",
                  new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 2 },
                  new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.NVarChar, Value = cmbResident.SelectedValue.ToString() },
-                 new SqlParameter() { ParameterName = "@Where", SqlDbType = SqlDbType.NVarChar, Value = SB1.ToString()},
-                 new SqlParameter() { ParameterName = "@C_BY", SqlDbType = SqlDbType.NVarChar, Value = (Session["UserID"].ToString())},
-                new SqlParameter() { ParameterName = "@TXCODE", SqlDbType = SqlDbType.NVarChar, Value = drpService.SelectedValue.ToString() }  );
+                 new SqlParameter() { ParameterName = "@Where", SqlDbType = SqlDbType.NVarChar, Value = SB1.ToString() },
+                 new SqlParameter() { ParameterName = "@C_BY", SqlDbType = SqlDbType.NVarChar, Value = (Session["UserID"].ToString()) },
+                new SqlParameter() { ParameterName = "@TXCODE", SqlDbType = SqlDbType.NVarChar, Value = drpService.SelectedValue.ToString() });
 
                 ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "alert", "alert('Txn(s). Deleted Successfully');", true);
                 LoadGrid();
@@ -296,7 +296,7 @@ public partial class DeleteUnbilledTxn : System.Web.UI.Page
 
     protected void btnSearch_Click(object sender, EventArgs e)
     {
-        
+
         try
         {
             if (cmbResident.SelectedValue == "0" || cmbResident.SelectedValue == "" || drpService.SelectedValue == "0" || drpService.SelectedValue == "")
@@ -304,16 +304,20 @@ public partial class DeleteUnbilledTxn : System.Web.UI.Page
                 ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "alert", "alert('Please select Resident and Invoice Type.');", true);
                 return;
             }
-            cmbResident.Enabled = false;
-            drpService.Enabled = false;
-            LoadGrid();
+            else
+            {
+                //cmbResident.Enabled = false;
+                //drpService.Enabled = false;
+                LoadGrid();
+            }
+
         }
         catch (Exception ex)
         {
             ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "alert", "alert('" + ex.Message.ToString() + "');", true);
         }
-  
-}
+
+    }
 
     protected void btnClear_Click(object sender, EventArgs e)
     {
@@ -337,7 +341,7 @@ public partial class DeleteUnbilledTxn : System.Web.UI.Page
             rgAdHoc.DataBind();
             btnSearch.Visible = true;
             btnDelete.Visible = true;
-                 
+
         }
         catch (Exception ex)
         {

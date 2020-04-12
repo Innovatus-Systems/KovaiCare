@@ -1,30 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Web;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data.SqlClient;
-using System.Data;
-using System.Text;
-using System.Web.Services;
-using System.Web.Script.Services;
-using System.Configuration;
-using System.Net.Mail;
-using System.IO;
-using Telerik.Web.UI;
-using System.Threading;
 using System.Windows.Forms;
-using System.Net;
-using System.Reflection;
-using Excel = Microsoft.Office.Interop.Excel;
-using System.Runtime.InteropServices;
-using System.Globalization;
-using System.Drawing;
-using OfficeOpenXml;
-using System.Data.OleDb;
-using System.Linq;
-using System.Web.UI.WebControls.WebParts;
-using System.Web.UI.HtmlControls;
+using Telerik.Web.UI;
 
 
 
@@ -78,7 +64,7 @@ public partial class NewEvent : System.Web.UI.Page
                 rgresidents.DataBind();
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -90,9 +76,9 @@ public partial class NewEvent : System.Web.UI.Page
         try
         {
 
-             DataSet dsTResidents = sqlobj.ExecuteSP("SP_GetTotalResidents");
+            DataSet dsTResidents = sqlobj.ExecuteSP("SP_GetTotalResidents");
 
-            if (dsTResidents.Tables[0].Rows.Count >0)
+            if (dsTResidents.Tables[0].Rows.Count > 0)
             {
                 chkIsSentMail.Text = "Inform all " + dsTResidents.Tables[0].Rows[0]["Total"].ToString() + " residents via email.";
 
@@ -102,10 +88,10 @@ public partial class NewEvent : System.Web.UI.Page
 
             dsTResidents.Dispose();
 
-            
+
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -163,7 +149,7 @@ public partial class NewEvent : System.Web.UI.Page
 
     private void clear()
     {
-      
+
         FromDate.SelectedDate = DateTime.Now;
         TillDate.SelectedDate = DateTime.Now;
         txtEventName.Text = string.Empty;
@@ -267,8 +253,8 @@ public partial class NewEvent : System.Web.UI.Page
 
 
 
-       // LoadTitle(43);
-       // strLastEvent = "Oncoming";
+        // LoadTitle(43);
+        // strLastEvent = "Oncoming";
         //ds.Dispose();
     }
 
@@ -287,7 +273,7 @@ public partial class NewEvent : System.Web.UI.Page
 
             DateTime dt = DateTime.Now;
             // THE EXCEL FILE.
-            string sFileName = "Events_"+ dt + ".xls";
+            string sFileName = "Events_" + dt + ".xls";
             //sFileName = sFileName.Replace("/", "");
 
             // SEND OUTPUT TO THE CLIENT MACHINE USING "RESPONSE OBJECT".
@@ -297,7 +283,7 @@ public partial class NewEvent : System.Web.UI.Page
             Response.ContentType = "application/vnd.ms-excel";
             EnableViewState = false;
 
-            System.IO.StringWriter objSW = new System.IO.StringWriter(); 
+            System.IO.StringWriter objSW = new System.IO.StringWriter();
             System.Web.UI.HtmlTextWriter objHTW = new System.Web.UI.HtmlTextWriter(objSW);
 
             dg.HeaderStyle.Font.Bold = true;
@@ -366,7 +352,7 @@ public partial class NewEvent : System.Web.UI.Page
                 if (dtpFromTime.SelectedTime.ToString() == "")
                 {
                     ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please Select Time');", true);
-                    return;                    
+                    return;
                 }
                 string filename = string.Empty;
                 String File = "";
@@ -396,9 +382,9 @@ public partial class NewEvent : System.Web.UI.Page
                            );
                 DateTime fdate = Convert.ToDateTime(FromDate.SelectedDate.Value);
                 DateTime tdate = Convert.ToDateTime(FromDate.SelectedDate.Value);
-                if (chkIsSentMail.Checked==true)
-                { 
-                EventMail(txtEventName.Text, txtdesc.Text, fdate, tdate);
+                if (chkIsSentMail.Checked == true)
+                {
+                    EventMail(txtEventName.Text, txtdesc.Text, fdate, tdate);
                 }
                 LoadGrid();
                 clear();
@@ -469,42 +455,42 @@ public partial class NewEvent : System.Web.UI.Page
     }
     protected void radgvEvents_ItemCommand(object sender, GridCommandEventArgs e)
     {
-        Int64 RSN;        
+        Int64 RSN;
         if (e.CommandName == "UpdateRow")
         {
             RSN = Convert.ToInt64(e.CommandArgument.ToString());
-            Session["RSN"] = RSN.ToString();       
-           DataSet dsEventConfirmation = sqlobj.ExecuteSP("Proc_Events", new SqlParameter() { ParameterName = "@i", SqlDbType = SqlDbType.Int, Value = 5 },
-                          new SqlParameter() { ParameterName = "@RSN", SqlDbType = SqlDbType.BigInt, Value = RSN });                       
+            Session["RSN"] = RSN.ToString();
+            DataSet dsEventConfirmation = sqlobj.ExecuteSP("Proc_Events", new SqlParameter() { ParameterName = "@i", SqlDbType = SqlDbType.Int, Value = 5 },
+                           new SqlParameter() { ParameterName = "@RSN", SqlDbType = SqlDbType.BigInt, Value = RSN });
             if (dsEventConfirmation.Tables[0].Rows.Count > 0)
             {
-                    string strchkdate = "1900-01-01";
-                    if (Convert.ToDateTime(dsEventConfirmation.Tables[0].Rows[0]["FromDate"].ToString()) > Convert.ToDateTime(strchkdate))
-                    {
-                        FromDate.SelectedDate = Convert.ToDateTime(dsEventConfirmation.Tables[0].Rows[0]["FromDate"].ToString());
-                        TillDate.SelectedDate = Convert.ToDateTime(dsEventConfirmation.Tables[0].Rows[0]["TillDate"].ToString());
-                    }
-                    if(dsEventConfirmation.Tables[0].Rows[0]["Time"].ToString()==""|| dsEventConfirmation.Tables[0].Rows[0]["Time"].ToString()==null)
-                    {
+                string strchkdate = "1900-01-01";
+                if (Convert.ToDateTime(dsEventConfirmation.Tables[0].Rows[0]["FromDate"].ToString()) > Convert.ToDateTime(strchkdate))
+                {
+                    FromDate.SelectedDate = Convert.ToDateTime(dsEventConfirmation.Tables[0].Rows[0]["FromDate"].ToString());
+                    TillDate.SelectedDate = Convert.ToDateTime(dsEventConfirmation.Tables[0].Rows[0]["TillDate"].ToString());
+                }
+                if (dsEventConfirmation.Tables[0].Rows[0]["Time"].ToString() == "" || dsEventConfirmation.Tables[0].Rows[0]["Time"].ToString() == null)
+                {
                     dtpFromTime.SelectedDate = null;
-                    }
-                    else
-                    {
+                }
+                else
+                {
                     dtpFromTime.SelectedDate = DateTime.Parse(dsEventConfirmation.Tables[0].Rows[0]["Time"].ToString());
-                    }
+                }
                 txtEventName.Text = dsEventConfirmation.Tables[0].Rows[0]["EventName"].ToString();
-                    txtdesc.Text = dsEventConfirmation.Tables[0].Rows[0]["Description"].ToString();
-                    TxtImge.Text = dsEventConfirmation.Tables[0].Rows[0]["Image"].ToString();
-                    string stvalue = dsEventConfirmation.Tables[0].Rows[0]["Status"].ToString();                    
-                    ddlupstatus.SelectedValue = dsEventConfirmation.Tables[0].Rows[0]["Status"].ToString();
-                    btnUpdate.Visible = true;
-                    btnAddEvent.Visible = false;
-                    lblcstatus.Visible = true;
-                    ddlupstatus.Visible = true;
-                }          
+                txtdesc.Text = dsEventConfirmation.Tables[0].Rows[0]["Description"].ToString();
+                TxtImge.Text = dsEventConfirmation.Tables[0].Rows[0]["Image"].ToString();
+                string stvalue = dsEventConfirmation.Tables[0].Rows[0]["Status"].ToString();
+                ddlupstatus.SelectedValue = dsEventConfirmation.Tables[0].Rows[0]["Status"].ToString();
+                btnUpdate.Visible = true;
+                btnAddEvent.Visible = false;
+                lblcstatus.Visible = true;
+                ddlupstatus.Visible = true;
+            }
 
-             dsEventConfirmation.Dispose();          
-           
+            dsEventConfirmation.Dispose();
+
         }
         else if (e.CommandName == "Events")
         {
@@ -533,17 +519,17 @@ public partial class NewEvent : System.Web.UI.Page
             dsEventConfirmation.Dispose();
             rwEventRating.Visible = true;
         }
-        else if (e.CommandName=="Image")
+        else if (e.CommandName == "Image")
         {
             //string jsFunc = "OpenModelPopup(" + e.CommandArgument.ToString() + ")";
             //ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "myJsFn", jsFunc, true);
             string imagename = "280616090653_city.jpg";
             ScriptManager.RegisterStartupScript(this, this.Page.GetType(), "updatePanel1Script", "javascript:OpenModelPopup(" + imagename.ToString() + ")", true);
         }
-        else 
+        else
         {
             LoadGrid();
-        }        
+        }
     }
     protected void btnUpdate_Click(object sender, EventArgs e)
     {
@@ -558,22 +544,22 @@ public partial class NewEvent : System.Web.UI.Page
                 }
                 DateTime cdate = DateTime.Today;
                 DateTime tdate = Convert.ToDateTime(TillDate.SelectedDate);
-                string strstatus = ddlupstatus.SelectedValue;               
+                string strstatus = ddlupstatus.SelectedValue;
                 string filename = Path.GetFileName(FileUpd.FileName);
                 String File;
-                string strfile="";
+                string strfile = "";
                 if (!FileUpd.HasFile)
                 {
                     File = TxtImge.Text;
                 }
                 else
                 {
-                    strfile = DateTime.Now.ToString("ddmmyyhhmmsss") + "_" + filename;                    
+                    strfile = DateTime.Now.ToString("ddmmyyhhmmsss") + "_" + filename;
                     File = (@"~//EventImages/") + strfile.ToString();
                     FileUpd.SaveAs(Server.MapPath(@"~//EventImages/") + strfile.ToString());
-                }           
+                }
                 string rsn = Session["RSN"].ToString();
-                sqlobj.ExecuteNonQuery("Proc_Events", new SqlParameter() { ParameterName = "@i", SqlDbType = SqlDbType.Int, Value = 3},
+                sqlobj.ExecuteNonQuery("Proc_Events", new SqlParameter() { ParameterName = "@i", SqlDbType = SqlDbType.Int, Value = 3 },
                               new SqlParameter() { ParameterName = "@Fromdate", SqlDbType = SqlDbType.DateTime, Value = FromDate.SelectedDate.Value },
                               new SqlParameter() { ParameterName = "@Tilldate", SqlDbType = SqlDbType.DateTime, Value = TillDate.SelectedDate.Value },
                                new SqlParameter() { ParameterName = "@FromTime", SqlDbType = SqlDbType.NVarChar, Value = dtpFromTime.SelectedTime.ToString() },
@@ -592,9 +578,9 @@ public partial class NewEvent : System.Web.UI.Page
                 WebMsgBox.Show("Event details updated successfully");
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('" + ex.Message.ToString()+ "');", true);           
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('" + ex.Message.ToString() + "');", true);
         }
     }
     protected void btnviewall_Click(object sender, EventArgs e)
@@ -657,9 +643,9 @@ public partial class NewEvent : System.Web.UI.Page
 
                 WebMsgBox.Show("Events confirmation successfully updated");
             }
-        
+
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -670,13 +656,13 @@ public partial class NewEvent : System.Web.UI.Page
         try
         {
 
-          DataSet  dsrdetails = sqlobj.ExecuteSP("SP_GetResidentDependent", 
-              new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.BigInt, Value = ddlAssignedTo.SelectedValue },
-               new SqlParameter() { ParameterName = "@EventID", SqlDbType = SqlDbType.BigInt, Value = Session["RSN"].ToString() }
-              );
+            DataSet dsrdetails = sqlobj.ExecuteSP("SP_GetResidentDependent",
+                new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.BigInt, Value = ddlAssignedTo.SelectedValue },
+                 new SqlParameter() { ParameterName = "@EventID", SqlDbType = SqlDbType.BigInt, Value = Session["RSN"].ToString() }
+                );
 
 
-            if (dsrdetails.Tables[0].Rows.Count >0)
+            if (dsrdetails.Tables[0].Rows.Count > 0)
             {
                 rgresidents.DataSource = dsrdetails.Tables[0];
                 rgresidents.DataBind();
@@ -688,13 +674,13 @@ public partial class NewEvent : System.Web.UI.Page
             }
 
 
-            if (dsrdetails.Tables[1].Rows.Count >0)
+            if (dsrdetails.Tables[1].Rows.Count > 0)
             {
                 ddlAttending.SelectedValue = dsrdetails.Tables[1].Rows[0]["Attending"].ToString();
-                ddlAttended.SelectedValue = dsrdetails.Tables[1].Rows[0]["Attended"].ToString(); 
+                ddlAttended.SelectedValue = dsrdetails.Tables[1].Rows[0]["Attended"].ToString();
             }
 
-            if (ddlAttending.SelectedValue == "N" && ddlAttended.SelectedValue == "N" )
+            if (ddlAttending.SelectedValue == "N" && ddlAttended.SelectedValue == "N")
             {
                 lblmsg.Text = "Yet to Confirm";
             }
@@ -702,9 +688,9 @@ public partial class NewEvent : System.Web.UI.Page
             {
                 lblmsg.Text = "Yet to Update";
             }
-            else if(ddlAttending.SelectedValue == "N" && ddlAttended.SelectedValue == "Y")
+            else if (ddlAttending.SelectedValue == "N" && ddlAttended.SelectedValue == "Y")
             {
-                lblmsg.Text  ="Yet to Update";
+                lblmsg.Text = "Yet to Update";
             }
             else if (ddlAttending.SelectedValue == "N" && ddlAttended.SelectedValue == "Y")
             {
@@ -715,7 +701,7 @@ public partial class NewEvent : System.Web.UI.Page
 
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -739,7 +725,7 @@ public partial class NewEvent : System.Web.UI.Page
         {
             if (menu.Items[i].Text == "NoFilter" || menu.Items[i].Text == "Contains"
                 )
-            
+
             {
                 i++;
             }

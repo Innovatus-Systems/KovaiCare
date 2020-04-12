@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
-using System.Globalization;
-using System.Drawing;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 public partial class GLAccMasterView : System.Web.UI.Page
@@ -88,11 +82,11 @@ public partial class GLAccMasterView : System.Web.UI.Page
                 drpContraAcc.DataSource = dsConAcc.Tables[0];
                 drpContraAcc.DataTextField = "AccountCode";
                 drpContraAcc.DataValueField = "AccountCode";
-                drpContraAcc.DataBind();                
+                drpContraAcc.DataBind();
             }
             else
             {
-                          
+
             }
             drpContraAcc.Items.Insert(0, "--Select--");
             dsConAcc.Dispose();
@@ -206,9 +200,9 @@ public partial class GLAccMasterView : System.Web.UI.Page
     {
         try
         {
-            if(drpContraAcc.SelectedValue=="0")
+            if (drpContraAcc.SelectedValue == "0")
             {
-                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please select Contra Account Code.');", true);              
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please select Contra Account Code.');", true);
                 return;
             }
             int flag = 1;
@@ -251,7 +245,7 @@ public partial class GLAccMasterView : System.Web.UI.Page
                 new SqlParameter() { ParameterName = "@PM", Value = DdlProg.SelectedValue, SqlDbType = SqlDbType.NVarChar },
                 new SqlParameter() { ParameterName = "@Help", Value = TxtHelp.Text, SqlDbType = SqlDbType.NVarChar },
                 new SqlParameter() { ParameterName = "@C_BY", Value = Convert.ToString(Session["UserID"]), SqlDbType = SqlDbType.NVarChar },
-                new SqlParameter() { ParameterName = "@M_BY", Value = Convert.ToString(Session["UserID"]), SqlDbType = SqlDbType.NVarChar }, 
+                new SqlParameter() { ParameterName = "@M_BY", Value = Convert.ToString(Session["UserID"]), SqlDbType = SqlDbType.NVarChar },
                 new SqlParameter() { ParameterName = "@HSNCODE", Value = Convert.ToString(txthsncode.Text), SqlDbType = SqlDbType.NVarChar }
                 );
             Clear();
@@ -311,7 +305,7 @@ public partial class GLAccMasterView : System.Web.UI.Page
                 TxtCGSTGL.Text = Convert.ToString(dsTxnDet.Tables[0].Rows[0]["CGST_AC"]);
                 TxtSGST.Text = Convert.ToString(dsTxnDet.Tables[0].Rows[0]["SGST_PCNT"]);
                 TxtSGSTGL.Text = Convert.ToString(dsTxnDet.Tables[0].Rows[0]["SGST_AC"]);
-                txthsncode.Text= Convert.ToString(dsTxnDet.Tables[0].Rows[0]["HSNCODE"]);
+                txthsncode.Text = Convert.ToString(dsTxnDet.Tables[0].Rows[0]["HSNCODE"]);
                 DdlIE.SelectedValue = Convert.ToString(dsTxnDet.Tables[0].Rows[0]["IorE"]);
                 DdlSC.SelectedValue = Convert.ToString(dsTxnDet.Tables[0].Rows[0]["SorC"]);
                 DdlProg.SelectedValue = Convert.ToString(dsTxnDet.Tables[0].Rows[0]["PM"]);
@@ -332,7 +326,7 @@ public partial class GLAccMasterView : System.Web.UI.Page
         {
             WebMsgBox.Show(ex.Message.ToString());
 
-        }        
+        }
     }
     protected void lnkGSTPopup_Click(object sender, EventArgs e)
     {
@@ -374,7 +368,7 @@ public partial class GLAccMasterView : System.Web.UI.Page
                         LblSGSTAmt.Text = SGSTAmt.ToString("0.00");
                     }
                 }
-                
+
                 rwGSTPopUp.Visible = true;
             }
         }

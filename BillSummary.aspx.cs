@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using Telerik.Web.UI;
 
 public partial class BillSummary : System.Web.UI.Page
 {
@@ -29,7 +22,7 @@ public partial class BillSummary : System.Web.UI.Page
                 if (Request.QueryString["ResidentRSN"] != null)
                 {
 
-                    Session["ResidentRSN"]= Request.QueryString["ResidentRSN"].ToString();
+                    Session["ResidentRSN"] = Request.QueryString["ResidentRSN"].ToString();
                     LoadDefault(Session["ResidentRSN"].ToString());
 
                     DataSet dsgetoutstanding = sqlobj.ExecuteSP("SP_GetResidentOutStanding",
@@ -60,11 +53,11 @@ public partial class BillSummary : System.Web.UI.Page
                 }
 
                 //DateTime now = DateTime.Now;
-               // radfromdate.SelectedDate = new DateTime(now.Year, now.Month, 1);
+                // radfromdate.SelectedDate = new DateTime(now.Year, now.Month, 1);
 
                 //radtilldate.SelectedDate = DateTime.Today;
                 //LoadSession();
-                
+
             }
         }
         catch (Exception ex)
@@ -188,7 +181,7 @@ public partial class BillSummary : System.Web.UI.Page
                 gvBillingDetails.DataBind();
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -204,27 +197,27 @@ public partial class BillSummary : System.Web.UI.Page
                 string sbn = e.CommandArgument.ToString();
 
 
-               // lblbillno.Text = "BillNo:" + sbn.ToString();
+                // lblbillno.Text = "BillNo:" + sbn.ToString();
 
                 LoadBillingDetails(sbn);
 
                 rwPopUp.Visible = true;
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
-       
+
     }
     protected void btnAcceptPayment_Click(object sender, EventArgs e)
     {
         try
         {
             Session["AcceptPayment"] = Session["ResidentRSN"].ToString();
-            Response.Redirect("FoodMenu.aspx?MenuName=Accept Payment",false);
+            Response.Redirect("FoodMenu.aspx?MenuName=Accept Payment", false);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -252,25 +245,25 @@ public partial class BillSummary : System.Web.UI.Page
             if (dsgetoutstanding.Tables[0].Rows.Count > 0)
             {
 
-                lblName.Text =dsgetoutstanding.Tables[0].Rows[0]["Name"].ToString() + ",";
+                lblName.Text = dsgetoutstanding.Tables[0].Rows[0]["Name"].ToString() + ",";
 
                 lblDoorNO.Text = dsgetoutstanding.Tables[0].Rows[0]["DoorNo"].ToString() + ",";
 
-                lblMobileNo.Text =  dsgetoutstanding.Tables[0].Rows[0]["Mobile"].ToString() + ",";
+                lblMobileNo.Text = dsgetoutstanding.Tables[0].Rows[0]["Mobile"].ToString() + ",";
 
                 lblEmail.Text = "Email:" + dsgetoutstanding.Tables[0].Rows[0]["EMail"].ToString();
 
                 decimal doutstanding = Convert.ToDecimal(dsgetoutstanding.Tables[0].Rows[0]["Outstanding"].ToString());
 
                 lbloutstanding.Text = "Outstanding:" + doutstanding.ToString("0.00");
-              
+
             }
 
             dsgetoutstanding.Dispose();
 
             LoadDefault(rsn.ToString());
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }

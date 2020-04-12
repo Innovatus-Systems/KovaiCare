@@ -1,19 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
-using System.Globalization;
-using System.Drawing;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
-using Excel = Microsoft.Office.Interop.Excel;
-using System.Runtime.InteropServices;
-using OfficeOpenXml;
-using System.IO;
 
 public partial class PreviousTenants : System.Web.UI.Page
 {
@@ -23,7 +13,7 @@ public partial class PreviousTenants : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        if(!IsPostBack)
+        if (!IsPostBack)
         {
             LoadTitle();
             LoadGridLevelT();

@@ -138,11 +138,6 @@
 
 
         }
-
-
-
-
-
     </script>
      <script type="text/javascript" language="javascript">
         function HideUpdateProgress() {
@@ -213,6 +208,8 @@
                                     <asp:Button ID="btnPro" Font-Names="Verdana" CssClass="btn btn-success" ToolTip=" Click here to process all services." runat="server" Text="Process Txn.(s)" AutoPostBack="true"   BackColor="DarkGreen" Font-Bold="true" OnClick="btnPro_Click" />
                                 
                                     <asp:Button ID="btnDashboard" Font-Names="Verdana" CssClass="btn btn-success" ToolTip=" Click here to get dashboard" runat="server" Text="Get Dashboard" AutoPostBack="true" Visible="true"   BackColor="DarkGreen" Font-Bold="true" OnClick="btnDashboard_Click" />
+
+
                                 </td>
                             </tr>
                                     </table>
@@ -364,8 +361,6 @@
                                     <asp:Button ID="btnExit" Font-Names="Verdana" CssClass="btn btn-success" ToolTip="Click here to exit." runat="server" Text="Return" ForeColor="White" BackColor="OrangeRed" BorderColor="OrangeRed" Font-Bold="true" OnClick="btnExit_Click"/>
            
                                 </td>
-                            </tr>
-                            <tr style="height: 30px">
                             </tr>
                         </table>
                           

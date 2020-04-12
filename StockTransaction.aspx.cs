@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Data;
+using System.Data.SqlClient;
+using System.Drawing;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Telerik.Web.UI;
-using System.Data.SqlClient;
-using System.Configuration;
-using System.Data;
-using System.Drawing;
 
 public partial class StockTransaction : System.Web.UI.Page
 {
@@ -28,8 +24,8 @@ public partial class StockTransaction : System.Web.UI.Page
         if (!IsPostBack)
         {
 
-            Session["update"] = Server.UrlEncode(System.DateTime.Now.ToString()); 
-            
+            Session["update"] = Server.UrlEncode(System.DateTime.Now.ToString());
+
             LoadTitle();
             LoadItem();
             LoadSession();
@@ -41,7 +37,7 @@ public partial class StockTransaction : System.Web.UI.Page
             dtpInoviceDt.SelectedDate = DateTime.Today;
             dtpTransDate.SelectedDate = DateTime.Today;
 
-           // LoadRecentTransaction();
+            // LoadRecentTransaction();
 
             LoadGrid(Convert.ToDateTime(dtpTransDate.SelectedDate));
 
@@ -49,7 +45,7 @@ public partial class StockTransaction : System.Web.UI.Page
 
             rgRecentTransaction.DataSource = string.Empty;
             rgRecentTransaction.DataBind();
-           
+
             lblpurchaseprice.Visible = false;
             txtPurchaseprice.Visible = false;
             lbldate.Visible = false;
@@ -58,8 +54,8 @@ public partial class StockTransaction : System.Web.UI.Page
             ddlSession.Visible = false;
             lblmenuitem.Visible = false;
             ddlMenuItem.Visible = false;
-            
-            
+
+
         }
     }
 
@@ -90,23 +86,23 @@ public partial class StockTransaction : System.Web.UI.Page
     {
         try
         {
-            DataSet dsLoadRecentTransaction = sqlobj.ExecuteSP("SP_RecentTransactionItem",                
+            DataSet dsLoadRecentTransaction = sqlobj.ExecuteSP("SP_RecentTransactionItem",
                  new SqlParameter() { ParameterName = "@ItemCode", SqlDbType = SqlDbType.Int, Value = Convert.ToInt64(ddlItemCode.SelectedValue) },
-                 new SqlParameter() { ParameterName = "@TransType", SqlDbType = SqlDbType.NVarChar, Value = ddlTransactionType.SelectedValue }                
-                 );       
+                 new SqlParameter() { ParameterName = "@TransType", SqlDbType = SqlDbType.NVarChar, Value = ddlTransactionType.SelectedValue }
+                 );
 
             if (dsLoadRecentTransaction.Tables[0].Rows.Count > 0)
             {
                 rgRecentTransaction.DataSource = dsLoadRecentTransaction;
                 rgRecentTransaction.DataBind();
-                if (ddlTransactionType.SelectedValue == "02" || ddlTransactionType.SelectedValue == "01" )
+                if (ddlTransactionType.SelectedValue == "02" || ddlTransactionType.SelectedValue == "01")
                 {
                     string strsb = "Shown below";
-                    lblrecenttransaction.Text =  dsLoadRecentTransaction.Tables[0].Rows[0]["RMCode"].ToString() + ',' + dsLoadRecentTransaction.Tables[0].Rows[0]["Item"].ToString() + ' ' + dsLoadRecentTransaction.Tables[0].Rows[0]["TransType"].ToString() + ' ' + strsb.ToString();
+                    lblrecenttransaction.Text = dsLoadRecentTransaction.Tables[0].Rows[0]["RMCode"].ToString() + ',' + dsLoadRecentTransaction.Tables[0].Rows[0]["Item"].ToString() + ' ' + dsLoadRecentTransaction.Tables[0].Rows[0]["TransType"].ToString() + ' ' + strsb.ToString();
                 }
                 else
                 {
-                    lblrecenttransaction.Text = "Recent transactions-" + dsLoadRecentTransaction.Tables[0].Rows[0]["RMCode"].ToString() + ',' + dsLoadRecentTransaction.Tables[0].Rows[0]["Item"].ToString(); 
+                    lblrecenttransaction.Text = "Recent transactions-" + dsLoadRecentTransaction.Tables[0].Rows[0]["RMCode"].ToString() + ',' + dsLoadRecentTransaction.Tables[0].Rows[0]["Item"].ToString();
                 }
             }
             else
@@ -171,7 +167,7 @@ public partial class StockTransaction : System.Web.UI.Page
 
             dsFetchSE.Dispose();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -191,7 +187,7 @@ public partial class StockTransaction : System.Web.UI.Page
 
             ddlMenuItem.Items.Clear();
 
-            if (dsFetchSE.Tables[0].Rows.Count >0)
+            if (dsFetchSE.Tables[0].Rows.Count > 0)
             {
                 ddlMenuItem.DataSource = dsFetchSE.Tables[0];
                 ddlMenuItem.DataValueField = "ItemCode";
@@ -199,13 +195,13 @@ public partial class StockTransaction : System.Web.UI.Page
                 ddlMenuItem.DataBind();
             }
 
-            ddlMenuItem.Items.Insert(0,"--Select--");
+            ddlMenuItem.Items.Insert(0, "--Select--");
 
             dsFetchSE.Dispose();
 
-           
+
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -271,40 +267,40 @@ public partial class StockTransaction : System.Web.UI.Page
             new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 27 },
             new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Int, Value = hdnItem.Value });
 
-             if (dsTT.Tables[0].Rows.Count > 0)
-             {
-                 DataSet dsTT2 = sqlobj.ExecuteSP("SP_General",
-                 new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 28 });
+            if (dsTT.Tables[0].Rows.Count > 0)
+            {
+                DataSet dsTT2 = sqlobj.ExecuteSP("SP_General",
+                new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 28 });
 
-                 if (dsTT2.Tables[0].Rows.Count > 0)
-                 {
-                     ddlTransactionType.DataSource = dsTT2.Tables[0];
-                     ddlTransactionType.DataValueField = "Value";
-                     ddlTransactionType.DataTextField = "Name";
-                     ddlTransactionType.DataBind();
+                if (dsTT2.Tables[0].Rows.Count > 0)
+                {
+                    ddlTransactionType.DataSource = dsTT2.Tables[0];
+                    ddlTransactionType.DataValueField = "Value";
+                    ddlTransactionType.DataTextField = "Name";
+                    ddlTransactionType.DataBind();
 
-                     ddlTransactionType.Items.Insert(0, new ListItem("-- Select --", "0"));
-                 }
-                 dsTT2.Dispose();
-             }
-             else
-             {
-                 DataSet dsTT3 = sqlobj.ExecuteSP("SP_General",
-                 new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 29 });
+                    ddlTransactionType.Items.Insert(0, new ListItem("-- Select --", "0"));
+                }
+                dsTT2.Dispose();
+            }
+            else
+            {
+                DataSet dsTT3 = sqlobj.ExecuteSP("SP_General",
+                new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 29 });
 
-                 if (dsTT3.Tables[0].Rows.Count > 0)
-                 {
-                     ddlTransactionType.DataSource = dsTT3.Tables[0];
-                     ddlTransactionType.DataValueField = "Value";
-                     ddlTransactionType.DataTextField = "Name";
-                     ddlTransactionType.DataBind();
+                if (dsTT3.Tables[0].Rows.Count > 0)
+                {
+                    ddlTransactionType.DataSource = dsTT3.Tables[0];
+                    ddlTransactionType.DataValueField = "Value";
+                    ddlTransactionType.DataTextField = "Name";
+                    ddlTransactionType.DataBind();
 
-                     ddlTransactionType.Items.Insert(0, new ListItem("-- Select --", "0"));
-                 }
-                 dsTT3.Dispose();
-             }
+                    ddlTransactionType.Items.Insert(0, new ListItem("-- Select --", "0"));
+                }
+                dsTT3.Dispose();
+            }
 
-           
+
         }
         catch (Exception ex)
         {
@@ -325,9 +321,9 @@ public partial class StockTransaction : System.Web.UI.Page
                 txtIUOM.Text = dsSIC.Tables[0].Rows[0]["IssueUOM"].ToString();
                 txtClosingStk.Text = dsSIC.Tables[0].Rows[0]["ClosingStock"].ToString();
             }
-           ddlTransactionType.Focus();
-           hdnItem.Value = ddlItemCode.SelectedValue;
-           LoadTransType();
+            ddlTransactionType.Focus();
+            hdnItem.Value = ddlItemCode.SelectedValue;
+            LoadTransType();
 
 
 
@@ -387,7 +383,7 @@ public partial class StockTransaction : System.Web.UI.Page
                             strloc = "1";
                         }
 
-                        
+
 
                         sqlobj.ExecuteSP("SP_InsertStockTransaction",
                             new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 1 },
@@ -405,13 +401,13 @@ public partial class StockTransaction : System.Web.UI.Page
 
                             new SqlParameter() { ParameterName = "@SupplierName", SqlDbType = SqlDbType.NVarChar, Value = txtSupplierName.Text },
                             new SqlParameter() { ParameterName = "@InvoiceNo", SqlDbType = SqlDbType.NVarChar, Value = txtInvoiceNo.Text },
-                            new SqlParameter() { ParameterName = "@InoviceDt", SqlDbType = SqlDbType.DateTime, Value = dtpInoviceDt.SelectedDate}
+                            new SqlParameter() { ParameterName = "@InoviceDt", SqlDbType = SqlDbType.DateTime, Value = dtpInoviceDt.SelectedDate }
                             );
 
                         LoadGrid(Convert.ToDateTime(dtpTransDate.SelectedDate));
                         SClearScr();
 
-                        Session["update"] = Server.UrlEncode(System.DateTime.Now.ToString()); 
+                        Session["update"] = Server.UrlEncode(System.DateTime.Now.ToString());
 
                         WebMsgBox.Show("Transaction detail saved successfully.");
                     }
@@ -464,7 +460,7 @@ public partial class StockTransaction : System.Web.UI.Page
     protected void btnClear_Click(object sender, EventArgs e)
     {
         ClearScr();
-    
+
     }
 
     public void ClearScr()
@@ -481,7 +477,7 @@ public partial class StockTransaction : System.Web.UI.Page
         lblpurchaseprice.Visible = false;
 
         txtPurchaseprice.Text = "";
-        txtPurchaseprice.Visible = false ;
+        txtPurchaseprice.Visible = false;
 
         dtpdate.SelectedDate = null;
 
@@ -501,8 +497,8 @@ public partial class StockTransaction : System.Web.UI.Page
 
         lblmenuitem.Visible = false;
         ddlMenuItem.Visible = false;
-       
-        ddlItemCode.Focus();        
+
+        ddlItemCode.Focus();
         btnSave.Visible = true;
 
         txtSupplierName.Text = string.Empty;
@@ -557,15 +553,15 @@ public partial class StockTransaction : System.Web.UI.Page
     protected void lnkView_Click(object sender, EventArgs e)
     {
         try
-        {            
+        {
             btnSave.Visible = false;
             LinkButton lnkEdititemBtn = (LinkButton)sender;
             GridDataItem row = (GridDataItem)lnkEdititemBtn.NamingContainer;
             string RSN;
             RSN = row.Cells[3].Text;
-            
+
             hdnRSN.Value = RSN.ToString();
-            SqlProcsNew proc = new SqlProcsNew();          
+            SqlProcsNew proc = new SqlProcsNew();
 
             DataSet dsSTR = sqlobj.ExecuteSP("SP_FetchStockTransaction",
               new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 1 },
@@ -599,8 +595,8 @@ public partial class StockTransaction : System.Web.UI.Page
     protected void ddlTransactionType_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (ddlTransactionType.SelectedValue == "02" || ddlTransactionType.SelectedValue == "06")
-        {   
-          
+        {
+
             lblpurchaseprice.Visible = true;
             txtPurchaseprice.Visible = true;
             lbldate.Visible = false;
@@ -621,7 +617,7 @@ public partial class StockTransaction : System.Web.UI.Page
             // lblmenuitem.Visible = true;
             // ddlMenuItem.Visible = true;
         }
-        
+
         else
         {
             lblpurchaseprice.Visible = false;
@@ -654,9 +650,9 @@ public partial class StockTransaction : System.Web.UI.Page
 
             }
 
-            
+
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -674,15 +670,15 @@ public partial class StockTransaction : System.Web.UI.Page
         if (dtpdate.SelectedDate != null)
         {
             lblSessionCode.Visible = true;
-            ddlSession.Visible = true; 
+            ddlSession.Visible = true;
 
 
-           
+
         }
         else
         {
             lblSessionCode.Visible = true;
-            ddlSession.Visible = true; 
+            ddlSession.Visible = true;
         }
     }
     protected void dtpTransDate_SelectedDateChanged(object sender, Telerik.Web.UI.Calendar.SelectedDateChangedEventArgs e)
@@ -691,7 +687,7 @@ public partial class StockTransaction : System.Web.UI.Page
         {
             LoadGrid(Convert.ToDateTime(dtpTransDate.SelectedDate));
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -853,13 +849,14 @@ public partial class StockTransaction : System.Web.UI.Page
                 }
             }
 
-            
+
         }
     }
     protected void rgRecentTransaction_ItemDataBound(object sender, GridItemEventArgs e)
     {
 
-        try {
+        try
+        {
 
             if (e.Item is GridDataItem)
             {
@@ -869,11 +866,11 @@ public partial class StockTransaction : System.Web.UI.Page
                 if (item["VPCNT"].Text == "&nbsp;")
                 {
                     item["VPCNT"].Text = "";
-                    
+
                 }
 
 
-                if (item["VPCNT"].Text != "" )
+                if (item["VPCNT"].Text != "")
                 {
 
                     double dvpcnt = Convert.ToDouble(item["VPCNT"].Text);
@@ -886,12 +883,12 @@ public partial class StockTransaction : System.Web.UI.Page
 
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
-        
 
-       
+
+
     }
 }

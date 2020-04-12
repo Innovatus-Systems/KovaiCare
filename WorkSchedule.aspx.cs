@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
-using System.Globalization;
 
 
 public partial class WorkSchedule : System.Web.UI.Page
@@ -42,7 +37,7 @@ public partial class WorkSchedule : System.Web.UI.Page
 
                 dtpdate.SelectedDate = DateTime.Now;
 
-               
+
 
                 dtpFrom.SelectedDate = DateTime.Now;
 
@@ -51,7 +46,7 @@ public partial class WorkSchedule : System.Web.UI.Page
 
                 dtpTo.SelectedDate = lastOfThisMonth;
 
-                dtpCopy.SelectedDate= DateTime.Now;
+                dtpCopy.SelectedDate = DateTime.Now;
                 dtpFromDate.SelectedDate = DateTime.Now;
                 dtpToDate.SelectedDate = lastOfThisMonth;
 
@@ -72,7 +67,7 @@ public partial class WorkSchedule : System.Web.UI.Page
                 LoadServiceRequestPending();
                 LoadViewTaskList();
                 LoadCopyFrom();
-                
+
 
                 //racHKResident.Visible = false;
 
@@ -136,7 +131,7 @@ public partial class WorkSchedule : System.Web.UI.Page
 
             dsLoadProvisionType.Dispose();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -170,7 +165,7 @@ public partial class WorkSchedule : System.Web.UI.Page
                 ddlViewCategory.DataValueField = "value";
                 ddlViewCategory.DataBind();
             }
-           
+
             ddlCategory.Items.Insert(0, "All");
             ddlViewCategory.Items.Insert(0, "All");
 
@@ -192,7 +187,7 @@ public partial class WorkSchedule : System.Web.UI.Page
             LoadTask();
             LoadPersonName();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -260,12 +255,12 @@ public partial class WorkSchedule : System.Web.UI.Page
 
 
             DateTime sd = DateTime.Now;
-                ;
+            ;
 
 
-            DateTime cd=DateTime.Now; 
+            DateTime cd = DateTime.Now;
 
-            if (dsBillingPeriod.Tables[0].Rows.Count >0)
+            if (dsBillingPeriod.Tables[0].Rows.Count > 0)
             {
                 sd = Convert.ToDateTime(dsBillingPeriod.Tables[0].Rows[0]["BPFrom"].ToString());
 
@@ -285,7 +280,7 @@ public partial class WorkSchedule : System.Web.UI.Page
                       new SqlParameter() { ParameterName = "@ToDate", SqlDbType = SqlDbType.DateTime, Value = cd }
                       );
 
-            if (dsCopyFrom.Tables[0].Rows.Count >0 )
+            if (dsCopyFrom.Tables[0].Rows.Count > 0)
             {
                 ddlCopyFrom.DataSource = dsCopyFrom;
                 ddlCopyFrom.DataTextField = "Date";
@@ -297,9 +292,9 @@ public partial class WorkSchedule : System.Web.UI.Page
 
 
             dsCopyFrom.Dispose();
-          
+
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -337,14 +332,14 @@ public partial class WorkSchedule : System.Web.UI.Page
     {
         try
         {
-           DataSet dsWorkSchedule = sqlobj.ExecuteSP("SP_LoadWorkSchedule",
-                       new SqlParameter() { ParameterName = "@Date", SqlDbType = SqlDbType.DateTime, Value = dtpdate.SelectedDate },
-                       new SqlParameter() { ParameterName = "@Staff", SqlDbType = SqlDbType.NVarChar, Value = ddlStaff.SelectedValue == "All" ? null:ddlStaff.SelectedValue },
-                       new SqlParameter() { ParameterName = "@WorkType", SqlDbType = SqlDbType.NVarChar, Value = ddlWorkType.SelectedValue == "All" ? null:ddlWorkType.SelectedValue }
-                       );
+            DataSet dsWorkSchedule = sqlobj.ExecuteSP("SP_LoadWorkSchedule",
+                        new SqlParameter() { ParameterName = "@Date", SqlDbType = SqlDbType.DateTime, Value = dtpdate.SelectedDate },
+                        new SqlParameter() { ParameterName = "@Staff", SqlDbType = SqlDbType.NVarChar, Value = ddlStaff.SelectedValue == "All" ? null : ddlStaff.SelectedValue },
+                        new SqlParameter() { ParameterName = "@WorkType", SqlDbType = SqlDbType.NVarChar, Value = ddlWorkType.SelectedValue == "All" ? null : ddlWorkType.SelectedValue }
+                        );
 
-            
-            if (dsWorkSchedule.Tables[0].Rows.Count>0)
+
+            if (dsWorkSchedule.Tables[0].Rows.Count > 0)
             {
                 gvWorkSchedule.DataSource = dsWorkSchedule;
                 gvWorkSchedule.DataBind();
@@ -359,7 +354,7 @@ public partial class WorkSchedule : System.Web.UI.Page
 
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -377,7 +372,7 @@ public partial class WorkSchedule : System.Web.UI.Page
                         new SqlParameter() { ParameterName = "@Staff", SqlDbType = SqlDbType.NVarChar, Value = ddlPendingStaff.SelectedValue == "All" ? null : ddlPendingStaff.SelectedValue },
                        new SqlParameter() { ParameterName = "@WorkType", SqlDbType = SqlDbType.NVarChar, Value = ddlPendingWorkType.SelectedValue == "All" ? null : ddlPendingWorkType.SelectedValue },
                        new SqlParameter() { ParameterName = "@Status", SqlDbType = SqlDbType.NVarChar, Value = ddlPenStatus.SelectedValue == "All" ? null : ddlPenStatus.SelectedValue }
-                        
+
                         );
 
 
@@ -424,7 +419,7 @@ public partial class WorkSchedule : System.Web.UI.Page
 
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -496,7 +491,7 @@ public partial class WorkSchedule : System.Web.UI.Page
 
             ddlTask.Items.Insert(0, "--Select--");
 
-            if (dsTask.Tables[1].Rows.Count >0)
+            if (dsTask.Tables[1].Rows.Count > 0)
             {
                 lbldepartment.Text = "Department:" + dsTask.Tables[1].Rows[0]["Department"].ToString();
             }
@@ -507,7 +502,7 @@ public partial class WorkSchedule : System.Web.UI.Page
 
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -528,7 +523,7 @@ public partial class WorkSchedule : System.Web.UI.Page
             //DataSet dsPersonName = sqlobj.ExecuteSP("SP_GetTaskNames",
             //    new SqlParameter() { ParameterName = "@TaskCategory", SqlDbType = SqlDbType.NVarChar, Value = strtask[0].ToString() });
 
-          
+
 
             DataSet dsPersonName = sqlobj.ExecuteSP("SP_HouseKeeping",
                 new SqlParameter() { ParameterName = "@Category", SqlDbType = SqlDbType.NVarChar, Value = strtask[0].ToString() },
@@ -542,19 +537,19 @@ public partial class WorkSchedule : System.Web.UI.Page
                 ddlAssignedTo.DataTextField = "PersonName";
                 ddlAssignedTo.DataBind();
 
-               
+
             }
             else
             {
                 ddlAssignedTo.Items.Clear();
-               
+
             }
 
 
             dsPersonName.Dispose();
 
             ddlAssignedTo.Items.Insert(0, "--Select--");
-          
+
 
         }
         catch (Exception ex)
@@ -596,7 +591,7 @@ public partial class WorkSchedule : System.Web.UI.Page
 
             ddlPendingStaff.Items.Insert(0, "All");
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -610,7 +605,7 @@ public partial class WorkSchedule : System.Web.UI.Page
 
             LoadCategory();
             LoadWorkSchedule();
-           // LoadStaffWorkChart();
+            // LoadStaffWorkChart();
 
         }
         catch (Exception ex)
@@ -618,7 +613,7 @@ public partial class WorkSchedule : System.Web.UI.Page
             WebMsgBox.Show(ex.Message);
         }
     }
-    
+
     protected void ddlSite_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -647,7 +642,7 @@ public partial class WorkSchedule : System.Web.UI.Page
                 else
                 {
                     txtLocation.Visible = true;
-                   // racHKResident.Visible = false;
+                    // racHKResident.Visible = false;
                     cmbResident.Visible = false;
                 }
             }
@@ -670,7 +665,7 @@ public partial class WorkSchedule : System.Web.UI.Page
         ddlSite.SelectedIndex = 0;
         ddlTask.SelectedIndex = 0;
         ddlAssignedTo.SelectedIndex = 0;
-        txtLocation.Text ="";
+        txtLocation.Text = "";
         //racHKResident.Entries.Clear();
         cmbResident.SelectedIndex = 0;
         txtRemarks.Text = "";
@@ -701,15 +696,15 @@ public partial class WorkSchedule : System.Web.UI.Page
                        new SqlParameter() { ParameterName = "@RTVillaNo", SqlDbType = SqlDbType.NVarChar, Value = strlocation.ToString() });
 
 
-                  if (dsgetrtrsn.Tables.Count>0)
-                  {
+                    if (dsgetrtrsn.Tables.Count > 0)
+                    {
 
-                   if(dsgetrtrsn.Tables[0].Rows.Count >0)
-                   {
-                       strrtrsn = dsgetrtrsn.Tables[0].Rows[0]["RTRSN"].ToString();
-                   }
+                        if (dsgetrtrsn.Tables[0].Rows.Count > 0)
+                        {
+                            strrtrsn = dsgetrtrsn.Tables[0].Rows[0]["RTRSN"].ToString();
+                        }
 
-                  }
+                    }
 
                     dsgetrtrsn.Dispose();
                 }
@@ -722,11 +717,11 @@ public partial class WorkSchedule : System.Web.UI.Page
                 string categoryvalue = "";
                 string cvalue = "";
 
-                
+
                 string taskvalue = ddlTask.SelectedValue.ToString();
 
                 string[] strtask = taskvalue.Split('-');
-                
+
                 if (ddlCategory.SelectedValue == "All")
                 {
                     DataSet dsGetCategory = sqlobj.ExecuteSP("SP_HouseKeeping",
@@ -735,7 +730,7 @@ public partial class WorkSchedule : System.Web.UI.Page
                       );
 
 
-                    if (dsGetCategory.Tables[0].Rows.Count >0)
+                    if (dsGetCategory.Tables[0].Rows.Count > 0)
                     {
                         cvalue = dsGetCategory.Tables[0].Rows[0]["rsn"].ToString();
                     }
@@ -751,17 +746,17 @@ public partial class WorkSchedule : System.Web.UI.Page
                 }
 
                 sqlobj.ExecuteSQLNonQuery("SP_InserttblWorkSchedule",
-                       new SqlParameter() { ParameterName = "@CategoryID", SqlDbType = SqlDbType.BigInt, Value =  cvalue.ToString() }, 
-                       new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.BigInt, Value =  strrtrsn.ToString() == "" ? "0":strrtrsn.ToString() },
-                       new SqlParameter() { ParameterName = "@TaskId", SqlDbType = SqlDbType.BigInt, Value =  strtask[0].ToString() },
+                       new SqlParameter() { ParameterName = "@CategoryID", SqlDbType = SqlDbType.BigInt, Value = cvalue.ToString() },
+                       new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.BigInt, Value = strrtrsn.ToString() == "" ? "0" : strrtrsn.ToString() },
+                       new SqlParameter() { ParameterName = "@TaskId", SqlDbType = SqlDbType.BigInt, Value = strtask[0].ToString() },
                        new SqlParameter() { ParameterName = "@WFId", SqlDbType = SqlDbType.BigInt, Value = ddlAssignedTo.SelectedValue },
                        new SqlParameter() { ParameterName = "@Date", SqlDbType = SqlDbType.DateTime, Value = dtpdate.SelectedDate },
                        new SqlParameter() { ParameterName = "@Location", SqlDbType = SqlDbType.NVarChar, Value = ddlSite.SelectedValue },
-                       new SqlParameter() { ParameterName = "@LocationDesc", SqlDbType = SqlDbType.NVarChar, Value = strlocation.ToString()},
+                       new SqlParameter() { ParameterName = "@LocationDesc", SqlDbType = SqlDbType.NVarChar, Value = strlocation.ToString() },
                        new SqlParameter() { ParameterName = "@Status", SqlDbType = SqlDbType.NVarChar, Value = "00" },
                        new SqlParameter() { ParameterName = "@Remarks", SqlDbType = SqlDbType.NVarChar, Value = txtRemarks.Text },
                        new SqlParameter() { ParameterName = "@UserID", SqlDbType = SqlDbType.NVarChar, Value = Session["UserID"].ToString() }
-                       
+
                        );
 
                 LoadWorkSchedule();
@@ -769,7 +764,7 @@ public partial class WorkSchedule : System.Web.UI.Page
                 //LoadCopyFrom();
 
                 ClearWorkSchedule();
-                
+
                 ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('House keeping work schedule details saved');", true);
             }
 
@@ -783,8 +778,8 @@ public partial class WorkSchedule : System.Web.UI.Page
 
     private string DoorNo()
     {
-       
-        string strrsnfilter =cmbResident.SelectedItem.Text;
+
+        string strrsnfilter = cmbResident.SelectedItem.Text;
 
         string[] custrsn = strrsnfilter.Split(',');
 
@@ -792,7 +787,7 @@ public partial class WorkSchedule : System.Web.UI.Page
 
         return strrsnfilter;
     }
-   
+
     protected void btnUpdate_Click(object sender, EventArgs e)
     {
         try
@@ -820,7 +815,7 @@ public partial class WorkSchedule : System.Web.UI.Page
                 ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('House keeping work schedule details updated');", true);
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -854,9 +849,9 @@ public partial class WorkSchedule : System.Web.UI.Page
                         ddlStatus.SelectedValue = dsRes.Tables[0].Rows[0]["Status"].ToString();
                         txtestimatedmins.Text = dsRes.Tables[0].Rows[0]["UsualTime"].ToString();
 
-                       // DateTime fromdatetime = DateTime.ParseExact(dsRes.Tables[0].Rows[0]["fromtime"].ToString(), "h:m t", CultureInfo.InvariantCulture);
+                        // DateTime fromdatetime = DateTime.ParseExact(dsRes.Tables[0].Rows[0]["fromtime"].ToString(), "h:m t", CultureInfo.InvariantCulture);
 
-                        string fromtime =dsRes.Tables[0].Rows[0]["fromtime"].ToString();
+                        string fromtime = dsRes.Tables[0].Rows[0]["fromtime"].ToString();
                         string totime = dsRes.Tables[0].Rows[0]["totime"].ToString();
 
                         if (fromtime != "")
@@ -869,7 +864,7 @@ public partial class WorkSchedule : System.Web.UI.Page
                             dtpfromTime.SelectedDate = null;
                         }
 
-                        if (totime !="")
+                        if (totime != "")
                         {
                             dtptoTime.SelectedDate = DateTime.Parse(dsRes.Tables[0].Rows[0]["totime"].ToString());
                         }
@@ -877,16 +872,16 @@ public partial class WorkSchedule : System.Web.UI.Page
                         {
                             dtptoTime.SelectedDate = null;
                         }
-                       
+
 
 
                         rwEditWorkSchedule.Visible = true;
-                        
+
                     }
 
                     dsRes.Dispose();
 
-             
+
 
                 }
             }
@@ -906,7 +901,7 @@ public partial class WorkSchedule : System.Web.UI.Page
         {
             if (CnfResult.Value == "true")
             {
-                if(Convert.ToString(dtpCopy.SelectedDate)==""|| dtpCopy.SelectedDate==null)
+                if (Convert.ToString(dtpCopy.SelectedDate) == "" || dtpCopy.SelectedDate == null)
                 {
                     ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please Select Copy From date.');", true);
                     return;
@@ -939,7 +934,7 @@ public partial class WorkSchedule : System.Web.UI.Page
             }
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -965,10 +960,10 @@ public partial class WorkSchedule : System.Web.UI.Page
             dg.DataBind();
 
             DateTime sdate = dtpdate.SelectedDate.Value;
-            
+
 
             // THE EXCEL FILE.
-            string sFileName = "Work Schedule For " + sdate.ToString("dd/MM/yyyy")  + ".xls";
+            string sFileName = "Work Schedule For " + sdate.ToString("dd/MM/yyyy") + ".xls";
             sFileName = sFileName.Replace("/", "");
 
             // SEND OUTPUT TO THE CLIENT MACHINE USING "RESPONSE OBJECT".
@@ -1001,7 +996,7 @@ public partial class WorkSchedule : System.Web.UI.Page
         }
         else
         {
-            WebMsgBox.Show("Work Schedule For" + dtpdate.SelectedDate.Value +  " does not exist");
+            WebMsgBox.Show("Work Schedule For" + dtpdate.SelectedDate.Value + " does not exist");
         }
 
     }
@@ -1014,7 +1009,7 @@ public partial class WorkSchedule : System.Web.UI.Page
 
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -1030,10 +1025,10 @@ public partial class WorkSchedule : System.Web.UI.Page
                 LoadCopyWorkSchedule();
                 LoadCopyStaffWorkChart();
             }
-            
+
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -1104,20 +1099,20 @@ public partial class WorkSchedule : System.Web.UI.Page
     }
 
 
-  
+
     protected void dtpTo_SelectedDateChanged(object sender, Telerik.Web.UI.Calendar.SelectedDateChangedEventArgs e)
     {
         try
         {
 
-                DateTime fdate = Convert.ToDateTime(dtpFrom.SelectedDate);
-                DateTime tdate = Convert.ToDateTime(dtpTo.SelectedDate);
+            DateTime fdate = Convert.ToDateTime(dtpFrom.SelectedDate);
+            DateTime tdate = Convert.ToDateTime(dtpTo.SelectedDate);
 
-                Int32 noofdays = TotalDays(fdate, tdate);
+            Int32 noofdays = TotalDays(fdate, tdate);
 
-                lbltotalnotupdated.Text = "Total Days:" + noofdays.ToString();
-            
-          
+            lbltotalnotupdated.Text = "Total Days:" + noofdays.ToString();
+
+
         }
         catch (Exception ex)
         {
@@ -1149,12 +1144,12 @@ public partial class WorkSchedule : System.Web.UI.Page
         CheckBox headerCheckBox = (sender as CheckBox);
         foreach (GridDataItem dataItem in gvWorkSchedule.MasterTableView.Items)
         {
-           // string strRef = dataItem["Reference"].Text.ToString();
+            // string strRef = dataItem["Reference"].Text.ToString();
             //if (strRef != "#Aptmnt")
             //{
-                (dataItem.FindControl("chkJSel") as CheckBox).Checked = headerCheckBox.Checked;
-                dataItem.Selected = headerCheckBox.Checked;
-           // }
+            (dataItem.FindControl("chkJSel") as CheckBox).Checked = headerCheckBox.Checked;
+            dataItem.Selected = headerCheckBox.Checked;
+            // }
         }
     }
 
@@ -1163,11 +1158,11 @@ public partial class WorkSchedule : System.Web.UI.Page
         CheckBox headerCheckBox = (sender as CheckBox);
         foreach (GridDataItem dataItem in gvWorkSchedulePending.MasterTableView.Items)
         {
-             string strRef = dataItem["Status"].Text.ToString();
+            string strRef = dataItem["Status"].Text.ToString();
             if (strRef != "Done")
             {
-            (dataItem.FindControl("chkJSel") as CheckBox).Checked = headerCheckBox.Checked;
-            dataItem.Selected = headerCheckBox.Checked;
+                (dataItem.FindControl("chkJSel") as CheckBox).Checked = headerCheckBox.Checked;
+                dataItem.Selected = headerCheckBox.Checked;
             }
         }
     }
@@ -1226,14 +1221,14 @@ public partial class WorkSchedule : System.Web.UI.Page
                 foreach (string id in taskid)
                 {
                     string test = id;
-                   DataSet dsBulkUpdate = sqlobj.ExecuteSP("SP_BulkUpdate",
-                         new SqlParameter() { ParameterName = "@RSN", SqlDbType = SqlDbType.NVarChar, Value = id },
-                         new SqlParameter() { ParameterName = "@Remarks", SqlDbType = SqlDbType.NVarChar, Value = txtbulktext.Text },
-                         new SqlParameter() { ParameterName = "@ModifiedBy", SqlDbType = SqlDbType.NVarChar, Value = Session["UserID"].ToString() },
-                         new SqlParameter() { ParameterName = "@Status", SqlDbType = SqlDbType.NVarChar, Value = ddlbulkstatus.SelectedValue }
-                         );                  
+                    DataSet dsBulkUpdate = sqlobj.ExecuteSP("SP_BulkUpdate",
+                          new SqlParameter() { ParameterName = "@RSN", SqlDbType = SqlDbType.NVarChar, Value = id },
+                          new SqlParameter() { ParameterName = "@Remarks", SqlDbType = SqlDbType.NVarChar, Value = txtbulktext.Text },
+                          new SqlParameter() { ParameterName = "@ModifiedBy", SqlDbType = SqlDbType.NVarChar, Value = Session["UserID"].ToString() },
+                          new SqlParameter() { ParameterName = "@Status", SqlDbType = SqlDbType.NVarChar, Value = ddlbulkstatus.SelectedValue }
+                          );
 
-                  
+
                     int count = Convert.ToInt16(dsBulkUpdate.Tables[0].Rows[0]["TotalCount"].ToString());
                     if (count != 0)
                     {
@@ -1260,7 +1255,7 @@ public partial class WorkSchedule : System.Web.UI.Page
         {
             rwBulkUpdate.Visible = false;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -1275,7 +1270,7 @@ public partial class WorkSchedule : System.Web.UI.Page
         {
             LoadWorkSchedule();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -1383,7 +1378,7 @@ public partial class WorkSchedule : System.Web.UI.Page
         {
             LoadWorkSchedulePending();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -1394,7 +1389,7 @@ public partial class WorkSchedule : System.Web.UI.Page
         {
             LoadWorkSchedulePending();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -1434,392 +1429,392 @@ public partial class WorkSchedule : System.Web.UI.Page
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Function", "alertmsg1();", true);
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
     }
-    
- protected void Button1_Click(object sender, EventArgs e)
- {
-     rwPendingBulk.Visible = true;
-    
- }
- protected void btnPendingUpdate_Click(object sender, EventArgs e)
- {
-     try
-     {
-        
-             if (ViewState["PendingBulk"] != null)
-             {
-                 string strtaskid = ViewState["PendingBulk"].ToString();
-                 string[] taskid = strtaskid.Split(',');
-                 int len = Convert.ToInt16(taskid.Length);
-                 int ucount = 0;
-                 foreach (string id in taskid)
-                 {
-                     string test = id;
-                     DataSet dsBulkUpdate = sqlobj.ExecuteSP("SP_BulkUpdate",
-                           new SqlParameter() { ParameterName = "@RSN", SqlDbType = SqlDbType.NVarChar, Value = id },
-                           new SqlParameter() { ParameterName = "@Remarks", SqlDbType = SqlDbType.NVarChar, Value = txtPendingRemarks.Text },
-                           new SqlParameter() { ParameterName = "@ModifiedBy", SqlDbType = SqlDbType.NVarChar, Value = Session["UserID"].ToString() },
-                           new SqlParameter() { ParameterName = "@Status", SqlDbType = SqlDbType.NVarChar, Value = ddlPendingstatus.SelectedValue }
-                           );
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        rwPendingBulk.Visible = true;
+
+    }
+    protected void btnPendingUpdate_Click(object sender, EventArgs e)
+    {
+        try
+        {
+
+            if (ViewState["PendingBulk"] != null)
+            {
+                string strtaskid = ViewState["PendingBulk"].ToString();
+                string[] taskid = strtaskid.Split(',');
+                int len = Convert.ToInt16(taskid.Length);
+                int ucount = 0;
+                foreach (string id in taskid)
+                {
+                    string test = id;
+                    DataSet dsBulkUpdate = sqlobj.ExecuteSP("SP_BulkUpdate",
+                          new SqlParameter() { ParameterName = "@RSN", SqlDbType = SqlDbType.NVarChar, Value = id },
+                          new SqlParameter() { ParameterName = "@Remarks", SqlDbType = SqlDbType.NVarChar, Value = txtPendingRemarks.Text },
+                          new SqlParameter() { ParameterName = "@ModifiedBy", SqlDbType = SqlDbType.NVarChar, Value = Session["UserID"].ToString() },
+                          new SqlParameter() { ParameterName = "@Status", SqlDbType = SqlDbType.NVarChar, Value = ddlPendingstatus.SelectedValue }
+                          );
 
 
-                     int count = Convert.ToInt16(dsBulkUpdate.Tables[0].Rows[0]["TotalCount"].ToString());
-                     if (count != 0)
-                     {
-                         ucount += 1;
-                     }
-                 }
-                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Function", "confirmbulk('" + len.ToString() + "','" + ucount + "');", true);
-                 //ScriptManager.RegisterStartupScript(this, this.GetType(), "Function", "ConfirmClick();", true);
-                 txtbulktext.Text = string.Empty;
-             }
+                    int count = Convert.ToInt16(dsBulkUpdate.Tables[0].Rows[0]["TotalCount"].ToString());
+                    if (count != 0)
+                    {
+                        ucount += 1;
+                    }
+                }
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Function", "confirmbulk('" + len.ToString() + "','" + ucount + "');", true);
+                //ScriptManager.RegisterStartupScript(this, this.GetType(), "Function", "ConfirmClick();", true);
+                txtbulktext.Text = string.Empty;
+            }
 
-             LoadWorkSchedulePending();
+            LoadWorkSchedulePending();
 
-             rwPendingBulk.Visible = false;
-        
-     }
-     catch (Exception ex)
-     {
-         WebMsgBox.Show(ex.Message.ToString());
-     }
- }
- protected void btnPendingClose_Click(object sender, EventArgs e)
- {
-     try
-     {
-         rwPendingBulk.Visible = false;
-     }
-     catch (Exception ex)
-     {
-         WebMsgBox.Show(ex.Message);
-     }
- }
- protected void btnPendingUpdate_Click1(object sender, EventArgs e)
- {
-     try
-     {
-         if (CnfResult.Value == "true")
-         {
+            rwPendingBulk.Visible = false;
 
-             if (ViewState["PendingBulk"] != null)
-             {
-                 string strtaskid = ViewState["PendingBulk"].ToString();
-                 string[] taskid = strtaskid.Split(',');
-                 int len = Convert.ToInt16(taskid.Length);
-                 int ucount = 0;
-                 foreach (string id in taskid)
-                 {
-                     string test = id;
-                     DataSet dsBulkUpdate = sqlobj.ExecuteSP("SP_BulkUpdate",
-                           new SqlParameter() { ParameterName = "@RSN", SqlDbType = SqlDbType.NVarChar, Value = id },
-                           new SqlParameter() { ParameterName = "@Remarks", SqlDbType = SqlDbType.NVarChar, Value = txtPendingRemarks.Text },
-                           new SqlParameter() { ParameterName = "@ModifiedBy", SqlDbType = SqlDbType.NVarChar, Value = Session["UserID"].ToString() },
-                           new SqlParameter() { ParameterName = "@Status", SqlDbType = SqlDbType.NVarChar, Value = ddlPendingstatus }
-                           );
+        }
+        catch (Exception ex)
+        {
+            WebMsgBox.Show(ex.Message.ToString());
+        }
+    }
+    protected void btnPendingClose_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            rwPendingBulk.Visible = false;
+        }
+        catch (Exception ex)
+        {
+            WebMsgBox.Show(ex.Message);
+        }
+    }
+    protected void btnPendingUpdate_Click1(object sender, EventArgs e)
+    {
+        try
+        {
+            if (CnfResult.Value == "true")
+            {
 
-
-                     int count = Convert.ToInt16(dsBulkUpdate.Tables[0].Rows[0]["TotalCount"].ToString());
-                     if (count != 0)
-                     {
-                         ucount += 1;
-                     }
-                 }
-                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Function", "confirmbulk('" + len.ToString() + "','" + ucount + "');", true);
-                 //ScriptManager.RegisterStartupScript(this, this.GetType(), "Function", "ConfirmClick();", true);
-                 txtbulktext.Text = string.Empty;
-             }
-
-             LoadWorkSchedulePending();
-
-             rwPendingBulk.Visible = false;
-         }
-     }
-     catch (Exception ex)
-     {
-         WebMsgBox.Show(ex.Message.ToString());
-     }
- }
- protected void ddlViewCategory_SelectedIndexChanged(object sender, EventArgs e)
- {
-     try
-     {
-         LoadViewTask();
-     }
-     catch(Exception ex)
-     {
-         WebMsgBox.Show(ex.Message);
-     }
- }
-
- private void LoadViewTask()
- {
-     try
-     {
-         //SP_LoadWorkTasks
-
-         string categoryvalue = ddlViewCategory.SelectedValue.ToString();
-
-         string[] strcatval = categoryvalue.Split(',');
-
-         DataSet dsTask = sqlobj.ExecuteSP("SP_LoadWorkTasks",
-             new SqlParameter() { ParameterName = "@CategoryCode", SqlDbType = SqlDbType.NVarChar, Value = strcatval[0].ToString() });
-
-         ddlTask.Items.Clear();
+                if (ViewState["PendingBulk"] != null)
+                {
+                    string strtaskid = ViewState["PendingBulk"].ToString();
+                    string[] taskid = strtaskid.Split(',');
+                    int len = Convert.ToInt16(taskid.Length);
+                    int ucount = 0;
+                    foreach (string id in taskid)
+                    {
+                        string test = id;
+                        DataSet dsBulkUpdate = sqlobj.ExecuteSP("SP_BulkUpdate",
+                              new SqlParameter() { ParameterName = "@RSN", SqlDbType = SqlDbType.NVarChar, Value = id },
+                              new SqlParameter() { ParameterName = "@Remarks", SqlDbType = SqlDbType.NVarChar, Value = txtPendingRemarks.Text },
+                              new SqlParameter() { ParameterName = "@ModifiedBy", SqlDbType = SqlDbType.NVarChar, Value = Session["UserID"].ToString() },
+                              new SqlParameter() { ParameterName = "@Status", SqlDbType = SqlDbType.NVarChar, Value = ddlPendingstatus }
+                              );
 
 
-         if (dsTask.Tables[0].Rows.Count > 0)
-         {
-             ddlViewTask.DataSource = dsTask;
-             ddlViewTask.DataValueField = "Value";
-             ddlViewTask.DataTextField = "Title";
-             ddlViewTask.DataBind();
-         }
+                        int count = Convert.ToInt16(dsBulkUpdate.Tables[0].Rows[0]["TotalCount"].ToString());
+                        if (count != 0)
+                        {
+                            ucount += 1;
+                        }
+                    }
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Function", "confirmbulk('" + len.ToString() + "','" + ucount + "');", true);
+                    //ScriptManager.RegisterStartupScript(this, this.GetType(), "Function", "ConfirmClick();", true);
+                    txtbulktext.Text = string.Empty;
+                }
+
+                LoadWorkSchedulePending();
+
+                rwPendingBulk.Visible = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            WebMsgBox.Show(ex.Message.ToString());
+        }
+    }
+    protected void ddlViewCategory_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            LoadViewTask();
+        }
+        catch (Exception ex)
+        {
+            WebMsgBox.Show(ex.Message);
+        }
+    }
+
+    private void LoadViewTask()
+    {
+        try
+        {
+            //SP_LoadWorkTasks
+
+            string categoryvalue = ddlViewCategory.SelectedValue.ToString();
+
+            string[] strcatval = categoryvalue.Split(',');
+
+            DataSet dsTask = sqlobj.ExecuteSP("SP_LoadWorkTasks",
+                new SqlParameter() { ParameterName = "@CategoryCode", SqlDbType = SqlDbType.NVarChar, Value = strcatval[0].ToString() });
+
+            ddlTask.Items.Clear();
 
 
-         dsTask.Dispose();
-
-         ddlViewTask.Items.Insert(0, "All");
-
-         //if (dsTask.Tables[1].Rows.Count > 0)
-         //{
-         //    lbldepartment.Text = "Department:" + dsTask.Tables[1].Rows[0]["Department"].ToString();
-         //}
-         //else
-         //{
-         //    lbldepartment.Text = "";
-         //}
+            if (dsTask.Tables[0].Rows.Count > 0)
+            {
+                ddlViewTask.DataSource = dsTask;
+                ddlViewTask.DataValueField = "Value";
+                ddlViewTask.DataTextField = "Title";
+                ddlViewTask.DataBind();
+            }
 
 
-     }
-     catch (Exception ex)
-     {
-         WebMsgBox.Show(ex.Message);
-     }
- }
+            dsTask.Dispose();
 
- protected void ddlViewTask_SelectedIndexChanged(object sender, EventArgs e)
- {
-     try
-     {
-         LoadviewPersonName();
-     }
-     catch(Exception ex)
-     {
-         WebMsgBox.Show(ex.Message);
-     }
- }
+            ddlViewTask.Items.Insert(0, "All");
+
+            //if (dsTask.Tables[1].Rows.Count > 0)
+            //{
+            //    lbldepartment.Text = "Department:" + dsTask.Tables[1].Rows[0]["Department"].ToString();
+            //}
+            //else
+            //{
+            //    lbldepartment.Text = "";
+            //}
 
 
- private void LoadviewPersonName()
- {
-     try
-     {
-         //SP_LoadWorkForce
+        }
+        catch (Exception ex)
+        {
+            WebMsgBox.Show(ex.Message);
+        }
+    }
 
-         string taskvalue = ddlViewTask.SelectedValue.ToString();
-
-         string[] strtask = taskvalue.Split('-');
-
-         DataSet dsPersonName = sqlobj.ExecuteSP("SP_GetTaskNames",
-             new SqlParameter() { ParameterName = "@TaskCategory", SqlDbType = SqlDbType.NVarChar, Value = strtask[1].ToString() });
-
-
-         ddlViewStaff.Items.Clear();
-         
-         if (dsPersonName.Tables[0].Rows.Count > 0)
-         {
-             ddlViewStaff.DataSource = dsPersonName;
-             ddlViewStaff.DataValueField = "RSN";
-             ddlViewStaff.DataTextField = "PersonName";
-             ddlViewStaff.DataBind();
-
-         }
-         else
-         {
-             ddlViewStaff.Items.Clear();
-
-         }
+    protected void ddlViewTask_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            LoadviewPersonName();
+        }
+        catch (Exception ex)
+        {
+            WebMsgBox.Show(ex.Message);
+        }
+    }
 
 
-         dsPersonName.Dispose();
+    private void LoadviewPersonName()
+    {
+        try
+        {
+            //SP_LoadWorkForce
 
-         ddlViewStaff.Items.Insert(0, "All");
+            string taskvalue = ddlViewTask.SelectedValue.ToString();
 
+            string[] strtask = taskvalue.Split('-');
 
-     }
-     catch (Exception ex)
-     {
-         WebMsgBox.Show(ex.Message);
-     }
- }
-
- protected void btnSearch_Click(object sender, EventArgs e)
- {
-     try
-     {
-
-         LoadViewTaskList();
-
-     }
-     catch(Exception ex)
-     {
-         WebMsgBox.Show(ex.Message);
-     }
- }
-
- private void LoadViewTaskList()
- {
-     try
-     {
-         DataSet dsViewWorkSchedule = sqlobj.ExecuteSP("SP_LoadViewTaskList",
-                    new SqlParameter() { ParameterName = "@FromDate", SqlDbType = SqlDbType.DateTime, Value = dtpFromDate.SelectedDate },
-                    new SqlParameter() { ParameterName = "@ToDate", SqlDbType = SqlDbType.DateTime, Value = dtpToDate.SelectedDate },
-                    new SqlParameter() { ParameterName = "@Staff", SqlDbType = SqlDbType.NVarChar, Value = ddlViewStaff.SelectedItem.Text == "All" ? null : ddlViewStaff.SelectedItem.Text },
-                    new SqlParameter() { ParameterName = "@Category", SqlDbType = SqlDbType.NVarChar, Value = ddlViewCategory.SelectedItem.Text == "All" ? null : ddlViewCategory.SelectedItem.Text },
-                    new SqlParameter() { ParameterName = "@Task", SqlDbType = SqlDbType.NVarChar, Value = ddlViewTask.SelectedItem.Text == "All" ? null : ddlViewTask.SelectedItem.Text },
-                    new SqlParameter() { ParameterName = "@Site", SqlDbType = SqlDbType.NVarChar, Value = ddlViewSite.SelectedItem.Text == "All" ? null : ddlViewSite.SelectedItem.Text },
-                    new SqlParameter() { ParameterName = "@WorkType", SqlDbType = SqlDbType.NVarChar, Value = ddlPendingWorkType.SelectedValue == "All" ? null : ddlPendingWorkType.SelectedValue }
-
-                    );
+            DataSet dsPersonName = sqlobj.ExecuteSP("SP_GetTaskNames",
+                new SqlParameter() { ParameterName = "@TaskCategory", SqlDbType = SqlDbType.NVarChar, Value = strtask[1].ToString() });
 
 
-         if (dsViewWorkSchedule.Tables[0].Rows.Count > 0)
-         {
-             rgViewTaskList.DataSource = dsViewWorkSchedule;
-             rgViewTaskList.DataBind();
-         }
-         else
-         {
-             rgViewTaskList.DataSource = string.Empty;
-             rgViewTaskList.DataBind();
-         }
+            ddlViewStaff.Items.Clear();
 
-         dsViewWorkSchedule.Dispose();
-     }
-     catch(Exception ex)
-     {
-         WebMsgBox.Show(ex.Message);
-     }
- }
- protected void btnCalendar_Click(object sender, EventArgs e)
- {
-     try
-     {
-         Page.ClientScript.RegisterStartupScript(
-this.GetType(), "OpenWindow", "window.open('CalendarPendingTasks.aspx','_newtab');", true);
+            if (dsPersonName.Tables[0].Rows.Count > 0)
+            {
+                ddlViewStaff.DataSource = dsPersonName;
+                ddlViewStaff.DataValueField = "RSN";
+                ddlViewStaff.DataTextField = "PersonName";
+                ddlViewStaff.DataBind();
 
-     
-     }
-     catch(Exception ex)
-     {
-         WebMsgBox.Show(ex.Message);
-     }
- }
- protected void ddlPenStatus_SelectedIndexChanged(object sender, EventArgs e)
- {
-     try
-     {
-         LoadWorkSchedulePending();
-     }
-     catch(Exception ex)
-     {
-         WebMsgBox.Show(ex.Message);
-     }
- }
+            }
+            else
+            {
+                ddlViewStaff.Items.Clear();
 
- protected void gvWorkSchedule_ItemDataBound(object sender, GridItemEventArgs e)
- {
-     try
-     {
-         if (e.Item is GridDataItem)
-         {
-             GridDataItem dataItem = e.Item as GridDataItem;
+            }
 
 
-             String strStatus = dataItem["Status"].Text;
+            dsPersonName.Dispose();
 
-             if (strStatus == "Done")
-             {
-                 dataItem["Status"].ForeColor = System.Drawing.Color.Green;
-             }
+            ddlViewStaff.Items.Insert(0, "All");
 
 
-         }
-     }
-     catch (Exception ex)
-     {
-         WebMsgBox.Show(ex.Message);
-     }
- }
+        }
+        catch (Exception ex)
+        {
+            WebMsgBox.Show(ex.Message);
+        }
+    }
 
- protected void gvWorkSchedule_Init(object sender, EventArgs e)
- {
-     GridFilterMenu menu = gvWorkSchedule.FilterMenu;
-     int i = 0;
-     while (i < menu.Items.Count)
-     {
-         if (menu.Items[i].Text == "NoFilter" || menu.Items[i].Text == "Contains"
-         || menu.Items[i].Text == "GreaterThanOrEqualTo" || menu.Items[i].Text == "LessThanOrEqualTo")
-         {
-             i++;
-         }
-         else
-         {
-             menu.Items.RemoveAt(i);
-         }
-     }
- }
- protected void gvWorkSchedulePending_Init(object sender, EventArgs e)
- {
-     GridFilterMenu menu = gvWorkSchedulePending.FilterMenu;
-     int i = 0;
-     while (i < menu.Items.Count)
-     {
-         if (menu.Items[i].Text == "NoFilter" || menu.Items[i].Text == "Contains"
-         || menu.Items[i].Text == "GreaterThanOrEqualTo" || menu.Items[i].Text == "LessThanOrEqualTo")
-         {
-             i++;
-         }
-         else
-         {
-             menu.Items.RemoveAt(i);
-         }
-     }
- }
- protected void rgViewTaskList_Init(object sender, EventArgs e)
- {
-     GridFilterMenu menu = rgViewTaskList.FilterMenu;
-     int i = 0;
-     while (i < menu.Items.Count)
-     {
-         if (menu.Items[i].Text == "NoFilter" || menu.Items[i].Text == "Contains"
-         || menu.Items[i].Text == "GreaterThanOrEqualTo" || menu.Items[i].Text == "LessThanOrEqualTo")
-         {
-             i++;
-         }
-         else
-         {
-             menu.Items.RemoveAt(i);
-         }
-     }
- }
+    protected void btnSearch_Click(object sender, EventArgs e)
+    {
+        try
+        {
+
+            LoadViewTaskList();
+
+        }
+        catch (Exception ex)
+        {
+            WebMsgBox.Show(ex.Message);
+        }
+    }
+
+    private void LoadViewTaskList()
+    {
+        try
+        {
+            DataSet dsViewWorkSchedule = sqlobj.ExecuteSP("SP_LoadViewTaskList",
+                       new SqlParameter() { ParameterName = "@FromDate", SqlDbType = SqlDbType.DateTime, Value = dtpFromDate.SelectedDate },
+                       new SqlParameter() { ParameterName = "@ToDate", SqlDbType = SqlDbType.DateTime, Value = dtpToDate.SelectedDate },
+                       new SqlParameter() { ParameterName = "@Staff", SqlDbType = SqlDbType.NVarChar, Value = ddlViewStaff.SelectedItem.Text == "All" ? null : ddlViewStaff.SelectedItem.Text },
+                       new SqlParameter() { ParameterName = "@Category", SqlDbType = SqlDbType.NVarChar, Value = ddlViewCategory.SelectedItem.Text == "All" ? null : ddlViewCategory.SelectedItem.Text },
+                       new SqlParameter() { ParameterName = "@Task", SqlDbType = SqlDbType.NVarChar, Value = ddlViewTask.SelectedItem.Text == "All" ? null : ddlViewTask.SelectedItem.Text },
+                       new SqlParameter() { ParameterName = "@Site", SqlDbType = SqlDbType.NVarChar, Value = ddlViewSite.SelectedItem.Text == "All" ? null : ddlViewSite.SelectedItem.Text },
+                       new SqlParameter() { ParameterName = "@WorkType", SqlDbType = SqlDbType.NVarChar, Value = ddlPendingWorkType.SelectedValue == "All" ? null : ddlPendingWorkType.SelectedValue }
+
+                       );
+
+
+            if (dsViewWorkSchedule.Tables[0].Rows.Count > 0)
+            {
+                rgViewTaskList.DataSource = dsViewWorkSchedule;
+                rgViewTaskList.DataBind();
+            }
+            else
+            {
+                rgViewTaskList.DataSource = string.Empty;
+                rgViewTaskList.DataBind();
+            }
+
+            dsViewWorkSchedule.Dispose();
+        }
+        catch (Exception ex)
+        {
+            WebMsgBox.Show(ex.Message);
+        }
+    }
+    protected void btnCalendar_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            Page.ClientScript.RegisterStartupScript(
+   this.GetType(), "OpenWindow", "window.open('CalendarPendingTasks.aspx','_newtab');", true);
+
+
+        }
+        catch (Exception ex)
+        {
+            WebMsgBox.Show(ex.Message);
+        }
+    }
+    protected void ddlPenStatus_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            LoadWorkSchedulePending();
+        }
+        catch (Exception ex)
+        {
+            WebMsgBox.Show(ex.Message);
+        }
+    }
+
+    protected void gvWorkSchedule_ItemDataBound(object sender, GridItemEventArgs e)
+    {
+        try
+        {
+            if (e.Item is GridDataItem)
+            {
+                GridDataItem dataItem = e.Item as GridDataItem;
+
+
+                String strStatus = dataItem["Status"].Text;
+
+                if (strStatus == "Done")
+                {
+                    dataItem["Status"].ForeColor = System.Drawing.Color.Green;
+                }
+
+
+            }
+        }
+        catch (Exception ex)
+        {
+            WebMsgBox.Show(ex.Message);
+        }
+    }
+
+    protected void gvWorkSchedule_Init(object sender, EventArgs e)
+    {
+        GridFilterMenu menu = gvWorkSchedule.FilterMenu;
+        int i = 0;
+        while (i < menu.Items.Count)
+        {
+            if (menu.Items[i].Text == "NoFilter" || menu.Items[i].Text == "Contains"
+            || menu.Items[i].Text == "GreaterThanOrEqualTo" || menu.Items[i].Text == "LessThanOrEqualTo")
+            {
+                i++;
+            }
+            else
+            {
+                menu.Items.RemoveAt(i);
+            }
+        }
+    }
+    protected void gvWorkSchedulePending_Init(object sender, EventArgs e)
+    {
+        GridFilterMenu menu = gvWorkSchedulePending.FilterMenu;
+        int i = 0;
+        while (i < menu.Items.Count)
+        {
+            if (menu.Items[i].Text == "NoFilter" || menu.Items[i].Text == "Contains"
+            || menu.Items[i].Text == "GreaterThanOrEqualTo" || menu.Items[i].Text == "LessThanOrEqualTo")
+            {
+                i++;
+            }
+            else
+            {
+                menu.Items.RemoveAt(i);
+            }
+        }
+    }
+    protected void rgViewTaskList_Init(object sender, EventArgs e)
+    {
+        GridFilterMenu menu = rgViewTaskList.FilterMenu;
+        int i = 0;
+        while (i < menu.Items.Count)
+        {
+            if (menu.Items[i].Text == "NoFilter" || menu.Items[i].Text == "Contains"
+            || menu.Items[i].Text == "GreaterThanOrEqualTo" || menu.Items[i].Text == "LessThanOrEqualTo")
+            {
+                i++;
+            }
+            else
+            {
+                menu.Items.RemoveAt(i);
+            }
+        }
+    }
 
     protected void dtpCopy_SelectedDateChanged(object sender, Telerik.Web.UI.Calendar.SelectedDateChangedEventArgs e)
     {
-        if(dtpCopy.SelectedDate!=null)
+        if (dtpCopy.SelectedDate != null)
         {
             LoadCopyWorkSchedule();
             LoadCopyStaffWorkChart();
-        }  
+        }
         else
         {
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please select Copy from date.');", true);
             return;
-        }      
+        }
     }
 }

@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
 using System.Globalization;
-using System.Drawing;
-using Telerik.Web.UI;
 using System.IO;
 using System.Net;
-using System.Text;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using Telerik.Web.UI;
 
 public partial class TaskList : System.Web.UI.Page
 {
     SqlProcsNew sqlobj = new SqlProcsNew();
-    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CovaiSoft"].ConnectionString);
+    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["constring"].ConnectionString);
 
     static string strDate;
     static string strTime;
@@ -32,12 +27,9 @@ public partial class TaskList : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-
         try
         {
-
             ScriptManager scriptManager = ScriptManager.GetCurrent(this.Page);
-            //scriptManager.RegisterAsyncPostBackControl(this.btnUpdate);
             scriptManager.RegisterPostBackControl(BtnnExcelExport);
 
             SqlProcsNew proc = new SqlProcsNew();
@@ -81,14 +73,14 @@ public partial class TaskList : System.Web.UI.Page
 
                 LoadResidentDet();
 
-               
+
 
                 if (qstring == "1")
                 {
                     pnlSecond.Visible = true;
                     pnlThird.Visible = false;
                     ddlStatus.Enabled = false;
-                   // lbltitle.Visible = true;
+                    // lbltitle.Visible = true;
                     dtpStatusDt.Enabled = false;
                     dtpStatusDt.SelectedDate = dstart;
                     dtpTargetDt.SelectedDate = dstart;
@@ -118,7 +110,7 @@ public partial class TaskList : System.Web.UI.Page
                     pnlSecond.Visible = true;
                     pnlThird.Visible = false;
                     ddlStatus.Enabled = false;
-                   // lbltitle.Visible = true;
+                    // lbltitle.Visible = true;
                     dtpStatusDt.Enabled = false;
                     dtpStatusDt.SelectedDate = dstart;
                     dtpTargetDt.SelectedDate = dstart;
@@ -148,34 +140,34 @@ public partial class TaskList : System.Web.UI.Page
                 // txtMobile.Enabled = false;
                 //txtEmail.Enabled = false;
 
-               
-                
+
+
                 LoadTasksCount();
                 LoadTaskDDL();
 
                 //lbltaskcount.Visible = false;
 
             }
-            if (ddlSStatus.SelectedItem.Value != "Close") 
+            if (ddlSStatus.SelectedItem.Value != "Close")
             {
                 LoadGrid();
-                 ddlStatus.Visible = false;
-            //    lblnetamount.Visible = false;
-            //    txtNetAmount.Visible = false;
-            //    lbltaxamount.Visible = false;
-            //    txtTaxAmount.Visible = false;
-            //    lblgrossamount.Visible = false;
-            //    txtGrossAmount.Visible = false;
-            //    lbltasksts.Visible = false;
-            //    txtStatusRemarks.Visible = false;
-            //    Label11.Visible = false;
+                ddlStatus.Visible = false;
+                //    lblnetamount.Visible = false;
+                //    txtNetAmount.Visible = false;
+                //    lbltaxamount.Visible = false;
+                //    txtTaxAmount.Visible = false;
+                //    lblgrossamount.Visible = false;
+                //    txtGrossAmount.Visible = false;
+                //    lbltasksts.Visible = false;
+                //    txtStatusRemarks.Visible = false;
+                //    Label11.Visible = false;
             }
             else
             {
-                
+
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -190,7 +182,7 @@ public partial class TaskList : System.Web.UI.Page
             DataSet dsResident = new DataSet();
 
             dsResident = sqlobj.ExecuteSP("SP_GenDropDownList",
-                 new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 9},
+                 new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 9 },
                  new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Decimal, Value = 1 });
             cmbResident.DataSource = dsResident.Tables[0];
             cmbResident.DataValueField = "RTRSN";
@@ -243,28 +235,28 @@ public partial class TaskList : System.Web.UI.Page
         try
         {
 
-            DataSet dsServiceType = sqlobj.ExecuteSP("Proc_LoadServiceConfig", new SqlParameter { ParameterName = "@i", SqlDbType = SqlDbType.Int, Value = 2 }); 
+            DataSet dsServiceType = sqlobj.ExecuteSP("Proc_LoadServiceConfig", new SqlParameter { ParameterName = "@i", SqlDbType = SqlDbType.Int, Value = 2 });
 
             if (dsServiceType.Tables[0].Rows.Count > 0)
             {
                 ddlSerType.DataSource = dsServiceType.Tables[0];
                 ddlSerType.DataValueField = "RSN";
                 ddlSerType.DataTextField = "ServiceType";
-                ddlSerType.DataBind();       
+                ddlSerType.DataBind();
             }
 
             ddlSerType.Items.Insert(0, new ListItem("--Select--", "0"));
 
-           
-            
+
+
         }
-        
-        catch(Exception ex)
+
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
     }
-    
+
     protected void btnClose_Click(object sender, EventArgs e)
     {
         ClearTaskDet();
@@ -368,7 +360,7 @@ public partial class TaskList : System.Web.UI.Page
             int min = now.Minute;
             int sec = now.Second;
             DateTime final = Format.AddHours(hours).AddMinutes(min).AddSeconds(sec);
-      
+
             try
             {
                 sqlobj.ExecuteNonQuery("Proc_NewTasks",
@@ -386,11 +378,11 @@ public partial class TaskList : System.Web.UI.Page
                    new SqlParameter() { ParameterName = "@StatusRemarks", SqlDbType = SqlDbType.VarChar, Value = txtStatusRemarks.Text.ToString() == null ? null : txtStatusRemarks.Text },
                    new SqlParameter() { ParameterName = "@Targetdate", SqlDbType = SqlDbType.DateTime, Value = dtpTargetDt.SelectedDate }
                    );
-              
+
                 SentSMS();
                 ClearTaskDet();
                 WebMsgBox.Show("Service Request details saved");
-               
+
                 pnlSecond.Visible = false;
                 pnlThird.Visible = true;
                 BtnnExcelExport.Visible = true;
@@ -411,9 +403,9 @@ public partial class TaskList : System.Web.UI.Page
     public void SentSMS()
     {
         //string constring = @"data source=111.118.188.128\SQLEXPRESS;initial catalog=CovaiSoft;persist security info=True;user id=cpc;password=C0vaipr0p";
-       string constring = ConfigurationManager.AppSettings["constring"].ToString();
-       SqlConnection con = new SqlConnection(constring);
-        SqlCommand cmd = new SqlCommand(string.Concat("SELECT * FROM SendSMS where status='NotSen'"), con);
+        string constring = ConfigurationManager.AppSettings["constring"].ToString();
+        SqlConnection conObj = new SqlConnection(constring);
+        SqlCommand cmd = new SqlCommand("SELECT * FROM SendSMS where status != 'NotSent'", conObj);
         SqlDataAdapter da = new SqlDataAdapter(cmd);
         DataSet dsCredential = new DataSet();
         da.Fill(dsCredential);
@@ -542,163 +534,163 @@ public partial class TaskList : System.Web.UI.Page
 
                 // Fetch Service Rate Start
 
-               strTaskStatus = ddlStatus.SelectedValue.ToString();
+                strTaskStatus = ddlStatus.SelectedValue.ToString();
 
 
-                 if (strTaskStatus == "Done")
-                 {
+                if (strTaskStatus == "Done")
+                {
 
-                     if (txtNetAmount.Text !="")
-                     {
-
-
-                            decimal dnetamount = Convert.ToDecimal(txtNetAmount.Text);
+                    if (txtNetAmount.Text != "")
+                    {
 
 
-                            if (dnetamount > 0)
+                        decimal dnetamount = Convert.ToDecimal(txtNetAmount.Text);
+
+
+                        if (dnetamount > 0)
+                        {
+
+
+
+
+                            // -- Strart Post Debit Transaction for net amount
+
+
+                            DateTime bdate = DateTime.Now;
+
+                            string strday = bdate.ToString("dd");
+                            string strmonth = bdate.ToString("MM");
+                            string stryear = bdate.ToString("yyyy");
+                            string strhour = bdate.ToString("HH");
+                            string strmin = bdate.ToString("mm");
+                            string strsec = bdate.ToString("ss");
+
+                            string strBillNo = "S" + stryear.ToString() + strmonth.ToString() + strday.ToString() + strhour.ToString() + strmin.ToString() + strsec.ToString();
+
+
+                            sqlobj.ExecuteSP("SP_InsertTransactionDetailsTxn",
+                             new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Int, Value = Session["RTRSN"].ToString() },
+                             new SqlParameter() { ParameterName = "@BCode", SqlDbType = SqlDbType.NVarChar, Value = "SERVICE" },
+                             new SqlParameter() { ParameterName = "@BGroup", SqlDbType = SqlDbType.NVarChar, Value = "SERVICE" },
+                             new SqlParameter() { ParameterName = "@BCategory", SqlDbType = SqlDbType.NVarChar, Value = "s" },
+                             new SqlParameter() { ParameterName = "@BStatus", SqlDbType = SqlDbType.NVarChar, Value = "UnBilled" },
+                             new SqlParameter() { ParameterName = "@BRate", SqlDbType = SqlDbType.NVarChar, Value = dnetamount.ToString() },
+                             new SqlParameter() { ParameterName = "@BCount", SqlDbType = SqlDbType.NVarChar, Value = "1" },
+                             new SqlParameter() { ParameterName = "@TAmount", SqlDbType = SqlDbType.Decimal, Value = dnetamount.ToString() },
+                             new SqlParameter() { ParameterName = "@TDate", SqlDbType = SqlDbType.DateTime, Value = DateTime.Now },
+                             new SqlParameter() { ParameterName = "@TType", SqlDbType = SqlDbType.NVarChar, Value = "DR" },
+                             new SqlParameter() { ParameterName = "@TNarration", SqlDbType = SqlDbType.NVarChar, Value = txtTask.Text },
+                             new SqlParameter() { ParameterName = "@BillNo", SqlDbType = SqlDbType.NVarChar, Value = strBillNo.ToString() },
+                             new SqlParameter() { ParameterName = "@Status", SqlDbType = SqlDbType.NVarChar, Value = "N" },
+                             new SqlParameter() { ParameterName = "@AccountType", SqlDbType = SqlDbType.NVarChar, Value = "R" },
+                             new SqlParameter() { ParameterName = "@BillingPeriod", SqlDbType = SqlDbType.NVarChar, Value = Session["CurrentBillingPeriod"].ToString() });
+
+
+                            // -- End Post Debit Transaction for net amount
+
+                            // -- Start Post Debit Transaction for cgst amount
+
+
+                            if (txtTaxAmount.Text != "")
                             {
-
-                                
-
-
-                                // -- Strart Post Debit Transaction for net amount
+                                decimal dtaxamount = Convert.ToDecimal(txtTaxAmount.Text);
 
 
-                                DateTime bdate = DateTime.Now;
-
-                                string strday = bdate.ToString("dd");
-                                string strmonth = bdate.ToString("MM");
-                                string stryear = bdate.ToString("yyyy");
-                                string strhour = bdate.ToString("HH");
-                                string strmin = bdate.ToString("mm");
-                                string strsec = bdate.ToString("ss");
-
-                                string strBillNo = "S" + stryear.ToString() + strmonth.ToString() + strday.ToString() + strhour.ToString() + strmin.ToString() + strsec.ToString();
-
-
-                                sqlobj.ExecuteSP("SP_InsertTransactionDetailsTxn",
-                                 new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Int, Value = Session["RTRSN"].ToString() },
-                                 new SqlParameter() { ParameterName = "@BCode", SqlDbType = SqlDbType.NVarChar, Value = "SERVICE" },
-                                 new SqlParameter() { ParameterName = "@BGroup", SqlDbType = SqlDbType.NVarChar, Value = "SERVICE" },
-                                 new SqlParameter() { ParameterName = "@BCategory", SqlDbType = SqlDbType.NVarChar, Value = "s" },
-                                 new SqlParameter() { ParameterName = "@BStatus", SqlDbType = SqlDbType.NVarChar, Value = "UnBilled" },
-                                 new SqlParameter() { ParameterName = "@BRate", SqlDbType = SqlDbType.NVarChar, Value = dnetamount.ToString() },
-                                 new SqlParameter() { ParameterName = "@BCount", SqlDbType = SqlDbType.NVarChar, Value = "1" },
-                                 new SqlParameter() { ParameterName = "@TAmount", SqlDbType = SqlDbType.Decimal, Value = dnetamount.ToString() },
-                                 new SqlParameter() { ParameterName = "@TDate", SqlDbType = SqlDbType.DateTime, Value = DateTime.Now },
-                                 new SqlParameter() { ParameterName = "@TType", SqlDbType = SqlDbType.NVarChar, Value = "DR" },
-                                 new SqlParameter() { ParameterName = "@TNarration", SqlDbType = SqlDbType.NVarChar, Value = txtTask.Text },
-                                 new SqlParameter() { ParameterName = "@BillNo", SqlDbType = SqlDbType.NVarChar, Value = strBillNo.ToString() },
-                                 new SqlParameter() { ParameterName = "@Status", SqlDbType = SqlDbType.NVarChar, Value = "N" },
-                                 new SqlParameter() { ParameterName = "@AccountType", SqlDbType = SqlDbType.NVarChar, Value = "R" },
-                                 new SqlParameter() { ParameterName = "@BillingPeriod", SqlDbType = SqlDbType.NVarChar, Value = Session["CurrentBillingPeriod"].ToString() });
-
-
-                                // -- End Post Debit Transaction for net amount
-
-                                // -- Start Post Debit Transaction for cgst amount
-
-
-                                if (txtTaxAmount.Text != "")
+                                if (dtaxamount > 0)
                                 {
-                                    decimal dtaxamount = Convert.ToDecimal(txtTaxAmount.Text);
- 
-
-                                 if (dtaxamount > 0)
-                                 {
 
 
-                                 sqlobj.ExecuteSP("SP_InsertTransactionDetailsTxn",
-                                 new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Int, Value = Session["RTRSN"].ToString() },
-                                 new SqlParameter() { ParameterName = "@BCode", SqlDbType = SqlDbType.NVarChar, Value = "OCGST" },
-                                 new SqlParameter() { ParameterName = "@BGroup", SqlDbType = SqlDbType.NVarChar, Value = "SERVICE" },
-                                 new SqlParameter() { ParameterName = "@BCategory", SqlDbType = SqlDbType.NVarChar, Value = "s" },
-                                 new SqlParameter() { ParameterName = "@BStatus", SqlDbType = SqlDbType.NVarChar, Value = "UnBilled" },
-                                 new SqlParameter() { ParameterName = "@BRate", SqlDbType = SqlDbType.NVarChar, Value = dtaxamount.ToString() },
-                                 new SqlParameter() { ParameterName = "@BCount", SqlDbType = SqlDbType.NVarChar, Value = "1" },
-                                 new SqlParameter() { ParameterName = "@TAmount", SqlDbType = SqlDbType.Decimal, Value = dtaxamount.ToString()},
-                                 new SqlParameter() { ParameterName = "@TDate", SqlDbType = SqlDbType.DateTime, Value = DateTime.Now },
-                                 new SqlParameter() { ParameterName = "@TType", SqlDbType = SqlDbType.NVarChar, Value = "DR" },
-                                 new SqlParameter() { ParameterName = "@TNarration", SqlDbType = SqlDbType.NVarChar, Value = "CGST " + Session["CGST"].ToString() + "%" },
-                                 new SqlParameter() { ParameterName = "@BillNo", SqlDbType = SqlDbType.NVarChar, Value = strBillNo.ToString() },
-                                 new SqlParameter() { ParameterName = "@Status", SqlDbType = SqlDbType.NVarChar, Value = "N" },
-                                 new SqlParameter() { ParameterName = "@AccountType", SqlDbType = SqlDbType.NVarChar, Value = "R" },
-                                 new SqlParameter() { ParameterName = "@BillingPeriod", SqlDbType = SqlDbType.NVarChar, Value = Session["CurrentBillingPeriod"].ToString() });
-                                    
-                                 }
-                                
-                                }
-
-
-                                // -- End Post Debit Transaction for cgst amount
-
-
-                                // -- Start Post Debit Transaction for sgst amount
-
-
-                                if (txtSGSTAmouont.Text != "")
-                                {
-                                    decimal dsgstamount = Convert.ToDecimal(txtSGSTAmouont.Text);
-
-
-                                    if (dsgstamount > 0)
-                                    {
-
-                                        sqlobj.ExecuteSP("SP_InsertTransactionDetailsTxn",
-                                        new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Int, Value = Session["RTRSN"].ToString() },
-                                        new SqlParameter() { ParameterName = "@BCode", SqlDbType = SqlDbType.NVarChar, Value = "OSGST" },
-                                        new SqlParameter() { ParameterName = "@BGroup", SqlDbType = SqlDbType.NVarChar, Value = "SERVICE" },
-                                        new SqlParameter() { ParameterName = "@BCategory", SqlDbType = SqlDbType.NVarChar, Value = "s" },
-                                        new SqlParameter() { ParameterName = "@BStatus", SqlDbType = SqlDbType.NVarChar, Value = "UnBilled" },
-                                        new SqlParameter() { ParameterName = "@BRate", SqlDbType = SqlDbType.NVarChar, Value = dsgstamount.ToString() },
-                                        new SqlParameter() { ParameterName = "@BCount", SqlDbType = SqlDbType.NVarChar, Value = "1" },
-                                        new SqlParameter() { ParameterName = "@TAmount", SqlDbType = SqlDbType.Decimal, Value = dsgstamount.ToString() },
-                                        new SqlParameter() { ParameterName = "@TDate", SqlDbType = SqlDbType.DateTime, Value = DateTime.Now },
-                                        new SqlParameter() { ParameterName = "@TType", SqlDbType = SqlDbType.NVarChar, Value = "DR" },
-                                        new SqlParameter() { ParameterName = "@TNarration", SqlDbType = SqlDbType.NVarChar, Value = "SGST " + Session["SGST"].ToString() + "%" },
-                                        new SqlParameter() { ParameterName = "@BillNo", SqlDbType = SqlDbType.NVarChar, Value = strBillNo.ToString() },
-                                        new SqlParameter() { ParameterName = "@Status", SqlDbType = SqlDbType.NVarChar, Value = "N" },
-                                        new SqlParameter() { ParameterName = "@AccountType", SqlDbType = SqlDbType.NVarChar, Value = "R" },
-                                        new SqlParameter() { ParameterName = "@BillingPeriod", SqlDbType = SqlDbType.NVarChar, Value = Session["CurrentBillingPeriod"].ToString() });
-
-                                    }
+                                    sqlobj.ExecuteSP("SP_InsertTransactionDetailsTxn",
+                                    new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Int, Value = Session["RTRSN"].ToString() },
+                                    new SqlParameter() { ParameterName = "@BCode", SqlDbType = SqlDbType.NVarChar, Value = "OCGST" },
+                                    new SqlParameter() { ParameterName = "@BGroup", SqlDbType = SqlDbType.NVarChar, Value = "SERVICE" },
+                                    new SqlParameter() { ParameterName = "@BCategory", SqlDbType = SqlDbType.NVarChar, Value = "s" },
+                                    new SqlParameter() { ParameterName = "@BStatus", SqlDbType = SqlDbType.NVarChar, Value = "UnBilled" },
+                                    new SqlParameter() { ParameterName = "@BRate", SqlDbType = SqlDbType.NVarChar, Value = dtaxamount.ToString() },
+                                    new SqlParameter() { ParameterName = "@BCount", SqlDbType = SqlDbType.NVarChar, Value = "1" },
+                                    new SqlParameter() { ParameterName = "@TAmount", SqlDbType = SqlDbType.Decimal, Value = dtaxamount.ToString() },
+                                    new SqlParameter() { ParameterName = "@TDate", SqlDbType = SqlDbType.DateTime, Value = DateTime.Now },
+                                    new SqlParameter() { ParameterName = "@TType", SqlDbType = SqlDbType.NVarChar, Value = "DR" },
+                                    new SqlParameter() { ParameterName = "@TNarration", SqlDbType = SqlDbType.NVarChar, Value = "CGST " + Session["CGST"].ToString() + "%" },
+                                    new SqlParameter() { ParameterName = "@BillNo", SqlDbType = SqlDbType.NVarChar, Value = strBillNo.ToString() },
+                                    new SqlParameter() { ParameterName = "@Status", SqlDbType = SqlDbType.NVarChar, Value = "N" },
+                                    new SqlParameter() { ParameterName = "@AccountType", SqlDbType = SqlDbType.NVarChar, Value = "R" },
+                                    new SqlParameter() { ParameterName = "@BillingPeriod", SqlDbType = SqlDbType.NVarChar, Value = Session["CurrentBillingPeriod"].ToString() });
 
                                 }
-
-
-                                // -- End Post Debit Transaction for cgst amount
-
 
                             }
-            
-                        }
-                         
 
-                 }
+
+                            // -- End Post Debit Transaction for cgst amount
+
+
+                            // -- Start Post Debit Transaction for sgst amount
+
+
+                            if (txtSGSTAmouont.Text != "")
+                            {
+                                decimal dsgstamount = Convert.ToDecimal(txtSGSTAmouont.Text);
+
+
+                                if (dsgstamount > 0)
+                                {
+
+                                    sqlobj.ExecuteSP("SP_InsertTransactionDetailsTxn",
+                                    new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Int, Value = Session["RTRSN"].ToString() },
+                                    new SqlParameter() { ParameterName = "@BCode", SqlDbType = SqlDbType.NVarChar, Value = "OSGST" },
+                                    new SqlParameter() { ParameterName = "@BGroup", SqlDbType = SqlDbType.NVarChar, Value = "SERVICE" },
+                                    new SqlParameter() { ParameterName = "@BCategory", SqlDbType = SqlDbType.NVarChar, Value = "s" },
+                                    new SqlParameter() { ParameterName = "@BStatus", SqlDbType = SqlDbType.NVarChar, Value = "UnBilled" },
+                                    new SqlParameter() { ParameterName = "@BRate", SqlDbType = SqlDbType.NVarChar, Value = dsgstamount.ToString() },
+                                    new SqlParameter() { ParameterName = "@BCount", SqlDbType = SqlDbType.NVarChar, Value = "1" },
+                                    new SqlParameter() { ParameterName = "@TAmount", SqlDbType = SqlDbType.Decimal, Value = dsgstamount.ToString() },
+                                    new SqlParameter() { ParameterName = "@TDate", SqlDbType = SqlDbType.DateTime, Value = DateTime.Now },
+                                    new SqlParameter() { ParameterName = "@TType", SqlDbType = SqlDbType.NVarChar, Value = "DR" },
+                                    new SqlParameter() { ParameterName = "@TNarration", SqlDbType = SqlDbType.NVarChar, Value = "SGST " + Session["SGST"].ToString() + "%" },
+                                    new SqlParameter() { ParameterName = "@BillNo", SqlDbType = SqlDbType.NVarChar, Value = strBillNo.ToString() },
+                                    new SqlParameter() { ParameterName = "@Status", SqlDbType = SqlDbType.NVarChar, Value = "N" },
+                                    new SqlParameter() { ParameterName = "@AccountType", SqlDbType = SqlDbType.NVarChar, Value = "R" },
+                                    new SqlParameter() { ParameterName = "@BillingPeriod", SqlDbType = SqlDbType.NVarChar, Value = Session["CurrentBillingPeriod"].ToString() });
+
+                                }
+
+                            }
+
+
+                            // -- End Post Debit Transaction for cgst amount
+
+
+                        }
+
+                    }
+
+
+                }
 
 
                 // Fetch Service Rate end
 
-                 ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Service details updated');", true);
+                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Service details updated');", true);
 
-                 LoadTasksCount();
-                 ClearTaskDet();
+                LoadTasksCount();
+                ClearTaskDet();
 
-                 pnlSecond.Visible = false;
-                 pnlThird.Visible = true;
+                pnlSecond.Visible = false;
+                pnlThird.Visible = true;
 
-                 btnSave.Visible = true;
-                 btnUpdate.Visible = false;
+                btnSave.Visible = true;
+                btnUpdate.Visible = false;
 
                 LoadTitle(36);
 
-                 //WebMsgBox.Show("Task details updated");
+                //WebMsgBox.Show("Task details updated");
 
-                 lblcSendsms.Visible = false;
-                 txtSendsms.Visible = false;
+                lblcSendsms.Visible = false;
+                txtSendsms.Visible = false;
 
 
-               
+
 
             }
             catch (Exception ex)
@@ -743,37 +735,37 @@ public partial class TaskList : System.Web.UI.Page
 
         try
         {
-        
-        pnlSecond.Visible = true;
-        btnSave.Visible = false;
-        btnUpdate.Visible = true;
 
-        //ddlAssignedBy.Enabled = false;
-     
-        rgServiceList.Visible = false;
-        lblcservicelist.Visible = false;
+            pnlSecond.Visible = true;
+            btnSave.Visible = false;
+            btnUpdate.Visible = true;
 
-     
-       
-        ddlUrgency.Enabled = false;
-        dtpTargetDt.Enabled = true; ;
-        ddlStatus.Enabled = true;
+            //ddlAssignedBy.Enabled = false;
 
-        ddlSerType.Enabled = false;
-        txtTask.Enabled = false;
-        txtMCount.Enabled = false;
-        dtpTargetDt.Enabled = false;
-        ddlstdtext.Enabled = false;
+            rgServiceList.Visible = false;
+            lblcservicelist.Visible = false;
+
+
+
+            ddlUrgency.Enabled = false;
+            dtpTargetDt.Enabled = true; ;
+            ddlStatus.Enabled = true;
+
+            ddlSerType.Enabled = false;
+            txtTask.Enabled = false;
+            txtMCount.Enabled = false;
+            dtpTargetDt.Enabled = false;
+            ddlstdtext.Enabled = false;
 
             LinkButton lkBtn = (LinkButton)sender;
             GridDataItem grditm = (GridDataItem)lkBtn.NamingContainer;
 
             string RSN = grditm.Cells[3].Text.ToString();
-            Session["TaskRSN"] = RSN;           
+            Session["TaskRSN"] = RSN;
             SqlProcsNew sqlobj = new SqlProcsNew();
             DataSet dsCSEdit = null;
-            Response.Redirect("ServicePosting.aspx?rsn=" + Session["TaskRSN"]);
-           
+            Response.Redirect("ServicePosting.aspx?rsn=" + RSN);
+
 
             //dsCSEdit = sqlobj.ExecuteSP("Proc_NewTasks",
             //   new SqlParameter() { ParameterName = "@i", SqlDbType = SqlDbType.Int, Value = 3 },
@@ -892,8 +884,8 @@ public partial class TaskList : System.Web.UI.Page
         ddlTask.SelectedValue = "0";
         //ddlAssignedBy.Enabled = true;
         //ddlAssignedTo.Enabled = true;
-       // txtMobile.Enabled = true;
-       // txtEmail.Enabled = true;
+        // txtMobile.Enabled = true;
+        // txtEmail.Enabled = true;
         ddlUrgency.Enabled = true;
         dtpTargetDt.Enabled = true;
         cmbResident.SelectedValue = "0";
@@ -910,7 +902,7 @@ public partial class TaskList : System.Web.UI.Page
         //lblMCount.Visible = false;
         //lblMDate.Visible = false;
         //lblMtime.Visible = false;
-        Session["ServiceRSN"] = string.Empty;        
+        Session["ServiceRSN"] = string.Empty;
     }
 
     protected void rmTask_ItemClick(object sender, RadMenuEventArgs e)
@@ -939,7 +931,7 @@ public partial class TaskList : System.Web.UI.Page
             pnlThird.Visible = true;
             ddlStatus.Enabled = true;
             BtnnExcelExport.Visible = true;
-           // lbltitle.Visible = false;
+            // lbltitle.Visible = false;
         }
 
         else if (e.Item.Text == "Diary Link")
@@ -958,17 +950,17 @@ public partial class TaskList : System.Web.UI.Page
             dsDT = proc.ExecuteSP("GetServerDateTime");
             string CDate = Convert.ToDateTime(dsDT.Tables[0].Rows[0][0].ToString()).ToString("ddMMyyyyhhmmtt");
             string FileName = "";
-            string status = ddlSStatus.SelectedValue; 
-            if (status.ToString()=="Open") 
+            string status = ddlSStatus.SelectedValue;
+            if (status.ToString() == "Open")
             {
                 FileName = "OpenServices_" + CDate;
                 rdgTaskList.MasterTableView.Caption = "<span><br/>List of Open Services</span>";
             }
-            else if (status.ToString()=="Overdue")
+            else if (status.ToString() == "Overdue")
             {
                 FileName = "OverdueServices_" + CDate;
                 rdgTaskList.MasterTableView.Caption = "<span><br/>List of Overdue Services</span>";
-            }        
+            }
             else if (status.ToString() == "Done")
             {
                 FileName = "CompletedServices_" + CDate;
@@ -1058,31 +1050,31 @@ public partial class TaskList : System.Web.UI.Page
             //Check the formatting condition
             if (dataBoundItem["AssignedTo"].Text != "")
             {
-               // dataBoundItem["AssignedTo"].ToolTip = dataBoundItem["AssignedTo"].Text.ToString() + "\n" +
-              // dataBoundItem["Mobile"].Text.ToString() + "\n" + dataBoundItem["Dependant"].Text.ToString() + "\n" + dataBoundItem["DMobile"].Text.ToString();
+                // dataBoundItem["AssignedTo"].ToolTip = dataBoundItem["AssignedTo"].Text.ToString() + "\n" +
+                // dataBoundItem["Mobile"].Text.ToString() + "\n" + dataBoundItem["Dependant"].Text.ToString() + "\n" + dataBoundItem["DMobile"].Text.ToString();
                 //Customize more...
             }
             if (dataBoundItem["Need"].Text != "")
             {
                 //dataBoundItem["Need"].ToolTip = "Dept:" + dataBoundItem["deptname"].Text.ToString() + "\n" + "Rate:" + dataBoundItem["Rate"].Text.ToString() + "\n" +
                 //        "DSMS:" + dataBoundItem["DSMS"].Text.ToString() + "\n" + "RSMS:" + dataBoundItem["RSMS"].Text.ToString() + "\n" + "MSMS:" + dataBoundItem["MSMS"].Text.ToString();
-                                                
+
             }
-            if(dataBoundItem["Need"].Text == "Complaint")
+            if (dataBoundItem["Need"].Text == "Complaint")
             {
                 dataBoundItem["Need"].ForeColor = System.Drawing.Color.Red;
             }
-            DateTime cdate= DateTime.Now ;
+            DateTime cdate = DateTime.Now;
             DateTime tdate = Convert.ToDateTime(dataBoundItem["TargetDate"].Text);
             cdate = Convert.ToDateTime(cdate.ToShortDateString());
             tdate = Convert.ToDateTime(tdate.ToShortDateString());
             if (tdate < cdate)
             {
                 dataBoundItem["TargetDate"].ForeColor = System.Drawing.Color.Red;
-            }          
+            }
         }
     }
-    
+
 
     public void LoadTaskDDL()
     {
@@ -1109,7 +1101,7 @@ public partial class TaskList : System.Web.UI.Page
     }
     protected void ddlSStatus_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if(ddlSStatus.SelectedValue.ToString() =="Done" || ddlSStatus.SelectedValue.ToString() == "All")
+        if (ddlSStatus.SelectedValue.ToString() == "Done" || ddlSStatus.SelectedValue.ToString() == "All")
         {
             LblFromDate.Visible = true;
             FromDate.Visible = true;
@@ -1118,10 +1110,11 @@ public partial class TaskList : System.Web.UI.Page
             if (ddlSStatus.SelectedValue.ToString() == "All")
             {
                 DataSet ds = sqlobj.ExecuteSP("CC_GETBILLINGMONTH");
-                FromDate.SelectedDate =DateTime.Parse(ds.Tables[0].Rows[0]["bpfrom"].ToString());
+                FromDate.SelectedDate = DateTime.Parse(ds.Tables[0].Rows[0]["bpfrom"].ToString());
                 ToDate.SelectedDate = DateTime.Parse(ds.Tables[0].Rows[0]["bptill"].ToString());
             }
-            else {
+            else
+            {
                 FromDate.SelectedDate = DateTime.Today;
                 ToDate.SelectedDate = DateTime.Today;
             }
@@ -1142,7 +1135,7 @@ public partial class TaskList : System.Web.UI.Page
     //    try
     //    {
     //        txtTask.Text = string.Empty;
-           
+
     //        if (ddlTask.SelectedValue != "0")
     //        {
     //            SqlProcsNew obj = new SqlProcsNew();
@@ -1179,11 +1172,11 @@ public partial class TaskList : System.Web.UI.Page
                 DataSet ds = new DataSet();
                 DataSet dscategory = new DataSet();
                 string strCategory = "";
-                DropDownList drplist = (DropDownList) sender;
-                string selectval = drplist.SelectedItem.Text ;             
+                DropDownList drplist = (DropDownList)sender;
+                string selectval = drplist.SelectedItem.Text;
                 ds = obj.ExecuteSP("SP_GetTask",
                     new SqlParameter() { ParameterName = "@Imode", SqlDbType = SqlDbType.Int, Value = 2 },
-                    new SqlParameter() { ParameterName = "@Task", SqlDbType = SqlDbType.NVarChar, Value = ddlTask.SelectedItem.Text   });
+                    new SqlParameter() { ParameterName = "@Task", SqlDbType = SqlDbType.NVarChar, Value = ddlTask.SelectedItem.Text });
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     txtTask.Text = ds.Tables[0].Rows[0]["Description"].ToString();
@@ -1197,7 +1190,7 @@ public partial class TaskList : System.Web.UI.Page
     }
     protected void ddlSerCategory_SelectedIndexChanged(object sender, EventArgs e)
     {
-        LoadCategory();     
+        LoadCategory();
     }
     public void LoadCategory()
     {
@@ -1288,7 +1281,7 @@ public partial class TaskList : System.Web.UI.Page
             dap.Fill(dsDept, "temp");
             if (dsDept.Tables[0].Rows.Count > 0)
             {
-               // lblPriority.Visible = true;
+                // lblPriority.Visible = true;
                 //lblPriorityMsg.Text = dsDept.Tables[0].Rows[0]["Priority"].ToString();
             }
         }
@@ -1299,13 +1292,13 @@ public partial class TaskList : System.Web.UI.Page
 
 
     protected void ddlSerType_SelectedIndexChanged(object sender, EventArgs e)
-    {      
-        LoadServiceTypeDetails(); 
+    {
+        LoadServiceTypeDetails();
         LoadStandardText();
-        CheckMandatory();       
+        CheckMandatory();
     }
 
-    
+
     private void LoadServiceTypeDetails()
     {
         try
@@ -1314,7 +1307,7 @@ public partial class TaskList : System.Web.UI.Page
 
             if (dsServiceTypeDetails.Tables[0].Rows.Count > 0)
             {
-                
+
                 lblcservice.Text = "Service";
                 lblCategory.Text = "Category:" + dsServiceTypeDetails.Tables[0].Rows[0]["Category"].ToString();
                 lblDepartment.Text = "Depatment:" + dsServiceTypeDetails.Tables[0].Rows[0]["deptname"].ToString();
@@ -1355,11 +1348,11 @@ public partial class TaskList : System.Web.UI.Page
                 lblCategory.Text = "";
                 lblDepartment.Text = "";
                 lblcservice.Text = "";
-                lblcprofile.Text = ""; 
-               
+                lblcprofile.Text = "";
+
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -1367,10 +1360,10 @@ public partial class TaskList : System.Web.UI.Page
 
     private void LoadStandardText()
     {
-        
+
         try
         {
-            DataSet dsStdText = sqlobj.ExecuteSP("Proc_LoadStandardText", new SqlParameter { ParameterName = "@SerTypeRSN", SqlDbType = SqlDbType.BigInt, Value=ddlSerType.SelectedValue });
+            DataSet dsStdText = sqlobj.ExecuteSP("Proc_LoadStandardText", new SqlParameter { ParameterName = "@SerTypeRSN", SqlDbType = SqlDbType.BigInt, Value = ddlSerType.SelectedValue });
 
             if (dsStdText.Tables[0].Rows.Count > 0)
             {
@@ -1384,7 +1377,7 @@ public partial class TaskList : System.Web.UI.Page
                 ddlstdtext.Items.Clear();
             }
 
-            ddlstdtext.Items.Insert(0,"--Select--");
+            ddlstdtext.Items.Insert(0, "--Select--");
 
             dsStdText.Dispose();
         }
@@ -1399,8 +1392,8 @@ public partial class TaskList : System.Web.UI.Page
         try
         {
             DataSet dsExistingTasks = sqlobj.ExecuteSP("SP_GetResientTasks",
-                new SqlParameter { ParameterName = "@RTRSN", SqlDbType = SqlDbType.BigInt, Value = cmbResident.SelectedValue});
-            if (dsExistingTasks.Tables[0].Rows.Count >0)
+                new SqlParameter { ParameterName = "@RTRSN", SqlDbType = SqlDbType.BigInt, Value = cmbResident.SelectedValue });
+            if (dsExistingTasks.Tables[0].Rows.Count > 0)
             {
                 rgServiceList.DataSource = dsExistingTasks.Tables[0];
                 rgServiceList.DataBind();
@@ -1412,23 +1405,23 @@ public partial class TaskList : System.Web.UI.Page
             }
             dsExistingTasks.Dispose();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
     }
     private void CheckMandatory()
-    {       
+    {
         try
         {
-            DataSet dsDept = sqlobj.ExecuteSP("Proc_CheckMandatory", 
+            DataSet dsDept = sqlobj.ExecuteSP("Proc_CheckMandatory",
                 new SqlParameter { ParameterName = "@RSN", SqlDbType = SqlDbType.BigInt, Value = ddlSerType.SelectedValue });
             if (dsDept.Tables[0].Rows.Count > 0)
             {
                 strDate = dsDept.Tables[0].Rows[0]["DateYorN"].ToString();
                 strTime = dsDept.Tables[0].Rows[0]["TimeYorN"].ToString();
-                strCount = dsDept.Tables[0].Rows[0]["CountYorN"].ToString();             
-                if(strDate == "Y")
+                strCount = dsDept.Tables[0].Rows[0]["CountYorN"].ToString();
+                if (strDate == "Y")
                 {
                     lblMDate.Enabled = true;
                     txtMDate.Enabled = true;
@@ -1457,7 +1450,7 @@ public partial class TaskList : System.Web.UI.Page
                 {
                     lblMCount.Enabled = false;
                     txtMCount.Enabled = false;
-                }               
+                }
             }
         }
         catch (Exception ex)
@@ -1469,14 +1462,14 @@ public partial class TaskList : System.Web.UI.Page
     {
         try
         {
-            if(ddlstdtext.SelectedItem.ToString() != "")
+            if (ddlstdtext.SelectedItem.ToString() != "")
             {
                 string strAppend = ddlstdtext.SelectedItem.ToString();
-                txtTask.Text = txtTask.Text + " "+ strAppend;
+                txtTask.Text = txtTask.Text + " " + strAppend;
             }
         }
         catch (Exception ex)
-        {           
+        {
         }
     }
     protected void ddlstdtext_SelectedIndexChanged(object sender, EventArgs e)
@@ -1533,19 +1526,19 @@ public partial class TaskList : System.Web.UI.Page
     {
 
     }
-   
+
     protected void btnSendsms_Click(object sender, EventArgs e)
     {
         try
         {
 
-           string strsms =  "Ref:" +  Session["TaskRSN"].ToString() +  txtSendsms.Text;
+            string strsms = "Ref:" + Session["TaskRSN"].ToString() + txtSendsms.Text;
 
             //SentSMS(Session["RMobileNo"].ToString(),strsms.ToString());
 
             WebMsgBox.Show("Your sms has been sent to resident");
-        } 
-        catch(Exception ex)
+        }
+        catch (Exception ex)
         {
 
         }
@@ -1599,9 +1592,9 @@ public partial class TaskList : System.Web.UI.Page
                 new SqlParameter() { ParameterName = "@Transtype", SqlDbType = SqlDbType.NVarChar, Value = "DR" },
                 new SqlParameter() { ParameterName = "@CR_MD", SqlDbType = SqlDbType.DateTime, Value = Convert.ToString(DateTime.Now) },
                 new SqlParameter() { ParameterName = "@DB_MD", SqlDbType = SqlDbType.DateTime, Value = Convert.ToString(DateTime.Now) });
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Debit transaction updated');", true);         
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Debit transaction updated');", true);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -1609,14 +1602,14 @@ public partial class TaskList : System.Web.UI.Page
     protected void lnkAddnewservicetype_Click(object sender, EventArgs e)
     {
         Response.Redirect("ServiceConfig.aspx", false);
-    } 
+    }
     protected void cmbResident_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
     {
         try
         {
             LoadResidentProfile();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -1656,33 +1649,33 @@ public partial class TaskList : System.Web.UI.Page
     protected void txtNetAmount_TextChanged(object sender, EventArgs e)
     {
         if (Session["CGST"] != null && Session["SGST"] != null)
-                {
-                    string strcgst = Session["CGST"].ToString();
-                    string strsgst = Session["SGST"].ToString();
-                    decimal servicetaxper = 0;
-                    decimal sgsttaxper = 0;
-                    if (strcgst.ToString() != "")
-                    {
-                        servicetaxper = Convert.ToDecimal(Session["CGST"].ToString());
-                    }
-                    if (strsgst.ToString() != "")
-                    {
-                        sgsttaxper = Convert.ToDecimal(Session["SGST"].ToString());
-                    }
-                    if (txtNetAmount.Text != "")
-                    {
-                        decimal taxamount = servicetaxper * (Convert.ToDecimal(txtNetAmount.Text) / 100);
-                        decimal sgstamount = sgsttaxper * (Convert.ToDecimal(txtNetAmount.Text) / 100);
-                        decimal grossamount = Convert.ToDecimal(txtNetAmount.Text) + Convert.ToDecimal(taxamount.ToString("0.00")) + Convert.ToDecimal(sgstamount.ToString("0.00"));
-                        txtTaxAmount.Text = taxamount.ToString("0.00");
-                        txtSGSTAmouont.Text = sgstamount.ToString("0.00");
-                        txtGrossAmount.Text = grossamount.ToString("0.00");
-                    }
-                }
-                else
-                {
-                    txtGrossAmount.Text = txtNetAmount.Text;
-                }            
-            
+        {
+            string strcgst = Session["CGST"].ToString();
+            string strsgst = Session["SGST"].ToString();
+            decimal servicetaxper = 0;
+            decimal sgsttaxper = 0;
+            if (strcgst.ToString() != "")
+            {
+                servicetaxper = Convert.ToDecimal(Session["CGST"].ToString());
+            }
+            if (strsgst.ToString() != "")
+            {
+                sgsttaxper = Convert.ToDecimal(Session["SGST"].ToString());
+            }
+            if (txtNetAmount.Text != "")
+            {
+                decimal taxamount = servicetaxper * (Convert.ToDecimal(txtNetAmount.Text) / 100);
+                decimal sgstamount = sgsttaxper * (Convert.ToDecimal(txtNetAmount.Text) / 100);
+                decimal grossamount = Convert.ToDecimal(txtNetAmount.Text) + Convert.ToDecimal(taxamount.ToString("0.00")) + Convert.ToDecimal(sgstamount.ToString("0.00"));
+                txtTaxAmount.Text = taxamount.ToString("0.00");
+                txtSGSTAmouont.Text = sgstamount.ToString("0.00");
+                txtGrossAmount.Text = grossamount.ToString("0.00");
+            }
+        }
+        else
+        {
+            txtGrossAmount.Text = txtNetAmount.Text;
+        }
+
     }
 }

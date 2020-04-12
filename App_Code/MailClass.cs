@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.IO;
-using System.Net.Mail;
 using System.Net;
-using System.Globalization; 
+using System.Net.Mail;
+using System.Web;
 
 
 /// <summary>
@@ -13,15 +10,15 @@ using System.Globalization;
 /// </summary>
 public class MailClass
 {
-	public MailClass()
-	{
-		//
-		// TODO: Add constructor logic here
-		//
-	}
+    public MailClass()
+    {
+        //
+        // TODO: Add constructor logic here
+        //
+    }
 
-    public void EventsMail(string _fromuserid, string _frommailname, string _touserid, string _tomailname, string _cutomername, string eventname,string description,
-       DateTime _Followupdate, string _Credentialusername, string _Credentailpassword,  string AdminName, string AdminContact, string MobileNo, string title)
+    public void EventsMail(string _fromuserid, string _frommailname, string _touserid, string _tomailname, string _cutomername, string eventname, string description,
+       DateTime _Followupdate, string _Credentialusername, string _Credentailpassword, string AdminName, string AdminContact, string MobileNo, string title)
     {
 
         MailMessage msg = new MailMessage();
@@ -41,8 +38,8 @@ public class MailClass
         //{
         //    msg.CC.Add(new MailAddress(custEmail, _cutomername));// it is optional, only if required
         //}
-   
-        msg.Subject = eventname.ToString() +  " on " + _Followupdate.ToString("dd-MMM-yyyy");
+
+        msg.Subject = eventname.ToString() + " on " + _Followupdate.ToString("dd-MMM-yyyy");
 
         //_Followupdate.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)
 
@@ -62,8 +59,8 @@ public class MailClass
         myString = myString.Replace("$$CompName$$", AdminName.ToString());
         myString = myString.Replace("$$AdminPhoneNo$$", AdminContact.ToString());
 
-        myString = myString.Replace("$$Customer$$", _cutomername.ToString());       
-     
+        myString = myString.Replace("$$Customer$$", _cutomername.ToString());
+
 
         msg.Body = myString.ToString();
 
@@ -82,9 +79,9 @@ public class MailClass
                               "BEGIN:VEVENT",
                               "DTSTART:" + _Followupdate.ToString("yyyyMMdd\\THHmmss"),
                               "DTEND:" +  _enddate.ToString("yyyyMMdd\\THHmmss"),
-                             "LOCATION:CGI", 
+                             "LOCATION:CGI",
                          "DESCRIPTION;ENCODING=QUOTED-PRINTABLE:" ,
-                              "SUMMARY:" + msg.Subject, "PRIORITY:3", 
+                              "SUMMARY:" + msg.Subject, "PRIORITY:3",
                          "END:VEVENT", "END:VCALENDAR" };
 
 
@@ -106,22 +103,22 @@ public class MailClass
         mailAttachment.Dispose();
     }
 
-    public void SendMail(string _fromuserid,string _frommailname,string _touserid,string _tomailname,string _cutomername,string _reference,string _Comments,
-        DateTime _Followupdate,string _Credentialusername,string _Credentailpassword)
+    public void SendMail(string _fromuserid, string _frommailname, string _touserid, string _tomailname, string _cutomername, string _reference, string _Comments,
+        DateTime _Followupdate, string _Credentialusername, string _Credentailpassword)
     {
 
         MailMessage msg = new MailMessage();
-        
+
         var smtpclient = new SmtpClient("smtp.gmail.com", 587)
         {
-            Credentials = new NetworkCredential(_Credentialusername.ToString() ,_Credentailpassword.ToString()),
+            Credentials = new NetworkCredential(_Credentialusername.ToString(), _Credentailpassword.ToString()),
             EnableSsl = true,
             Timeout = 100000
         };
 
         //Note Please change it to correct mail-id to use this in your application
-        msg.From = new MailAddress(_fromuserid.ToString() , _frommailname);
-        msg.To.Add(new MailAddress(_touserid,_tomailname));
+        msg.From = new MailAddress(_fromuserid.ToString(), _frommailname);
+        msg.To.Add(new MailAddress(_touserid, _tomailname));
         //msg.CC.Add(new MailAddress("sridhar@innovatussystems.com", "Sridhar"));// it is optional, only if required
         msg.Subject = "Followup scheduled for " + _cutomername;
 
@@ -130,7 +127,7 @@ public class MailClass
         StreamReader reader = new StreamReader(HttpContext.Current.Server.MapPath("~/Followup.html"));
         string readFile = reader.ReadToEnd();
         string myString = "";
-        
+
         myString = readFile;
         myString = myString.Replace("$$Customer$$", _cutomername.ToString());
         myString = myString.Replace("$$Reference$$", _reference.ToString());
@@ -140,11 +137,11 @@ public class MailClass
         msg.Body = myString.ToString();
 
         TimeSpan time = new TimeSpan(08, 00, 00);
-        TimeSpan endtime =new TimeSpan(00,30,00);
-       _Followupdate  = _Followupdate.Add(time);
+        TimeSpan endtime = new TimeSpan(00, 30, 00);
+        _Followupdate = _Followupdate.Add(time);
 
-       DateTime _enddate = _Followupdate;
-       _enddate = _enddate.Add(endtime);
+        DateTime _enddate = _Followupdate;
+        _enddate = _enddate.Add(endtime);
 
 
         string strdate = _Followupdate.ToString("yyyyMMdd\\THHmmss");
@@ -154,9 +151,9 @@ public class MailClass
                               "BEGIN:VEVENT",
                               "DTSTART:" + _Followupdate.ToString("yyyyMMdd\\THHmmss"),
                               "DTEND:" +  _enddate.ToString("yyyyMMdd\\THHmmss"),
-                             "LOCATION:CGI", 
+                             "LOCATION:CGI",
                          "DESCRIPTION;ENCODING=QUOTED-PRINTABLE:" ,
-                              "SUMMARY:" + msg.Subject, "PRIORITY:3", 
+                              "SUMMARY:" + msg.Subject, "PRIORITY:3",
                          "END:VEVENT", "END:VCALENDAR" };
 
 
@@ -175,7 +172,7 @@ public class MailClass
         msg.IsBodyHtml = true;
         smtpclient.Send(msg);
 
-        mailAttachment.Dispose(); 
+        mailAttachment.Dispose();
     }
 
 

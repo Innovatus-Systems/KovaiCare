@@ -1,13 +1,11 @@
 ﻿
+using OfficeOpenXml;
 using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Web;
 using System.Web.UI;
-using Excel = Microsoft.Office.Interop.Excel;
-using System.Runtime.InteropServices;
-using OfficeOpenXml;
 
 
 
@@ -28,7 +26,7 @@ public partial class DiningTemplate : System.Web.UI.Page
         }
     }
 
-    protected void ddlsession_Change(object sender,EventArgs e)
+    protected void ddlsession_Change(object sender, EventArgs e)
     {
         SqlCommand cmd = new SqlCommand("SP_FecthVillaNO", con);
         cmd.CommandType = CommandType.StoredProcedure;
@@ -47,14 +45,14 @@ public partial class DiningTemplate : System.Web.UI.Page
             return;
         }
 
-       
+
 
         SqlCommand cmd = new SqlCommand("SP_FecthVillaNO", con);
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.Parameters.Add("@IMODE", SqlDbType.Int).Value = 5;
         DataSet dsGrid = new DataSet();
         SqlDataAdapter da = new SqlDataAdapter(cmd);
-        da.Fill(dsGrid);        
+        da.Fill(dsGrid);
         ExcelExport(dsGrid.Tables[0]);
 
         //LoadLbl();
@@ -102,13 +100,13 @@ public partial class DiningTemplate : System.Web.UI.Page
             //string FileName = "DiningRegister_" + DateTime.Now.ToString("MMMM") + "_" + DateTime.Now.Year  + ".xlsx";
 
             string TFileName = "DiningRegisterTemplate_" + txtMonthYear.Text.ToString() + ".xslt";
-	    //string TFileName = "DiningRegisterTemplate_" + txtMonthYear.Text.ToString() + ".xltx";
+            //string TFileName = "DiningRegisterTemplate_" + txtMonthYear.Text.ToString() + ".xltx";
             string FileName = "DiningRegister_" + txtMonthYear.Text.ToString() + ".xlsx";
 
 
-            string templateFilePath = Server.MapPath("~/DiningTemplate/"+TFileName);
+            string templateFilePath = Server.MapPath("~/DiningTemplate/" + TFileName);
             string newFilePath = Server.MapPath("~/DiningDownload/" + FileName);
-           
+
             FileInfo newFile = new FileInfo(newFilePath);
             FileInfo template = new FileInfo(templateFilePath);
             using (ExcelPackage xlPackage = new ExcelPackage(newFile, template))
@@ -118,7 +116,7 @@ public partial class DiningTemplate : System.Web.UI.Page
                 {
                     //aworksheet.Cell(1, 1).Value = aworksheet.Cell(1, 1).Value;
                     aworksheet.Cell(1, 2).Value = ddlsession.SelectedItem.ToString();
-                    
+
                 }
 
                 ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets[1];
@@ -126,7 +124,7 @@ public partial class DiningTemplate : System.Web.UI.Page
                 int row = 0;
                 int col = 0;
 
-                
+
 
 
                 try
@@ -143,7 +141,7 @@ public partial class DiningTemplate : System.Web.UI.Page
                         }
                     }
 
-                   
+
                 }
 
                 catch (Exception ex)
@@ -160,16 +158,16 @@ public partial class DiningTemplate : System.Web.UI.Page
                     }
                 }
                 xlPackage.Save();
-            } 
+            }
 
             string attachment = "attachment; filename=" + newFilePath;
-            HttpContext.Current.Response.Clear(); 
+            HttpContext.Current.Response.Clear();
             HttpContext.Current.Response.AddHeader("content-disposition", "attachment; filename=" + FileName + ";");
             HttpContext.Current.Response.ContentType = "application/vnd.ms-excel";
             HttpContext.Current.Response.TransmitFile(newFilePath);
             HttpContext.Current.Response.Flush();
             HttpContext.Current.Response.End();
-            
+
         }
 
         catch (Exception ex)
@@ -204,4 +202,3 @@ public partial class DiningTemplate : System.Web.UI.Page
         //fu_Dining.PostedFile.SaveAs(strPath);
     }
 }
- 

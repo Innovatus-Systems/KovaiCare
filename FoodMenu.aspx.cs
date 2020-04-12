@@ -1,20 +1,17 @@
-﻿using System;
+﻿using iTextSharp.text;
+using iTextSharp.text.html.simpleparser;
+using iTextSharp.text.pdf;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Data;
+using System.Data.SqlClient;
+using System.Drawing;
+using System.IO;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
-using System.Data.SqlClient;
-using System.Configuration;
-using System.Globalization;
-using System.Drawing;
 using Telerik.Web.UI;
-using System.IO;
-using System.Text;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.html.simpleparser;
 
 public partial class FoodMenu : System.Web.UI.Page
 {
@@ -6500,7 +6497,7 @@ public partial class FoodMenu : System.Web.UI.Page
 
                     string custname = custrsn[0].ToString();
 
-                     doorno = custrsn[1].ToString();
+                    doorno = custrsn[1].ToString();
 
                 }
 
@@ -6514,25 +6511,25 @@ public partial class FoodMenu : System.Web.UI.Page
 
                 if (dsFoodTransaction.Tables[0].Rows.Count > 0)
                 {
-                        GridDataItem dataBoundItem = e.Item as GridDataItem;
-                        if (dataBoundItem["RegularAmount"].Text == "0.00")
-                        {
-                            dataBoundItem["RegularAmount"].BackColor = Color.LightGray; // chanmge particuler cell
-                        }
-                        if (dataBoundItem["CasualAmount"].Text == "0.00")
-                        {
-                            dataBoundItem["CasualAmount"].BackColor = Color.LightGray; // chanmge particuler cell
-                        }
-                        if (dataBoundItem["GuestAmount"].Text == "0.00")
-                        {
-                            dataBoundItem["GuestAmount"].BackColor = Color.LightGray; // chanmge particuler cell
-                        }
-                        if (dataBoundItem["TotalAmount"].Text == "0.00")
-                        {
-                            dataBoundItem["TotalAmount"].BackColor = Color.LightGray; // chanmge particuler cell
-                        }
+                    GridDataItem dataBoundItem = e.Item as GridDataItem;
+                    if (dataBoundItem["RegularAmount"].Text == "0.00")
+                    {
+                        dataBoundItem["RegularAmount"].BackColor = Color.LightGray; // chanmge particuler cell
+                    }
+                    if (dataBoundItem["CasualAmount"].Text == "0.00")
+                    {
+                        dataBoundItem["CasualAmount"].BackColor = Color.LightGray; // chanmge particuler cell
+                    }
+                    if (dataBoundItem["GuestAmount"].Text == "0.00")
+                    {
+                        dataBoundItem["GuestAmount"].BackColor = Color.LightGray; // chanmge particuler cell
+                    }
+                    if (dataBoundItem["TotalAmount"].Text == "0.00")
+                    {
+                        dataBoundItem["TotalAmount"].BackColor = Color.LightGray; // chanmge particuler cell
+                    }
 
-                    
+
                 }
 
                 dsFoodTransaction.Dispose();

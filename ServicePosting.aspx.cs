@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
-using System.Globalization;
-using System.Drawing;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
-using System.IO;
-using System.Net;
-using System.Text;
 
 public partial class ServicePosting : System.Web.UI.Page
 {
@@ -29,6 +21,8 @@ public partial class ServicePosting : System.Web.UI.Page
     static string strMSMS;
     static string strRSMS;
     decimal dlastOutStanding;
+    string CGST = string.Empty;
+
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -64,7 +58,7 @@ public partial class ServicePosting : System.Web.UI.Page
             {
                 lblhelp1.Text = dsTxn.Tables[0].Rows[0]["Help"].ToString();
                 string msg = dsTxn.Tables[0].Rows[0]["StdDescription"].ToString();
-                string CGST = dsTxn.Tables[0].Rows[0]["CGST"].ToString();
+                CGST = dsTxn.Tables[0].Rows[0]["CGST"].ToString();
                 string SGST = dsTxn.Tables[0].Rows[0]["SGST"].ToString();
                 string code = dsTxn.Tables[0].Rows[0]["TxnCode"].ToString();
                 string All = msg + " - " + code + "  <br/> " + "CGST %:- " + CGST + "  - " + "SGST %:- " + SGST;
@@ -96,7 +90,7 @@ public partial class ServicePosting : System.Web.UI.Page
                 //LoadStandardText();
                 txtMDate.Enabled = false;
                 txtMTime.Enabled = false;
-               
+
                 if (dsCSEdit.Tables[0].Rows[0]["taskdate"].ToString() != "")
                 {
                     txtMDate.SelectedDate = Convert.ToDateTime(dsCSEdit.Tables[0].Rows[0]["taskdate"].ToString());
@@ -123,8 +117,8 @@ public partial class ServicePosting : System.Web.UI.Page
                 txtStatusRemarks.Text = dsCSEdit.Tables[0].Rows[0]["StatusRemarks"].ToString();
                 Session["AccCode"] = dsCSEdit.Tables[0].Rows[0]["GLAccount"].ToString();
                 ddlStatus.Visible = true;
-                lbltasksts.Visible = true;               
-                txtStatusRemarks.Visible = true;                        
+                lbltasksts.Visible = true;
+                txtStatusRemarks.Visible = true;
             }
         }
         catch (Exception ex)
@@ -188,7 +182,7 @@ public partial class ServicePosting : System.Web.UI.Page
             txtStatusRemarks.Text = txtStatusRemarks.Text + "- Rs." + lblNetAmount.Text;
         }
     }
-   
+
     private void LoadServiceType()
     {
         try
@@ -248,12 +242,12 @@ public partial class ServicePosting : System.Web.UI.Page
     {
         try
         {
-          if (string.IsNullOrEmpty(txtNetAmount.Text))
+            if (string.IsNullOrEmpty(txtNetAmount.Text))
             {
                 WebMsgBox.Show("Please enter valid amount.");
                 txtNetAmount.Focus();
                 return;
-            }              
+            }
             else
             {
                 SqlProcsNew obj = new SqlProcsNew();
@@ -265,7 +259,7 @@ public partial class ServicePosting : System.Web.UI.Page
                 string strmin = bdate.ToString("mm");
                 string strsec = bdate.ToString("ss");
                 string strBillNo = stryear.ToString() + strmonth.ToString() + strday.ToString() + strhour.ToString() + strmin.ToString() + strsec.ToString();
-                string narration = ddlSerType.SelectedItem.ToString() + "-" +txtStatusRemarks.Text;
+                string narration = ddlSerType.SelectedItem.ToString() + "-" + txtStatusRemarks.Text;
                 DataSet dsRSN = sqlobj.ExecuteSP("SP_InsertUNBILLEDTxnPosting",
                                    new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Decimal, Value = cmbResident.SelectedValue.ToString() },
                                    new SqlParameter() { ParameterName = "@BGroup", SqlDbType = SqlDbType.NVarChar, Value = "SC" },
@@ -289,7 +283,7 @@ public partial class ServicePosting : System.Web.UI.Page
                    new SqlParameter() { ParameterName = "@i", SqlDbType = SqlDbType.Int, Value = 4 },
                    new SqlParameter() { ParameterName = "@RSN", SqlDbType = SqlDbType.Int, Value = Convert.ToInt16(Session["TaskRSN"].ToString()) },
                    new SqlParameter() { ParameterName = "@Task", SqlDbType = SqlDbType.VarChar, Value = txtTask.Text },
-                    //new SqlParameter() { ParameterName = "@Urgency", SqlDbType = SqlDbType.VarChar, Value = ddlUrgency.SelectedValue.ToString() },
+                   //new SqlParameter() { ParameterName = "@Urgency", SqlDbType = SqlDbType.VarChar, Value = ddlUrgency.SelectedValue.ToString() },
                    new SqlParameter() { ParameterName = "@TaskStatus", SqlDbType = SqlDbType.VarChar, Value = "Done" },
                    new SqlParameter() { ParameterName = "@StatusDate", SqlDbType = SqlDbType.DateTime, Value = DateTime.Today },
                    new SqlParameter() { ParameterName = "@M_By", SqlDbType = SqlDbType.VarChar, Value = Session["UserID"].ToString() == null ? null : "Admin" },
@@ -299,10 +293,9 @@ public partial class ServicePosting : System.Web.UI.Page
                    new SqlParameter() { ParameterName = "@CompTime", SqlDbType = SqlDbType.NVarChar, Value = txtCompTime.Text },
                    new SqlParameter() { ParameterName = "@AmtCharged", SqlDbType = SqlDbType.Decimal, Value = Convert.ToDecimal(lblNetAmount.Text) }
                    );
-               
-                WebMsgBox.Show("Service Details and Payment Amount Saved Successfully");
+
             }
-          
+
             Session["CGST"] = null;
             Session["SGST"] = null;
             Session["AccCode"] = null;
@@ -313,6 +306,20 @@ public partial class ServicePosting : System.Web.UI.Page
             WebMsgBox.Show(ex.Message.ToString());
         }
     }
+
+    protected void InsertInvoice(string PARTICULAR, string HSN, decimal GSTPERCENTAGE, decimal CGST, decimal SGST,
+        decimal AMOUNT, decimal TOTAL, int RTRSN, string ACCOUNTCODE, string INVOICENO, string YYYY, string BMONTH, string REF,
+        string BILLED, string C_ID, DateTime C_ON, string M_ID, DateTime M_ON, int INVPCOUNT)
+    {
+
+    }
+    private string GenerateInvoiceNo()
+    {
+        string InvoiceNo = string.Empty;
+
+        return InvoiceNo;
+    }
+
     protected void btnReturn_Click(object sender, EventArgs e)
     {
         Response.Redirect("TaskList.aspx?Value1=2&Value2=-");
@@ -336,29 +343,29 @@ public partial class ServicePosting : System.Web.UI.Page
             //{
             //    txtStatusRemarks.Text = txtStatusRemarks.Text.ToString() + "- Rs.0.00";
             //}                
-                SqlProcsNew obj = new SqlProcsNew();
-                sqlobj.ExecuteNonQuery("Proc_NewTasks",
-                   new SqlParameter() { ParameterName = "@i", SqlDbType = SqlDbType.Int, Value = 2 },
-                   new SqlParameter() { ParameterName = "@RSN", SqlDbType = SqlDbType.Int, Value = Convert.ToInt16(Session["TaskRSN"].ToString()) },
-                   new SqlParameter() { ParameterName = "@Task", SqlDbType = SqlDbType.VarChar, Value = txtTask.Text },
-                    //new SqlParameter() { ParameterName = "@Urgency", SqlDbType = SqlDbType.VarChar, Value = ddlUrgency.SelectedValue.ToString() },
-                   new SqlParameter() { ParameterName = "@TaskStatus", SqlDbType = SqlDbType.VarChar, Value = ddlStatus.SelectedValue.ToString() },
-                   new SqlParameter() { ParameterName = "@StatusDate", SqlDbType = SqlDbType.DateTime, Value = DateTime.Today },
-                   new SqlParameter() { ParameterName = "@M_By", SqlDbType = SqlDbType.VarChar, Value = Session["UserID"].ToString() == null ? null : "Admin" },
-                   new SqlParameter() { ParameterName = "@StatusRemarks", SqlDbType = SqlDbType.VarChar, Value = txtStatusRemarks.Text.ToString() == null ? null : txtStatusRemarks.Text },
-                   new SqlParameter() { ParameterName = "@Targetdate", SqlDbType = SqlDbType.DateTime, Value = dtpTargetDt.SelectedDate },
-                    new SqlParameter() { ParameterName = "@CompDate", SqlDbType = SqlDbType.DateTime, Value = radDateComp.SelectedDate },
-                   new SqlParameter() { ParameterName = "@CompTime", SqlDbType = SqlDbType.NVarChar, Value = txtCompTime.Text == "" ? "00:00" : txtCompTime.Text },
-                    new SqlParameter() { ParameterName = "@AmtCharged", SqlDbType = SqlDbType.Decimal, Value = Convert.ToDecimal("0.00") }
-                   );
-                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Service Details Updated Successfully');", true);                
-                Redirect();
-            
-           
+            SqlProcsNew obj = new SqlProcsNew();
+            sqlobj.ExecuteNonQuery("Proc_NewTasks",
+               new SqlParameter() { ParameterName = "@i", SqlDbType = SqlDbType.Int, Value = 2 },
+               new SqlParameter() { ParameterName = "@RSN", SqlDbType = SqlDbType.Int, Value = Convert.ToInt16(Session["TaskRSN"].ToString()) },
+               new SqlParameter() { ParameterName = "@Task", SqlDbType = SqlDbType.VarChar, Value = txtTask.Text },
+               //new SqlParameter() { ParameterName = "@Urgency", SqlDbType = SqlDbType.VarChar, Value = ddlUrgency.SelectedValue.ToString() },
+               new SqlParameter() { ParameterName = "@TaskStatus", SqlDbType = SqlDbType.VarChar, Value = ddlStatus.SelectedValue.ToString() },
+               new SqlParameter() { ParameterName = "@StatusDate", SqlDbType = SqlDbType.DateTime, Value = DateTime.Today },
+               new SqlParameter() { ParameterName = "@M_By", SqlDbType = SqlDbType.VarChar, Value = Session["UserID"].ToString() == null ? null : "Admin" },
+               new SqlParameter() { ParameterName = "@StatusRemarks", SqlDbType = SqlDbType.VarChar, Value = txtStatusRemarks.Text.ToString() == null ? null : txtStatusRemarks.Text },
+               new SqlParameter() { ParameterName = "@Targetdate", SqlDbType = SqlDbType.DateTime, Value = dtpTargetDt.SelectedDate },
+                new SqlParameter() { ParameterName = "@CompDate", SqlDbType = SqlDbType.DateTime, Value = radDateComp.SelectedDate },
+               new SqlParameter() { ParameterName = "@CompTime", SqlDbType = SqlDbType.NVarChar, Value = txtCompTime.Text == "" ? "00:00" : txtCompTime.Text },
+                new SqlParameter() { ParameterName = "@AmtCharged", SqlDbType = SqlDbType.Decimal, Value = Convert.ToDecimal("0.00") }
+               );
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Service Details Updated Successfully');", true);
+            Redirect();
+
+
         }
         catch (Exception ex)
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('"+ ex.Message.ToString()+"');", true);
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('" + ex.Message.ToString() + "');", true);
         }
 
     }

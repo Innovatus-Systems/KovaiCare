@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Telerik.Web.UI;
@@ -19,10 +16,10 @@ public partial class InvoiceLkUp : System.Web.UI.Page
             if (Session["UserID"] == null)
             {
                 Response.Redirect("Login.aspx");
-            }           
+            }
             if (!IsPostBack)
             {
-                LoadTitle();              
+                LoadTitle();
                 LoadInvoiceLkup();
                 btnUpdate.Visible = false;
                 btnSave.Visible = true;
@@ -86,7 +83,7 @@ public partial class InvoiceLkUp : System.Web.UI.Page
             txtHSNCode.Text = "";
             txtPrefix.Text = "";
             txtStdText.Text = "";
-            txtTXNCode.Text = ""; 
+            txtTXNCode.Text = "";
             txtYear.Text = "";
             btnUpdate.Visible = false;
             //txtTXNCode.Enabled = true;
@@ -108,7 +105,7 @@ public partial class InvoiceLkUp : System.Web.UI.Page
                 {
                     GridDataItem ditem = (GridDataItem)e.Item;
                     LinkButton lnkRSN = (LinkButton)e.Item.FindControl("lnkRSN");
-                    DataSet dsRes= sqlobj.ExecuteSP("Proc_InvoiceLkUp",
+                    DataSet dsRes = sqlobj.ExecuteSP("Proc_InvoiceLkUp",
                                        new SqlParameter() { ParameterName = "@Imode", SqlDbType = SqlDbType.Int, Value = 4 },
                                        new SqlParameter() { ParameterName = "@TXNCODE", SqlDbType = SqlDbType.NVarChar, Value = lnkRSN.Text }
                                        );
@@ -119,10 +116,10 @@ public partial class InvoiceLkUp : System.Web.UI.Page
                         txtPrefix.Text = dsRes.Tables[0].Rows[0]["Prefix"].ToString();
                         txtStdText.Text = dsRes.Tables[0].Rows[0]["StdText"].ToString();
                         txtTXNCode.Text = dsRes.Tables[0].Rows[0]["TXNCode"].ToString();
-                        txtYear.Text = dsRes.Tables[0].Rows[0]["Year"].ToString();  
-                        txtRSN.Text= dsRes.Tables[0].Rows[0]["RSN"].ToString();
+                        txtYear.Text = dsRes.Tables[0].Rows[0]["Year"].ToString();
+                        txtRSN.Text = dsRes.Tables[0].Rows[0]["RSN"].ToString();
                         btnSave.Visible = false;
-                        btnUpdate.Visible = true;                      
+                        btnUpdate.Visible = true;
                     }
                     dsRes.Dispose();
                 }
@@ -177,13 +174,13 @@ public partial class InvoiceLkUp : System.Web.UI.Page
                     new SqlParameter() { ParameterName = "@CID", SqlDbType = SqlDbType.NVarChar, Value = Session["UserID"].ToString() }
                );
             Clear();
-                LnkSH.Text = "Add New";
-                LoadInvoiceLkup();
-                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Invoice Details Updated Successfully.');", true);
+            LnkSH.Text = "Add New";
+            LoadInvoiceLkup();
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Invoice Details Updated Successfully.');", true);
         }
         catch (Exception ex)
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('"+ex.Message.ToString()+"');", true);
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('" + ex.Message.ToString() + "');", true);
         }
     }
 
@@ -199,9 +196,10 @@ public partial class InvoiceLkUp : System.Web.UI.Page
 
     protected void BtnExcelExport_Click(object sender, EventArgs e)
     {
-        try {
+        try
+        {
             string DT = DateTime.Now.ToString("ddMMMyyyyhhmmss");
-            SqlProcsNew sqlobj = new SqlProcsNew();            
+            SqlProcsNew sqlobj = new SqlProcsNew();
             DataSet dsCategory = sqlobj.ExecuteSP("Proc_InvoiceLkUp",
               new SqlParameter() { ParameterName = "@IMode", SqlDbType = SqlDbType.Int, Value = 3 });
             if (dsCategory.Tables[0].Rows.Count > 0)
@@ -247,7 +245,7 @@ public partial class InvoiceLkUp : System.Web.UI.Page
 
             }
             else
-        {
+            {
                 ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('No Data To Export');", true);
             }
         }

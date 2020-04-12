@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
-using Telerik.Web.UI; 
+using Telerik.Web.UI;
 
 public partial class HouseKeepingView : System.Web.UI.Page
 {
@@ -20,7 +14,7 @@ public partial class HouseKeepingView : System.Web.UI.Page
             if (Session["UserID"] == null)
             {
                 Response.Redirect("Login.aspx");
-            }         
+            }
 
 
 
@@ -28,7 +22,7 @@ public partial class HouseKeepingView : System.Web.UI.Page
             {
 
                 if (Request.QueryString["Val"].ToString() == "1")
-                {                   
+                {
                     PnlSR.Visible = false;
                     PnlHK.Visible = true;
 
@@ -37,13 +31,13 @@ public partial class HouseKeepingView : System.Web.UI.Page
                     LoadViewTaskList();
 
                     dvhk.Visible = false;
-                    dvsr.Visible = true;          
-         
-                
+                    dvsr.Visible = true;
+
+
                 }
 
                 if (Request.QueryString["Val"].ToString() == "2")
-                {                   
+                {
                     PnlHK.Visible = false;
                     PnlSR.Visible = true;
 
@@ -56,8 +50,8 @@ public partial class HouseKeepingView : System.Web.UI.Page
 
                 }
 
-               // grdHouseKeeping.Visible = false;
-               
+                // grdHouseKeeping.Visible = false;
+
             }
         }
         catch (Exception ex)
@@ -116,7 +110,7 @@ public partial class HouseKeepingView : System.Web.UI.Page
         {
             DataSet dsWorkSchedule = sqlobj.ExecuteSP("SP_ViewHouseKeepingService",
                        new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 1 },
-                       new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Decimal, Value = Convert.ToDecimal(Session["HouseKeepingRSN"].ToString())});
+                       new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Decimal, Value = Convert.ToDecimal(Session["HouseKeepingRSN"].ToString()) });
 
 
             if (dsWorkSchedule.Tables[0].Rows.Count > 0)
@@ -143,7 +137,7 @@ public partial class HouseKeepingView : System.Web.UI.Page
         try
         {
             DataSet dsWorkSchedule = sqlobj.ExecuteSP("SP_ViewHouseKeepingService",
-                       new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value =2 },
+                       new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 2 },
                        new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Decimal, Value = Convert.ToDecimal(Session["HouseKeepingRSN"].ToString()) });
 
 
@@ -165,9 +159,9 @@ public partial class HouseKeepingView : System.Web.UI.Page
             WebMsgBox.Show(ex.Message);
         }
     }
-  
 
-    private void LoadViewIndService ()
+
+    private void LoadViewIndService()
     {
         try
         {
@@ -223,7 +217,7 @@ public partial class HouseKeepingView : System.Web.UI.Page
         }
     }
 
-    protected void btnAdd_Click(object sender,EventArgs e)
+    protected void btnAdd_Click(object sender, EventArgs e)
     {
         Response.Redirect("WorkSchedule.aspx");
     }

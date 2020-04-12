@@ -1,28 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Data;
+using System.Data.SqlClient;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
-using System.Collections;
-using System.Configuration;
-using System.Data;
-using System.Web.Security;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml.Linq;
-using System.Data.SqlClient;
-using Telerik.Web.UI;
 
 //using iTextSharp.text;
 //using iTextSharp.text.html.simpleparser;
 //using iTextSharp.text.pdf;
 
 
-using System.IO;
-
-using System.Globalization;
 
 public partial class TransactionLevel : System.Web.UI.Page
 {
@@ -50,12 +36,12 @@ public partial class TransactionLevel : System.Web.UI.Page
         DataSet dsDT = null;
         if (!IsPostBack)
         {
-            LoadBillingCode();            
+            LoadBillingCode();
             BindGeneralInfrm();
             loadCustDetails();
             LoadBillingPeriod();
             lblSelCustName.Visible = true;
-            
+
 
             dsDT = sqlobj.ExecuteSP("GetServerDateTime");
 
@@ -69,7 +55,7 @@ public partial class TransactionLevel : System.Web.UI.Page
         BindPastBills();
         BindBilledTrans();
         LoadLstFiveTrans();
-        
+
 
         rwMoreInfo.VisibleOnPageLoad = true;
         rwMoreInfo.Visible = false;
@@ -170,7 +156,7 @@ public partial class TransactionLevel : System.Web.UI.Page
             }
 
             sqlobj.ExecuteNonQuery("SP_InsertDiary2",
-                                          new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Int, Value = Convert.ToInt32(Session["ResidentRSN"])},
+                                          new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Int, Value = Convert.ToInt32(Session["ResidentRSN"]) },
                                           new SqlParameter() { ParameterName = "@MoreInfoResponse", SqlDbType = SqlDbType.NVarChar, Value = txtdescription.Text },
                                           new SqlParameter() { ParameterName = "@MoreInfoAction", SqlDbType = SqlDbType.NVarChar, Value = txttext.Text },
                                           new SqlParameter() { ParameterName = "@MoreInfoValue", SqlDbType = SqlDbType.Decimal, Value = IVal });
@@ -206,7 +192,7 @@ public partial class TransactionLevel : System.Web.UI.Page
                                             new SqlParameter() { ParameterName = "@MoreInfoResponse", SqlDbType = SqlDbType.NVarChar, Value = txtdescription.Text },
                                             new SqlParameter() { ParameterName = "@MoreInfoAction", SqlDbType = SqlDbType.NVarChar, Value = txttext.Text },
                                             new SqlParameter() { ParameterName = "@MoreInfoValue", SqlDbType = SqlDbType.Decimal, Value = txtvalue.Text },
-                //new SqlParameter() { ParameterName = "@ModifiedBy", SqlDbType = SqlDbType.NVarChar, Value = Session["UserID"].ToString() },
+           //new SqlParameter() { ParameterName = "@ModifiedBy", SqlDbType = SqlDbType.NVarChar, Value = Session["UserID"].ToString() },
            new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.BigInt, Value = RSN });
 
 
@@ -326,7 +312,7 @@ public partial class TransactionLevel : System.Web.UI.Page
         {
 
             if (Session["ResidentRSN"] != "")
-           
+
             {
                 int RSN = Convert.ToInt32(Session["ResidentRSN"]);
 
@@ -360,25 +346,25 @@ public partial class TransactionLevel : System.Web.UI.Page
                         new SqlParameter() { ParameterName = "@BCode", SqlDbType = SqlDbType.NVarChar, Value = ddllBCode.SelectedValue },
                         new SqlParameter() { ParameterName = "@BStatus", SqlDbType = SqlDbType.NVarChar, Value = ddlBStatus.SelectedValue },
                         new SqlParameter() { ParameterName = "@BRate", SqlDbType = SqlDbType.NVarChar, Value = txtRate.Text },
-                        new SqlParameter() { ParameterName = "@BCount", SqlDbType = SqlDbType.NVarChar, Value = txtCount.Text },                        
+                        new SqlParameter() { ParameterName = "@BCount", SqlDbType = SqlDbType.NVarChar, Value = txtCount.Text },
                         new SqlParameter() { ParameterName = "@TAmount", SqlDbType = SqlDbType.Decimal, Value = txtCAmount.Text },
                         new SqlParameter() { ParameterName = "@TDate", SqlDbType = SqlDbType.DateTime, Value = dtpCDate.SelectedDate },
                         new SqlParameter() { ParameterName = "@TType", SqlDbType = SqlDbType.NVarChar, Value = TransType },
                         new SqlParameter() { ParameterName = "@TNarration", SqlDbType = SqlDbType.NVarChar, Value = TransNarraction });
-                    
-                   
+
+
                     if (ddlAmountType.SelectedValue == "3" || ddlAmountType.SelectedValue == "4")
                     {
                         sqlobj.ExecuteNonQuery("sp_inserttransactiondiary",
                         new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Int, Value = RSN },
                         new SqlParameter() { ParameterName = "@MoreInfoResponse", SqlDbType = SqlDbType.NVarChar, Value = ddlAmountType.SelectedItem.Text },
                         new SqlParameter() { ParameterName = "@MoreInfoAction", SqlDbType = SqlDbType.NVarChar, Value = TransNarraction },
-                        new SqlParameter() { ParameterName = "@MoreInfoValue", SqlDbType = SqlDbType.Decimal, Value = txtCAmount.Text });                       
+                        new SqlParameter() { ParameterName = "@MoreInfoValue", SqlDbType = SqlDbType.Decimal, Value = txtCAmount.Text });
                     }
 
                     decimal dlastdebit = 0;
                     decimal dlastcredit = 0;
-                    
+
                     DataSet dsgetdebitcredittoal = null;
                     dsgetdebitcredittoal = sqlobj.ExecuteSP("[SP_GetTotalS]",
                         new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.BigInt, Value = RSN });
@@ -387,7 +373,7 @@ public partial class TransactionLevel : System.Web.UI.Page
                     {
                         dlastdebit = Convert.ToDecimal(dsgetdebitcredittoal.Tables[0].Rows[0]["SumDR"].ToString());
                         dlastcredit = Convert.ToDecimal(dsgetdebitcredittoal.Tables[0].Rows[0]["SumCR"].ToString());
-                        dlastOutStanding = Convert.ToDecimal(dsgetdebitcredittoal.Tables[0].Rows[0]["OutStanding"].ToString());                     
+                        dlastOutStanding = Convert.ToDecimal(dsgetdebitcredittoal.Tables[0].Rows[0]["OutStanding"].ToString());
                     }
 
                     sqlobj.ExecuteNonQuery("SP_UpdateDebitCreditTotal",
@@ -405,11 +391,11 @@ public partial class TransactionLevel : System.Web.UI.Page
 
                     WebMsgBox.Show("Transactions details saved successfully");
                     ClearTransScr();
-                   
+
                 }
                 else
                 {
-                    WebMsgBox.Show("Please enter mandatory field(s)");                   
+                    WebMsgBox.Show("Please enter mandatory field(s)");
                 }
             }
             else
@@ -460,13 +446,13 @@ public partial class TransactionLevel : System.Web.UI.Page
                 Decimal OutStand = Convert.ToDecimal(dsACDet.Tables[4].Rows[0]["OS"].ToString());
                 if (OutStand > 0)
                 {
-                    lblUBillAmt.Text = dsACDet.Tables[4].Rows[0]["OS"].ToString()+" DR";
+                    lblUBillAmt.Text = dsACDet.Tables[4].Rows[0]["OS"].ToString() + " DR";
                 }
                 else if (OutStand < 0)
                 {
                     lblUBillAmt.Text = Math.Abs(Convert.ToDecimal(dsACDet.Tables[4].Rows[0]["OS"].ToString())) + " CR";
                 }
-                
+
             }
 
             if (dsACDet.Tables[1].Rows[0]["OutStanding"].ToString() != "" && dsACDet.Tables[1].Rows[0]["OutStanding"].ToString() != string.Empty)
@@ -526,7 +512,7 @@ public partial class TransactionLevel : System.Web.UI.Page
             WebMsgBox.Show(ex.Message.ToString());
         }
     }
-    
+
     protected void LoadMoreInfo()
     {
         int RSN = Convert.ToInt32(Session["ResidentRSN"]);
@@ -615,7 +601,7 @@ public partial class TransactionLevel : System.Web.UI.Page
 
 
 
-    
+
 
 
 
@@ -760,7 +746,7 @@ public partial class TransactionLevel : System.Web.UI.Page
                 new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Decimal, Value = RSN });
             rdgPastBills.DataSource = dsACDet.Tables[0];
             rdgPastBills.DataBind();
-            dsACDet.Dispose();            
+            dsACDet.Dispose();
         }
         catch (Exception ex)
         {
@@ -780,14 +766,14 @@ public partial class TransactionLevel : System.Web.UI.Page
                 new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Decimal, Value = RSN });
             rdgBilledTrans.DataSource = dsBTrans.Tables[0];
             rdgBilledTrans.DataBind();
-            dsBTrans.Dispose();            
+            dsBTrans.Dispose();
         }
         catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message.ToString());
         }
-    
-    
+
+
     }
 
     protected void btnExpBT_Click(object sender, EventArgs e)
@@ -802,7 +788,7 @@ public partial class TransactionLevel : System.Web.UI.Page
             Response.Charset = "";
             dsDT = proc.ExecuteSP("GetServerDateTime");
             CDate = Convert.ToDateTime(dsDT.Tables[0].Rows[0][0].ToString()).ToString("ddMMyyyyhhmmtt");
-            FileName = "BT_" + Session["VName"].ToString() + "_" + CDate ;
+            FileName = "BT_" + Session["VName"].ToString() + "_" + CDate;
 
             rdgBilledTrans.ExportSettings.ExportOnlyData = true;
             rdgBilledTrans.ExportSettings.FileName = FileName;
@@ -828,7 +814,7 @@ public partial class TransactionLevel : System.Web.UI.Page
             Response.Charset = "";
             dsDT = proc.ExecuteSP("GetServerDateTime");
             CDate = Convert.ToDateTime(dsDT.Tables[0].Rows[0][0].ToString()).ToString("ddMMyyyyhhmmtt");
-            FileName = "UBT_" + Session["VName"].ToString() + "_" + CDate ;
+            FileName = "UBT_" + Session["VName"].ToString() + "_" + CDate;
 
             rdgStatOfAcc.ExportSettings.ExportOnlyData = true;
             rdgStatOfAcc.ExportSettings.FileName = FileName;
@@ -876,7 +862,7 @@ public partial class TransactionLevel : System.Web.UI.Page
             FetchPreBillPeriodDet();
 
             txtAmtReceivedNow.Focus();
-            
+
 
         }
         catch (Exception ex)
@@ -888,7 +874,7 @@ public partial class TransactionLevel : System.Web.UI.Page
 
     protected void FetchPreBillPeriodDet()
     {
-        try        
+        try
         {
             decimal RRSN = Convert.ToDecimal(Session["ResidentRSN"]);
 
@@ -903,14 +889,14 @@ public partial class TransactionLevel : System.Web.UI.Page
                 txtAmtBilled.Text = dsBPDet.Tables[0].Rows[0]["AmtBilled"].ToString();
                 txtAmtReceived.Text = dsBPDet.Tables[0].Rows[0]["AmtReceived"].ToString();
                 txtAmtDue.Text = dsBPDet.Tables[0].Rows[0]["AmtOutstanding"].ToString();
-                
+
             }
         }
         catch (Exception ex)
-        { 
-        
+        {
+
         }
-    
+
     }
 
     protected void btnPMBSave_Click(object sender, EventArgs e)
@@ -924,9 +910,9 @@ public partial class TransactionLevel : System.Web.UI.Page
                     new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Decimal, Value = RRSN },
                     new SqlParameter() { ParameterName = "@BillPeriod", SqlDbType = SqlDbType.NVarChar, Value = ddlBillingPeriod.SelectedItem.ToString() },
                     new SqlParameter() { ParameterName = "@AmtReceivedNow", SqlDbType = SqlDbType.Decimal, Value = Convert.ToDecimal(txtAmtReceivedNow.Text) });
-            }         
-           
-            WebMsgBox.Show("Billing amount saved");            
+            }
+
+            WebMsgBox.Show("Billing amount saved");
             txtAmtReceivedNow.Text = string.Empty;
             FetchPreBillPeriodDet();
 
@@ -936,13 +922,13 @@ public partial class TransactionLevel : System.Web.UI.Page
         {
             WebMsgBox.Show(ex.Message);
         }
-    
+
     }
 
     protected void btnPMBClear_Click(object sender, EventArgs e)
     {
         ClearScr();
-    
+
     }
 
     protected void ClearScr()
@@ -951,7 +937,7 @@ public partial class TransactionLevel : System.Web.UI.Page
         txtAmtReceived.Text = string.Empty;
         txtAmtDue.Text = string.Empty;
         txtAmtReceivedNow.Text = string.Empty;
-    
+
     }
 }
 

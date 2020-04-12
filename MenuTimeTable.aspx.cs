@@ -1,20 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
-using System.Globalization;
 using System.Drawing;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
-using System.IO;
-using System.Text;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.html.simpleparser;
 
 public partial class MenuTimeTable : System.Web.UI.Page
 {
@@ -1091,7 +1082,7 @@ public partial class MenuTimeTable : System.Web.UI.Page
             lblMainItem.Text = "";
             lblSubItem.Text = "";
 
-             
+
             ViewState["UItemDet"] = null;
 
             cmbUItemName.DataSource = string.Empty;
@@ -1496,14 +1487,14 @@ public partial class MenuTimeTable : System.Web.UI.Page
     protected void btnAddItem_Click(object sender, EventArgs e)
     {
         ////LoadMenuItems2();              
-        AddtoList();       
+        AddtoList();
 
     }
     protected void cmbItemName_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
     {
         AddtoList();
     }
-   
+
     protected void AddtoList()
     {
         try
@@ -1644,7 +1635,7 @@ public partial class MenuTimeTable : System.Web.UI.Page
 
     protected void btnUAddItem_Click(object sender, EventArgs e)
     {
-        AddtoList1();      
+        AddtoList1();
     }
 
     protected void cmbUItemName_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
@@ -1832,5 +1823,5 @@ public partial class MenuTimeTable : System.Web.UI.Page
         rgEditMenuforday.DataSource = ViewState["UItemDet"];
         rgEditMenuforday.DataBind();
     }
-   
+
 }

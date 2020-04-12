@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Net;
 
 public partial class Login : System.Web.UI.Page
 {
@@ -28,10 +23,10 @@ public partial class Login : System.Web.UI.Page
             //hostName = Dns.GetHostName(); // Retrive the Name of HOST           
             //hostName = localIPs[2].ToString();
             //IP = Dns.GetHostByName(hostName).AddressList[0].ToString();    
-             hostName = Environment.MachineName;
+            hostName = Environment.MachineName;
             //IP = Dns.GetHostAddresses(Environment.MachineName)[2].ToString();
-            
-           url = HttpContext.Current.Request.Url.AbsoluteUri;
+
+            url = HttpContext.Current.Request.Url.AbsoluteUri;
             LoadCompanyCode();
             Session.Clear();
             Session.Abandon();
@@ -47,7 +42,7 @@ public partial class Login : System.Web.UI.Page
 
             if (TxtUserID.Text != String.Empty && TxtPassword.Text != String.Empty)
             {
-                
+
                 DivError.Visible = false;
                 if (TxtUserID.Text == "admin" && TxtPassword.Text == "a$m#n~")
                 {
@@ -177,7 +172,7 @@ public partial class Login : System.Web.UI.Page
 
                                 }
                                 else
-                                {                                    
+                                {
                                     Session["UserID"] = dslogin.Tables[0].Rows[0]["UserName"].ToString();
                                     //Response.Redirect("Homemenu.aspx", false);
                                     //Response.Redirect("AllMenus.aspx", false);
@@ -192,7 +187,7 @@ public partial class Login : System.Web.UI.Page
                             }
                         }
 
-                     // -- start daily payment code
+                        // -- start daily payment code
 
                         else
                         {
@@ -244,10 +239,10 @@ public partial class Login : System.Web.UI.Page
                         DivError.Visible = true;
                     }
                 }
-                
+
                 // -- end daily payment code
             }
-            
+
 
             else
             {

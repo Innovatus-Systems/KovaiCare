@@ -1,23 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
-using System.Globalization;
 using System.Drawing;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
-using Excel = Microsoft.Office.Interop.Excel;
-using System.Runtime.InteropServices;
-using OfficeOpenXml;
-using System.IO;
 public partial class FandBLedger : System.Web.UI.Page
 {
-   
-        SqlProcsNew sqlobj = new SqlProcsNew();
+
+    SqlProcsNew sqlobj = new SqlProcsNew();
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -42,7 +33,7 @@ public partial class FandBLedger : System.Web.UI.Page
             LoadSessionFilter();
             LoadAccountNo();
             LoadDate();
-           
+
             //LoadGrid1();
         }
     }
@@ -60,7 +51,7 @@ public partial class FandBLedger : System.Web.UI.Page
             drpSessionfilters.DataValueField = "Code";
             drpSessionfilters.DataTextField = "Name";
             drpSessionfilters.DataBind();
-            drpSessionfilters.Items.Insert(0, (new ListItem("All", "0")));  
+            drpSessionfilters.Items.Insert(0, (new ListItem("All", "0")));
 
         }
         catch (Exception ex)
@@ -103,8 +94,8 @@ public partial class FandBLedger : System.Web.UI.Page
             DataSet dsResident = new DataSet();
 
             dsResident = sqlobj.ExecuteSP("SP_GETBILLINGDATE");
-            dtpfordate.SelectedDate =Convert.ToDateTime(dsResident.Tables[0].Rows[0]["FROM"].ToString());
-            dtpuntildate.SelectedDate= Convert.ToDateTime(dsResident.Tables[0].Rows[0]["TILL"].ToString());
+            dtpfordate.SelectedDate = Convert.ToDateTime(dsResident.Tables[0].Rows[0]["FROM"].ToString());
+            dtpuntildate.SelectedDate = Convert.ToDateTime(dsResident.Tables[0].Rows[0]["TILL"].ToString());
         }
         catch (Exception ex)
         {
@@ -119,7 +110,7 @@ public partial class FandBLedger : System.Web.UI.Page
             if (cmbResident.SelectedValue == "0")
             {
                 ddlAccountNumber.Items.Clear();
-                ddlAccountNumber.Items.Add(new ListItem("All", "0"));             
+                ddlAccountNumber.Items.Add(new ListItem("All", "0"));
 
             }
             else
@@ -169,76 +160,76 @@ public partial class FandBLedger : System.Web.UI.Page
                    new SqlParameter() { ParameterName = "@AccountCode", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = ddlAccountNumber.SelectedValue.ToString() }
                    );
 
-               
-               
+
+
                 if (dsStatement.Tables[1].Rows.Count > 0)
-            {
-                //lblDebitCnt.Text = dsStatement.Tables[1].Rows[0]["DR"].ToString();
-            }
-            else
-            {
-                lblDebitCnt.Text = "-";
-            }
-            if (dsStatement.Tables[2].Rows.Count > 0)
-            {
-                lblCreditcnt.Text = dsStatement.Tables[2].Rows[0]["CR"].ToString();
-            }
-            else
-            {
-                lblCreditcnt.Text = "-";
-            }
-            //if (dsStatement.Tables[3].Rows.Count > 0)
-            //{
-            //    lblCategory.Text = dsStatement.Tables[3].Rows[0]["AccountGroup"].ToString();
-            //    lblSubGrp1.Text = dsStatement.Tables[3].Rows[0]["SubGroup1"].ToString();               
-            //}
-            //else
-            //{
-            //    lblCategory.Text = "-";
-            //    lblSubGrp1.Text = "-";               
-            //}
-            if (dsStatement.Tables[3].Rows.Count > 0)
-            {
-                lblLatTxnDt.Text = dsStatement.Tables[3].Rows[0]["LastTxn"].ToString();                
-            }
+                {
+                    //lblDebitCnt.Text = dsStatement.Tables[1].Rows[0]["DR"].ToString();
+                }
+                else
+                {
+                    lblDebitCnt.Text = "-";
+                }
+                if (dsStatement.Tables[2].Rows.Count > 0)
+                {
+                    lblCreditcnt.Text = dsStatement.Tables[2].Rows[0]["CR"].ToString();
+                }
+                else
+                {
+                    lblCreditcnt.Text = "-";
+                }
+                //if (dsStatement.Tables[3].Rows.Count > 0)
+                //{
+                //    lblCategory.Text = dsStatement.Tables[3].Rows[0]["AccountGroup"].ToString();
+                //    lblSubGrp1.Text = dsStatement.Tables[3].Rows[0]["SubGroup1"].ToString();               
+                //}
+                //else
+                //{
+                //    lblCategory.Text = "-";
+                //    lblSubGrp1.Text = "-";               
+                //}
+                if (dsStatement.Tables[3].Rows.Count > 0)
+                {
+                    lblLatTxnDt.Text = dsStatement.Tables[3].Rows[0]["LastTxn"].ToString();
+                }
 
-            else
-            {
-                ReportList.DataSource = string.Empty;
-                ReportList.DataBind();
+                else
+                {
+                    ReportList.DataSource = string.Empty;
+                    ReportList.DataBind();
 
-                lblTCt.Text = "0.00";
-                lblLatTxnDt.Text = "-";
-            }
-            if (dsStatement.Tables[4].Rows.Count > 0)
-            {
+                    lblTCt.Text = "0.00";
+                    lblLatTxnDt.Text = "-";
+                }
+                if (dsStatement.Tables[4].Rows.Count > 0)
+                {
 
-                lblTDt.Text = dsStatement.Tables[4].Rows[0]["DR"].ToString();
-            }
-            else
-            {
-                lblTDt.Text = "0.00";
-            }
-            if (dsStatement.Tables[5].Rows.Count > 0)
-            {
+                    lblTDt.Text = dsStatement.Tables[4].Rows[0]["DR"].ToString();
+                }
+                else
+                {
+                    lblTDt.Text = "0.00";
+                }
+                if (dsStatement.Tables[5].Rows.Count > 0)
+                {
 
-                lblTCt.Text = dsStatement.Tables[5].Rows[0]["CR"].ToString();
-            }
-            else
-            {
-                ReportList.DataSource = string.Empty;
-                ReportList.DataBind();
-                lblTCt.Text = "0.00";
-            }
+                    lblTCt.Text = dsStatement.Tables[5].Rows[0]["CR"].ToString();
+                }
+                else
+                {
+                    ReportList.DataSource = string.Empty;
+                    ReportList.DataBind();
+                    lblTCt.Text = "0.00";
+                }
                 Label6.Visible = true;
                 Label8.Visible = true;
                 Label10.Visible = true;
                 lblDebitCnt.Visible = true;
                 lblLatTxnDt.Visible = true;
                 lblTDt.Visible = true;
-                
+
                 dsStatement.Dispose();
-        }
+            }
         }
         catch (Exception ex)
         {
@@ -424,15 +415,15 @@ public partial class FandBLedger : System.Web.UI.Page
                        new SqlParameter() { ParameterName = "@AccountNo", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = ddlAccountNumber.SelectedValue });
                 }
             }
-            
-            if (dsStatement.Tables[0].Rows.Count>0)
+
+            if (dsStatement.Tables[0].Rows.Count > 0)
             {
                 LoadOtherDet();
                 ReportList.DataSource = dsStatement;
                 ReportList.DataBind();
                 ReportListAll.DataSource = dsStatement;
                 ReportListAll.DataBind();
-                lblDebitCnt.Text =Convert.ToString(dsStatement.Tables[0].Rows.Count);               
+                lblDebitCnt.Text = Convert.ToString(dsStatement.Tables[0].Rows.Count);
             }
             else
             {
@@ -450,12 +441,12 @@ public partial class FandBLedger : System.Web.UI.Page
 
                 ReportList.DataSource = string.Empty;
                 ReportList.DataBind();
-                ReportListAll.DataSource = string.Empty; 
+                ReportListAll.DataSource = string.Empty;
                 ReportListAll.DataBind();
                 ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('No record for your selected date range.');", true);
             }
 
-           
+
 
             //if (dsStatement.Tables[0].Rows.Count > 0)
             //{
@@ -529,18 +520,18 @@ public partial class FandBLedger : System.Web.UI.Page
     {
 
         try
-        {       
-            if(cmbResident.SelectedValue=="0")
+        {
+            if (cmbResident.SelectedValue == "0")
             {
                 ReportListAll.Visible = true;
                 ReportList.Visible = false;
-              
+
             }
             else
             {
                 ReportListAll.Visible = false;
                 ReportList.Visible = true;
-               
+
             }
             LoadGrid1();
         }
@@ -603,13 +594,13 @@ public partial class FandBLedger : System.Web.UI.Page
                    new SqlParameter() { ParameterName = "@AccountNo", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = ddlAccountNumber.SelectedValue });
             }
         }
-        if (dsStatement.Tables[0].Rows.Count>0)
-        { 
-        DataGrid dg = new DataGrid();
+        if (dsStatement.Tables[0].Rows.Count > 0)
+        {
+            DataGrid dg = new DataGrid();
 
             dg.DataSource = dsStatement.Tables[0];
             dg.DataBind();
-           
+
             DateTime sdate = dtpfordate.SelectedDate.Value;
             DateTime edate = dtpuntildate.SelectedDate.Value;
 
@@ -703,9 +694,9 @@ public partial class FandBLedger : System.Web.UI.Page
     protected void chkstatus_CheckedChanged(object sender, EventArgs e)
     {
         DataSet dsStatement = new DataSet();
-        if (chkstatus.Checked==true)
+        if (chkstatus.Checked == true)
         {
-            
+
             if (cmbResident.SelectedValue == "0")
             {
                 dsStatement = sqlobj.ExecuteSP("SP_GetUnbilledTransactions",
@@ -830,78 +821,79 @@ public partial class FandBLedger : System.Web.UI.Page
     {
         try
         {
-            
+
             DataSet dsStatement = new DataSet();
-            if(drpSessionfilters.SelectedValue=="0")
+            if (drpSessionfilters.SelectedValue == "0")
             {
                 BtnShow_Click(sender, e);
             }
-            else { 
-            if (chkstatus.Checked == true)
-            {
-
-                if (cmbResident.SelectedValue == "0")
-                {
-                    dsStatement = sqlobj.ExecuteSP("SP_GetUnbilledTxnsFilter",
-                       new SqlParameter() { ParameterName = "@iMode", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Int, Value = 3 },
-                       new SqlParameter() { ParameterName = "@FromDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpfordate.SelectedDate },
-                       new SqlParameter() { ParameterName = "@ToDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpuntildate.SelectedDate },
-                       new SqlParameter() { ParameterName = "@RTRSN", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Decimal, Value = 1 },
-                       new SqlParameter() { ParameterName = "@AccountNo", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = "NA" },
-                       new SqlParameter() { ParameterName = "@Session", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = drpSessionfilters.SelectedValue }
-                       );
-
-                }
-                else if (cmbResident.SelectedValue != "0")
-                {
-                    dsStatement = sqlobj.ExecuteSP("SP_GetUnbilledTxnsFilter",
-                       new SqlParameter() { ParameterName = "@iMode", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Int, Value = 4 },
-                       new SqlParameter() { ParameterName = "@FromDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpfordate.SelectedDate },
-                       new SqlParameter() { ParameterName = "@ToDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpuntildate.SelectedDate },
-                       new SqlParameter() { ParameterName = "@RTRSN", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Decimal, Value = cmbResident.SelectedValue },
-                       new SqlParameter() { ParameterName = "@AccountNo", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = ddlAccountNumber.SelectedValue },
-                        new SqlParameter() { ParameterName = "@Session", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = drpSessionfilters.SelectedValue });
-                }
-            }
-            if (chkstatus.Checked == false)
-            {
-                if (cmbResident.SelectedValue == "0")
-                {
-                    dsStatement = sqlobj.ExecuteSP("SP_GetUnbilledTxnsFilter",
-                       new SqlParameter() { ParameterName = "@iMode", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Int, Value = 1 },
-                       new SqlParameter() { ParameterName = "@FromDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpfordate.SelectedDate },
-                       new SqlParameter() { ParameterName = "@ToDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpuntildate.SelectedDate },
-                       new SqlParameter() { ParameterName = "@RTRSN", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Decimal, Value = 1 },
-                       new SqlParameter() { ParameterName = "@AccountNo", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = "NA" },
-                        new SqlParameter() { ParameterName = "@Session", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = drpSessionfilters.SelectedValue });
-
-                }
-                else if (cmbResident.SelectedValue != "0")
-                {
-                    dsStatement = sqlobj.ExecuteSP("SP_GetUnbilledTxnsFilter",
-                       new SqlParameter() { ParameterName = "@iMode", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Int, Value = 2 },
-                       new SqlParameter() { ParameterName = "@FromDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpfordate.SelectedDate },
-                       new SqlParameter() { ParameterName = "@ToDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpuntildate.SelectedDate },
-                       new SqlParameter() { ParameterName = "@RTRSN", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Decimal, Value = cmbResident.SelectedValue },
-                       new SqlParameter() { ParameterName = "@AccountNo", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = ddlAccountNumber.SelectedValue },
-                        new SqlParameter() { ParameterName = "@Session", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = drpSessionfilters.SelectedValue });
-                }
-            }
-            if (dsStatement.Tables[0].Rows.Count > 0)
-            {
-                if(cmbResident.SelectedValue == "0") { ReportListAll.DataSource = dsStatement.Tables[0];ReportListAll.DataBind(); }
-                else { ReportList.DataSource = dsStatement.Tables[0]; ReportList.DataBind(); }
-            }
             else
             {
-                if (cmbResident.SelectedValue == "0") { ReportListAll.DataSource = string.Empty; ReportListAll.DataBind(); }
-                else { ReportList.DataSource = string.Empty; ReportList.DataBind(); }
-            }
+                if (chkstatus.Checked == true)
+                {
+
+                    if (cmbResident.SelectedValue == "0")
+                    {
+                        dsStatement = sqlobj.ExecuteSP("SP_GetUnbilledTxnsFilter",
+                           new SqlParameter() { ParameterName = "@iMode", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Int, Value = 3 },
+                           new SqlParameter() { ParameterName = "@FromDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpfordate.SelectedDate },
+                           new SqlParameter() { ParameterName = "@ToDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpuntildate.SelectedDate },
+                           new SqlParameter() { ParameterName = "@RTRSN", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Decimal, Value = 1 },
+                           new SqlParameter() { ParameterName = "@AccountNo", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = "NA" },
+                           new SqlParameter() { ParameterName = "@Session", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = drpSessionfilters.SelectedValue }
+                           );
+
+                    }
+                    else if (cmbResident.SelectedValue != "0")
+                    {
+                        dsStatement = sqlobj.ExecuteSP("SP_GetUnbilledTxnsFilter",
+                           new SqlParameter() { ParameterName = "@iMode", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Int, Value = 4 },
+                           new SqlParameter() { ParameterName = "@FromDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpfordate.SelectedDate },
+                           new SqlParameter() { ParameterName = "@ToDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpuntildate.SelectedDate },
+                           new SqlParameter() { ParameterName = "@RTRSN", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Decimal, Value = cmbResident.SelectedValue },
+                           new SqlParameter() { ParameterName = "@AccountNo", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = ddlAccountNumber.SelectedValue },
+                            new SqlParameter() { ParameterName = "@Session", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = drpSessionfilters.SelectedValue });
+                    }
+                }
+                if (chkstatus.Checked == false)
+                {
+                    if (cmbResident.SelectedValue == "0")
+                    {
+                        dsStatement = sqlobj.ExecuteSP("SP_GetUnbilledTxnsFilter",
+                           new SqlParameter() { ParameterName = "@iMode", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Int, Value = 1 },
+                           new SqlParameter() { ParameterName = "@FromDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpfordate.SelectedDate },
+                           new SqlParameter() { ParameterName = "@ToDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpuntildate.SelectedDate },
+                           new SqlParameter() { ParameterName = "@RTRSN", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Decimal, Value = 1 },
+                           new SqlParameter() { ParameterName = "@AccountNo", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = "NA" },
+                            new SqlParameter() { ParameterName = "@Session", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = drpSessionfilters.SelectedValue });
+
+                    }
+                    else if (cmbResident.SelectedValue != "0")
+                    {
+                        dsStatement = sqlobj.ExecuteSP("SP_GetUnbilledTxnsFilter",
+                           new SqlParameter() { ParameterName = "@iMode", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Int, Value = 2 },
+                           new SqlParameter() { ParameterName = "@FromDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpfordate.SelectedDate },
+                           new SqlParameter() { ParameterName = "@ToDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpuntildate.SelectedDate },
+                           new SqlParameter() { ParameterName = "@RTRSN", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Decimal, Value = cmbResident.SelectedValue },
+                           new SqlParameter() { ParameterName = "@AccountNo", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = ddlAccountNumber.SelectedValue },
+                            new SqlParameter() { ParameterName = "@Session", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = drpSessionfilters.SelectedValue });
+                    }
+                }
+                if (dsStatement.Tables[0].Rows.Count > 0)
+                {
+                    if (cmbResident.SelectedValue == "0") { ReportListAll.DataSource = dsStatement.Tables[0]; ReportListAll.DataBind(); }
+                    else { ReportList.DataSource = dsStatement.Tables[0]; ReportList.DataBind(); }
+                }
+                else
+                {
+                    if (cmbResident.SelectedValue == "0") { ReportListAll.DataSource = string.Empty; ReportListAll.DataBind(); }
+                    else { ReportList.DataSource = string.Empty; ReportList.DataBind(); }
+                }
             }
         }
         catch (Exception ex)
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('"+ex.Message.ToString()+"');", true);
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('" + ex.Message.ToString() + "');", true);
         }
     }
 }

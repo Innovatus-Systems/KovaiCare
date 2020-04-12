@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Text;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Telerik.Web.UI;
@@ -64,7 +61,7 @@ public partial class Confirmation : System.Web.UI.Page
             dtDate.SelectedDate = DateTime.Now;
             dtDate.MaxDate = DateTime.Now;
             //LoadSession();
-            chkSplSess_CheckedChanged(sender,e);
+            chkSplSess_CheckedChanged(sender, e);
             LoadResident();
             LoadDinNts();
             LoadTitle();
@@ -104,8 +101,8 @@ public partial class Confirmation : System.Web.UI.Page
     }
     private void LoadSession()
     {
-        
-           DataSet dsFetchSE = new DataSet();
+
+        DataSet dsFetchSE = new DataSet();
         try
         {
             dsFetchSE = sqlobj.ExecuteSP("SP_ConfirmDinersSessionFilter",
@@ -143,7 +140,7 @@ public partial class Confirmation : System.Web.UI.Page
             drpSession.DataTextField = "SName";
             drpSession.DataBind();
             drpSession.Items.Insert(0, new ListItem("--Select--", "0"));
-            dsFetchSE.Dispose();            
+            dsFetchSE.Dispose();
         }
         catch (Exception ex)
         {
@@ -182,7 +179,7 @@ public partial class Confirmation : System.Web.UI.Page
                 rdCount.DataSource = ds.Tables[0];
                 rdCount.DataBind();
             }
-            else 
+            else
             {
                 rdCount.DataSource = string.Empty;
                 rdCount.DataBind();
@@ -201,7 +198,7 @@ public partial class Confirmation : System.Web.UI.Page
         {
             if (chkFrmApp.Checked == true)
             {
- 
+
                 dtDate.SelectedDate = DateTime.Now;
                 dtDate.Enabled = false;
                 rgConfir.Visible = false;
@@ -213,7 +210,7 @@ public partial class Confirmation : System.Web.UI.Page
 
 
                 dsResd = sqlobj.ExecuteSP("SP_GenDropDownList",
-                new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 18 },              
+                new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 18 },
                 new SqlParameter() { ParameterName = "@DinedDate", SqlDbType = SqlDbType.DateTime, Value = dtDate.SelectedDate },
                 new SqlParameter() { ParameterName = "@DinedSession", SqlDbType = SqlDbType.NVarChar, Value = drpSession.SelectedValue.ToString() });
             }
@@ -225,7 +222,7 @@ public partial class Confirmation : System.Web.UI.Page
                 rgDinNts.Visible = true;
                 drpName.Enabled = true;
                 ViewState["DEVICE"] = "W";
-              
+
 
                 dsResd = sqlobj.ExecuteSP("SP_GenDropDownList",
                     new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 16 });
@@ -254,7 +251,7 @@ public partial class Confirmation : System.Web.UI.Page
         DataSet dsResd = new DataSet();
         try
         {
-            if(chkFrmApp.Checked==true)
+            if (chkFrmApp.Checked == true)
             {
 
                 //************
@@ -268,9 +265,10 @@ public partial class Confirmation : System.Web.UI.Page
                 new SqlParameter() { ParameterName = "@DinedDate", SqlDbType = SqlDbType.DateTime, Value = dtDate.SelectedDate },
                 new SqlParameter() { ParameterName = "@DinedSession", SqlDbType = SqlDbType.NVarChar, Value = drpSession.SelectedValue.ToString() });
             }
-            else { 
-            dsResd = sqlobj.ExecuteSP("SP_GenDropDownList",
-                new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 16 });
+            else
+            {
+                dsResd = sqlobj.ExecuteSP("SP_GenDropDownList",
+                    new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 16 });
             }
             drpName.DataSource = dsResd.Tables[0];
             drpName.DataValueField = "RTRSN";
@@ -290,9 +288,9 @@ public partial class Confirmation : System.Web.UI.Page
         }
     }
 
-   
 
-    
+
+
     private void LoadDinNts()
     {
         try
@@ -321,7 +319,7 @@ public partial class Confirmation : System.Web.UI.Page
     {
         try
         {
-            
+
             if (drpSession.SelectedValue == "0")
             {
                 lbltiming.Visible = false;
@@ -356,7 +354,7 @@ public partial class Confirmation : System.Web.UI.Page
                   );
                 if (ds.Tables[1].Rows.Count > 0)
                 {
-                    ViewState["SessCd"]   = ds.Tables[1].Rows[0]["SName"].ToString();                   
+                    ViewState["SessCd"] = ds.Tables[1].Rows[0]["SName"].ToString();
                 }
                 else
                 {
@@ -418,8 +416,8 @@ public partial class Confirmation : System.Web.UI.Page
     {
         try
         {
-           
-            if (drpName.SelectedValue=="0")
+
+            if (drpName.SelectedValue == "0")
             {
                 lbltiming.Visible = false;
                 lblTime.Visible = false;
@@ -465,7 +463,7 @@ public partial class Confirmation : System.Web.UI.Page
                 {
                     btnPost.Visible = true;
                     drpName.SelectedValue = "0";
-                    lblRDetails.Visible = false; 
+                    lblRDetails.Visible = false;
                     rgConfir.DataSource = string.Empty;
                     rgConfir.DataBind();
                     ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('You have already done the confirmation for this particular date and session for the selected resident.');", true);
@@ -473,8 +471,8 @@ public partial class Confirmation : System.Web.UI.Page
                 }
                 else
                 {
-                    DataSet dsGrid=new DataSet();
-                    if(chkFrmApp.Checked==true)
+                    DataSet dsGrid = new DataSet();
+                    if (chkFrmApp.Checked == true)
                     {
                         //***************
                         //dsGrid = sqlobj.ExecuteSP("DConfirmation", new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 8 },
@@ -496,7 +494,7 @@ public partial class Confirmation : System.Web.UI.Page
                          new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.NVarChar, Value = drpName.SelectedValue.ToString() });
                         ViewState["DEVICE"] = "W";
                     }
-                    
+
                     if (dsGrid.Tables[0].Rows.Count > 0)
                     {
                         dtct = dsGrid.Tables[0];
@@ -531,7 +529,7 @@ public partial class Confirmation : System.Web.UI.Page
                     ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please Select Session.');", true);
                     return;
                 }
-                
+
                 if (drpName.SelectedValue != "0")
                 {
                     DataSet dsDetails = sqlobj.ExecuteSP("DConfirmation", new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 1 },
@@ -580,7 +578,7 @@ public partial class Confirmation : System.Web.UI.Page
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('" + ex.Message.ToString() + "');", true);
         }
     }
-    protected void  btnSave_Click(object sender, EventArgs e)
+    protected void btnSave_Click(object sender, EventArgs e)
     {
         try
         {
@@ -601,7 +599,7 @@ public partial class Confirmation : System.Web.UI.Page
 
                 if (dsResd.Tables[0].Rows.Count > 0)
                 {
-                    
+
 
                     for (int i = 0; i < dsResd.Tables[0].Rows.Count; i++)
                     {
@@ -617,7 +615,7 @@ public partial class Confirmation : System.Web.UI.Page
                             new SqlParameter() { ParameterName = "@DinedDate", SqlDbType = SqlDbType.DateTime, Value = dtDate.SelectedDate },
                             new SqlParameter() { ParameterName = "@Session", SqlDbType = SqlDbType.Char, Value = drpSession.SelectedValue.ToString() });
 
-                        string MAddlBooked =  dsGrid.Tables[0].Rows[0]["Diners"].ToString();
+                        string MAddlBooked = dsGrid.Tables[0].Rows[0]["Diners"].ToString();
                         string MAlGuestBooked = dsGrid.Tables[0].Rows[0]["Guest"].ToString();
                         string MAddlHomeService = dsGrid.Tables[0].Rows[0]["HS"].ToString();
 
@@ -639,10 +637,10 @@ public partial class Confirmation : System.Web.UI.Page
                         decimal BkGt = Convert.ToDecimal(Convert.ToDecimal(MAddlBooked) + Convert.ToDecimal(MAlGuestBooked));
 
 
-                        DataSet ds = sqlobj.ExecuteSP("DConfirmation", 
-                            new SqlParameter(){ ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 5 },
-                            new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.NVarChar, Value = dsResd.Tables[0].Rows[i]["RTRSN"].ToString()});
-                        DataSet dsTxnCd = sqlobj.ExecuteSP("DConfirmation", 
+                        DataSet ds = sqlobj.ExecuteSP("DConfirmation",
+                            new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 5 },
+                            new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.NVarChar, Value = dsResd.Tables[0].Rows[i]["RTRSN"].ToString() });
+                        DataSet dsTxnCd = sqlobj.ExecuteSP("DConfirmation",
                             new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 6 },
                             new SqlParameter() { ParameterName = "@TxnCd", SqlDbType = SqlDbType.NVarChar, Value = "DI" });
 
@@ -662,7 +660,7 @@ public partial class Confirmation : System.Web.UI.Page
 
                         }
 
-                        decimal amount = Convert.ToDecimal((Convert.ToDecimal(MAddlBooked) * Convert.ToDecimal(DRate)) + (Convert.ToDecimal(MAlGuestBooked) * Convert.ToDecimal(GRate)) + (Convert.ToDecimal(MAddlHomeService) * (Convert.ToDecimal(HRate) + Convert.ToDecimal(DRate)) ));
+                        decimal amount = Convert.ToDecimal((Convert.ToDecimal(MAddlBooked) * Convert.ToDecimal(DRate)) + (Convert.ToDecimal(MAlGuestBooked) * Convert.ToDecimal(GRate)) + (Convert.ToDecimal(MAddlHomeService) * (Convert.ToDecimal(HRate) + Convert.ToDecimal(DRate))));
                         decimal CGSTPCNT = Convert.ToDecimal((Convert.ToDecimal(MAddlBooked) * Convert.ToDecimal(DCTax)) + (Convert.ToDecimal(MAlGuestBooked) * Convert.ToDecimal(GCTax)) + (Convert.ToDecimal(MAddlHomeService) * Convert.ToDecimal(HCTax)));
                         decimal SGSTPCNT = Convert.ToDecimal((Convert.ToDecimal(MAddlBooked) * Convert.ToDecimal(DSTax)) + (Convert.ToDecimal(MAlGuestBooked) * Convert.ToDecimal(GSTax)) + (Convert.ToDecimal(MAddlHomeService) * Convert.ToDecimal(HSTax)));
                         decimal amount2 = amount + CGSTPCNT + SGSTPCNT;
@@ -672,7 +670,7 @@ public partial class Confirmation : System.Web.UI.Page
                         ViewState["Count"] = Convert.ToInt32(ViewState["Count"]) + 1;
                         string date = Convert.ToString(Convert.ToDateTime(dtDate.SelectedDate).ToString("dd"));
                         string Sess = ViewState["SessCd"].ToString();
-                            
+
 
                         int rowcount = Convert.ToInt32(ViewState["Count"]);
                         dr["RSN"] = rowcount;
@@ -704,7 +702,7 @@ public partial class Confirmation : System.Web.UI.Page
 
                     glTransactions.DataSource = ViewState["dt"];
                     glTransactions.DataBind();
-                   
+
 
                     if (glTransactions.Items.Count > 0)
                     {
@@ -873,7 +871,7 @@ public partial class Confirmation : System.Web.UI.Page
             }
 
 
-            
+
         }
         catch (Exception ex)
         {
@@ -884,13 +882,13 @@ public partial class Confirmation : System.Web.UI.Page
     {
         drpName.SelectedValue = "0";
         lblRDetails.Visible = false;
-       // lblDRate.Text = "-";
+        // lblDRate.Text = "-";
         lblDCalc.Text = "-";
         lblDTol.Text = "-";
         //lblGRate.Text = "-";
         lblGCalc.Text = "-";
         lblGTol.Text = "-";
-       // lblHRate.Text = "-";
+        // lblHRate.Text = "-";
         lblHCalc.Text = "-";
         lblHTol.Text = "-";
         lblTotal.Text = "-";
@@ -904,7 +902,7 @@ public partial class Confirmation : System.Web.UI.Page
         //lblhexcode.Visible = false;
         //dtDate.Enabled = true;
         //drpSession.Enabled = true;      
-        
+
         rgConfir.Visible = true;
         rdCount.Visible = true;
         rgDinNts.Visible = true;
@@ -972,14 +970,14 @@ public partial class Confirmation : System.Web.UI.Page
                            new SqlParameter() { ParameterName = "@DATE", SqlDbType = SqlDbType.Date, Value = dtDate.SelectedDate },
                            new SqlParameter() { ParameterName = "@DinedSession", SqlDbType = SqlDbType.NVarChar, Value = drpSession.SelectedValue }
                             );
-                   
+
                     DataSet dsUpdateTotalCount = sqlobj.ExecuteSP("SP_UPDATEDINERSCOUNT",
                            new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Decimal, Value = 1 },
                            new SqlParameter() { ParameterName = "@DATE", SqlDbType = SqlDbType.Date, Value = dtDate.SelectedDate },
                            new SqlParameter() { ParameterName = "@SESSION", SqlDbType = SqlDbType.NVarChar, Value = drpSession.SelectedValue },
                            new SqlParameter() { ParameterName = "@REG", SqlDbType = SqlDbType.Decimal, Value = Convert.ToDecimal(reg) },
                            new SqlParameter() { ParameterName = "@GST", SqlDbType = SqlDbType.Decimal, Value = Convert.ToDecimal(gst) },
-                           new SqlParameter() { ParameterName = "@HD", SqlDbType = SqlDbType.Decimal, Value = Convert.ToDecimal(hd) }                          
+                           new SqlParameter() { ParameterName = "@HD", SqlDbType = SqlDbType.Decimal, Value = Convert.ToDecimal(hd) }
                            );
                 }
                 chkFrmApp.Checked = false;
@@ -998,9 +996,9 @@ public partial class Confirmation : System.Web.UI.Page
             lblGRate.Text = "-";
             lblHRate.Text = "-";
             lblDCalc.Text = "-";
-            lblDTol.Text = "-";           
+            lblDTol.Text = "-";
             lblGCalc.Text = "-";
-            lblGTol.Text = "-";            
+            lblGTol.Text = "-";
             lblHCalc.Text = "-";
             lblHTol.Text = "-";
             lblTotal.Text = "-";
@@ -1020,7 +1018,7 @@ public partial class Confirmation : System.Web.UI.Page
             btnPost.Visible = false;
 
             dt.Clear();
- 
+
         }
         catch (Exception ex)
         {
@@ -1056,7 +1054,7 @@ public partial class Confirmation : System.Web.UI.Page
     protected void dtDate_SelectedDateChanged(object sender, Telerik.Web.UI.Calendar.SelectedDateChangedEventArgs e)
     {
         string date = DateTime.Now.Date.ToString();
-        if (dtDate.SelectedDate<Convert.ToDateTime(date))
+        if (dtDate.SelectedDate < Convert.ToDateTime(date))
         {
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('You have selected past date.');", true);
         }
@@ -1093,7 +1091,7 @@ public partial class Confirmation : System.Web.UI.Page
         TextBox ddlBooked = (TextBox)item.FindControl("ddlDiners");
         TextBox ddlGuestBooked = (TextBox)item.FindControl("ddlGuest");
         TextBox ddlHomeService = (TextBox)item.FindControl("ddlHomeDly");
-        if (ddlBooked.Text=="")
+        if (ddlBooked.Text == "")
         {
             ddlBooked.Text = "0";
         }
@@ -1131,7 +1129,7 @@ public partial class Confirmation : System.Web.UI.Page
         if (Convert.ToInt32(dsGrid.Tables[0].Rows[0]["Diners"].ToString()) < Convert.ToInt32(ddlBooked.Text))
         {
             diff = (Convert.ToInt32(ddlBooked.Text) - Convert.ToInt32(dsGrid.Tables[0].Rows[0]["Diners"].ToString())).ToString();
-            ddlBooked.Text= Convert.ToString(dsGrid.Tables[0].Rows[0]["Diners"].ToString());
+            ddlBooked.Text = Convert.ToString(dsGrid.Tables[0].Rows[0]["Diners"].ToString());
             ddlGuestBooked.Text = (Convert.ToInt32(diff) + Convert.ToInt32(ddlGuestBooked.Text)).ToString();
         }
         //lblDCalc.Text = ddlBooked.Text + " X " + DRate + " = ";
@@ -1182,7 +1180,7 @@ public partial class Confirmation : System.Web.UI.Page
         {
             ddlHomeService.Text = "0";
         }
-        if(Convert.ToDecimal(ddlGuestBooked.Text)>10)
+        if (Convert.ToDecimal(ddlGuestBooked.Text) > 10)
         {
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Guest count is more then 10.Please Check the count.Not allow to enter more then 10 count.');", true);
             ddlGuestBooked.Text = "0";
@@ -1209,7 +1207,7 @@ public partial class Confirmation : System.Web.UI.Page
             diff = (Convert.ToInt32(ddlBooked.Text) - Convert.ToInt32(dsGrid.Tables[0].Rows[0]["Diners"].ToString())).ToString();
             ddlGuestBooked.Text = (Convert.ToInt32(diff) + Convert.ToInt32(ddlGuestBooked.Text)).ToString();
         }
-       
+
         //lblDCalc.Text = ddlBooked.Text + " X " + DRate + " = ";
         //lblGCalc.Text = ddlGuestBooked.Text + " X " + GRate + " = ";
         //lblHCalc.Text = ddlHomeService.Text + " X " + HRate + " = ";
@@ -1314,7 +1312,7 @@ public partial class Confirmation : System.Web.UI.Page
         else
         {
             LoadResident();
-        }       
+        }
 
     }
 
@@ -1322,7 +1320,7 @@ public partial class Confirmation : System.Web.UI.Page
     {
         try
         {
-           if(chkSplSess.Checked==true)
+            if (chkSplSess.Checked == true)
             {
                 LoadsplSession();
             }
@@ -1331,7 +1329,7 @@ public partial class Confirmation : System.Web.UI.Page
                 LoadSession();
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Something went wong with SPL. Session.');", true);
         }

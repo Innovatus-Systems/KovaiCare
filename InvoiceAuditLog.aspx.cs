@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using iTextSharp.text;
+using iTextSharp.text.html.simpleparser;
+using iTextSharp.text.pdf;
+using System;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
-using System.IO;
-using System.Net.Mail;
-using System.Data.SqlClient;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.html.simpleparser;
-using System.Configuration;
-using System.Text;
 using Telerik.Web.UI;
-using System.Threading;
 public partial class InvoiceAuditLog : System.Web.UI.Page
 {
     SqlProcsNew sqlobj = new SqlProcsNew();
@@ -270,7 +267,7 @@ public partial class InvoiceAuditLog : System.Web.UI.Page
                 BranchName = dsDetails.Tables[2].Rows[0]["BranchName"].ToString();
                 AccountNo = dsDetails.Tables[2].Rows[0]["AccountNo"].ToString();
                 IFSCCode = dsDetails.Tables[2].Rows[0]["IFSCCode"].ToString();
-                ReprintInvoice(dsDetails.Tables[0], dsDetails.Tables[1], dsDetails.Tables[3]);                
+                ReprintInvoice(dsDetails.Tables[0], dsDetails.Tables[1], dsDetails.Tables[3]);
                 HttpContext.Current.ApplicationInstance.CompleteRequest();
             }
             else
@@ -335,7 +332,7 @@ public partial class InvoiceAuditLog : System.Web.UI.Page
                         invNo = dtservice.Rows[0]["InvoiceNo"].ToString();
                         string NARATION = dtservice.Rows[0]["Particulars"].ToString();
                         StringBuilder sb1 = new StringBuilder();
-                
+
                         sb1.Append("<table width='100%' padding='-5PX'  style='font-family:Verdana;'>");
                         sb1.Append("<tr><td align='Right' colspan='4' style='font-size:8px;'>Copy</td></tr></table>");
                         int Jai = 0;
@@ -345,25 +342,25 @@ public partial class InvoiceAuditLog : System.Web.UI.Page
                         sb1.Append("GSTIN/UIN : " + gstin + ", State Name : Tamil Nadu, Code : 33 <br /></td></tr></table>");
                         sb1.Append("<table align=center width=100% ><tr><td align=center><b>INVOICE</b></td></tr></table>");
 
-                        sb1.Append("<table align=center border=0.2 bordercolor=gray>");                       
+                        sb1.Append("<table align=center border=0.2 bordercolor=gray>");
                         sb1.Append("<tr><td width=50%><b>To,</b><br /> " + Villa + " - " + Resident + "<br />" + Adress + "<br />" + Cty + "<br /> Mobile No.: " + MobileNo + "<br /> Email ID: " + EmailId + "<br /><br /> </td>");
-                        sb1.Append("<td width=25% valign=top>Invoice No.<br /><b>" + invNo + "</b></td><td width=25% valign=top>Dated<br /><b> " + printedOn.Remove(11) + " </b></td></tr></table>");                        
+                        sb1.Append("<td width=25% valign=top>Invoice No.<br /><b>" + invNo + "</b></td><td width=25% valign=top>Dated<br /><b> " + printedOn.Remove(11) + " </b></td></tr></table>");
 
-                        sb1.Append("<table align=center border=0.2 bordercolor=gray>");                        
+                        sb1.Append("<table align=center border=0.2 bordercolor=gray>");
 
                         sb1.Append("<tr><th align=center width=5%><b>Sl No.</b></th> <th align=center width=45%><b>Description of Goods and Services</b></th> <th align=center width=15%><b>HSN/SAC</b></th> <th align=center width=10%><b>Rate %</b></th>" +
                             "<th align=center width=25%><b>Amount</b></th> </tr>");
 
                         foreach (DataRow row in dtservice.Rows)
                         {
-                            Jai = Jai + 1;                           
+                            Jai = Jai + 1;
 
                             sb1.Append("<tr><td align=center width=5%>" + Jai + "</td><td align=right width=45%>" + row["Particulars"].ToString() + "</td><td align=center width=15%>" + row["HSN/SAC"].ToString() + "</td>" +
                                 "<td align=center width=10%>" + row["Rate"].ToString() + "</td>" +
                                     "<td align=right width=25%>" + row["TaxableVlu"].ToString() + "</td></tr>");
                         }
                         object sumObject;
-                        sumObject = dtservice.Compute("Sum(TaxableVlu)", string.Empty);                        
+                        sumObject = dtservice.Compute("Sum(TaxableVlu)", string.Empty);
                         sb1.Append("<tr><td align=center width=5%></td><td align=right width=45%><b>Total</b></td><td align=left width=15%></td><td align=left width=10%></td><td align=right width=25%><b>" + sumObject.ToString() + "</b></td></tr>");
                         sb1.Append("<tr><td colspan=4>Amount Chargeable (in words)<br /><b> Rupees " + ConvertToWords(sumObject.ToString()) + "</b></td><td align=right><i> E. & O.E </i></td></tr>");
                         sb1.Append("<tr  bgcolor=\"#EEE8AA\" color=\"#8B4513\"> <td></td><td></td><td></td><td></td><td></td></tr></table>");
@@ -405,8 +402,8 @@ public partial class InvoiceAuditLog : System.Web.UI.Page
 
                         StringReader sr2 = new StringReader(sb1.ToString());
 
-                        string FileName1 ="Copy - "+ invNo + "_" + Villa + "_" + Resident + ".pdf";
-                        
+                        string FileName1 = "Copy - " + invNo + "_" + Villa + "_" + Resident + ".pdf";
+
                         //Document pdfDoc1 = new Document(PageSize.A4, 60f, 30f, 10f, 5f);
                         Document pdfDoc2 = new Document(PageSize.A4, 60f, 30f, 10f, 5f);
                         HttpContext.Current.Response.Clear();
@@ -460,7 +457,7 @@ public partial class InvoiceAuditLog : System.Web.UI.Page
         try
         {
             DataSet dsUpdate = sqlobj.ExecuteSP("SP_AdHocInvoice",
-                 new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 10 },                 
+                 new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 10 },
                   new SqlParameter() { ParameterName = "@invNo", SqlDbType = SqlDbType.NVarChar, Value = invNo },
                    new SqlParameter() { ParameterName = "@File", SqlDbType = SqlDbType.NVarChar, Value = FileName },
                     new SqlParameter() { ParameterName = "@C_BY", SqlDbType = SqlDbType.NVarChar, Value = Session["UserID"].ToString() }
@@ -761,7 +758,7 @@ public partial class InvoiceAuditLog : System.Web.UI.Page
     protected void gvLog_SortCommand(object sender, GridSortCommandEventArgs e)
     {
         LoadAccountMaster();
-    }   
+    }
 
     protected void gvLog_ItemEvent(object sender, GridItemEventArgs e)
     {

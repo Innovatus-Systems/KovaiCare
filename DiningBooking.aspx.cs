@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
+using System.Web.UI.WebControls;
 
 public partial class DiningBooking : System.Web.UI.Page
 {
@@ -35,12 +30,12 @@ public partial class DiningBooking : System.Web.UI.Page
 
                 LoadSession();
 
-                LoadResident(Convert.ToInt32(ddlforwhom.SelectedValue),1);
+                LoadResident(Convert.ToInt32(ddlforwhom.SelectedValue), 1);
 
             }
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -116,30 +111,30 @@ public partial class DiningBooking : System.Web.UI.Page
         }
     }
 
-    private void LoadResident(int Type,int ResidentType)
+    private void LoadResident(int Type, int ResidentType)
     {
         try
         {
 
-            
-           DataSet dsFetchSE = sqlobj.ExecuteSP("SP_GetResidentType",
-            new SqlParameter() { ParameterName = "@Mode", SqlDbType = SqlDbType.Int, Value = Type },
-            new SqlParameter() { ParameterName = "@Type", SqlDbType = SqlDbType.Int, Value = ResidentType },
-            new SqlParameter() { ParameterName = "@Date", SqlDbType = SqlDbType.DateTime, Value = dtpDiners.SelectedDate },
-            new SqlParameter() { ParameterName = "@SessionCode", SqlDbType = SqlDbType.NVarChar, Value = ddlDinersSession.SelectedValue }
-            
-            );
+
+            DataSet dsFetchSE = sqlobj.ExecuteSP("SP_GetResidentType",
+             new SqlParameter() { ParameterName = "@Mode", SqlDbType = SqlDbType.Int, Value = Type },
+             new SqlParameter() { ParameterName = "@Type", SqlDbType = SqlDbType.Int, Value = ResidentType },
+             new SqlParameter() { ParameterName = "@Date", SqlDbType = SqlDbType.DateTime, Value = dtpDiners.SelectedDate },
+             new SqlParameter() { ParameterName = "@SessionCode", SqlDbType = SqlDbType.NVarChar, Value = ddlDinersSession.SelectedValue }
+
+             );
 
 
             ddlByDoorNo.Items.Clear();
 
-            if (dsFetchSE.Tables[0].Rows.Count>0)
+            if (dsFetchSE.Tables[0].Rows.Count > 0)
             {
 
-            ddlByDoorNo.DataSource = dsFetchSE.Tables[0];
-            ddlByDoorNo.DataValueField = "rtrsn";
-            ddlByDoorNo.DataTextField = "Name";
-            ddlByDoorNo.DataBind();
+                ddlByDoorNo.DataSource = dsFetchSE.Tables[0];
+                ddlByDoorNo.DataValueField = "rtrsn";
+                ddlByDoorNo.DataTextField = "Name";
+                ddlByDoorNo.DataBind();
             }
 
             ddlByDoorNo.Items.Insert(0, new ListItem("--Select--", "0"));
@@ -204,7 +199,7 @@ public partial class DiningBooking : System.Web.UI.Page
                 ddlGuest.SelectedValue = dsFetchSE.Tables[0].Rows[0]["GuestBooked"].ToString();
 
 
-                hfregularcount.Value = dsFetchSE.Tables[0].Rows[0]["Booked"].ToString(); 
+                hfregularcount.Value = dsFetchSE.Tables[0].Rows[0]["Booked"].ToString();
             }
 
             if (dsFetchSE.Tables[1].Rows.Count > 0)
@@ -232,40 +227,40 @@ public partial class DiningBooking : System.Web.UI.Page
 
             DataSet dsCharge = sqlobj.ExecuteSP("SP_GetSessionCharges",
                  new SqlParameter() { ParameterName = "@SessionCode", SqlDbType = SqlDbType.NVarChar, Value = ddlDinersSession.SelectedValue });
-           
-             if (dsCharge.Tables[0].Rows.Count >0)
-             {
 
-                 decimal dRegularRate = 0;
+            if (dsCharge.Tables[0].Rows.Count > 0)
+            {
 
-                 if (lbldiningmsg.Text == "")
-                 {
+                decimal dRegularRate = 0;
 
-                     dRegularRate = Convert.ToDecimal(dsCharge.Tables[0].Rows[0]["RegularRate"].ToString());
+                if (lbldiningmsg.Text == "")
+                {
 
-                     dRegularRate = dRegularRate * Convert.ToInt32(ddlDiner.SelectedValue);
-                 }
+                    dRegularRate = Convert.ToDecimal(dsCharge.Tables[0].Rows[0]["RegularRate"].ToString());
 
-
-                 decimal dGuestRate = Convert.ToDecimal(dsCharge.Tables[0].Rows[0]["GuestRate"].ToString());
-
-                 dGuestRate = dGuestRate * Convert.ToInt32(ddlGuest.SelectedValue);
+                    dRegularRate = dRegularRate * Convert.ToInt32(ddlDiner.SelectedValue);
+                }
 
 
-                 if (lbldiningmsg.Text == "")
-                 {
-                     lblamtcharged.Text = "Amount to be charged: Rs." + Convert.ToString(dRegularRate + dGuestRate);
+                decimal dGuestRate = Convert.ToDecimal(dsCharge.Tables[0].Rows[0]["GuestRate"].ToString());
 
-                 }
-                 else
-                 {
-                     lblamtcharged.Text = "Amount to be charged: Rs." + Convert.ToString(dRegularRate + dGuestRate);
-                 }
+                dGuestRate = dGuestRate * Convert.ToInt32(ddlGuest.SelectedValue);
 
 
-             }
+                if (lbldiningmsg.Text == "")
+                {
+                    lblamtcharged.Text = "Amount to be charged: Rs." + Convert.ToString(dRegularRate + dGuestRate);
 
-             dsCharge.Dispose();
+                }
+                else
+                {
+                    lblamtcharged.Text = "Amount to be charged: Rs." + Convert.ToString(dRegularRate + dGuestRate);
+                }
+
+
+            }
+
+            dsCharge.Dispose();
 
         }
         catch (Exception ex)
@@ -291,7 +286,7 @@ public partial class DiningBooking : System.Web.UI.Page
 
                     dRegularRate = dRegularRate * Convert.ToInt32(ddlDiner.SelectedValue);
                 }
-                
+
 
                 decimal dGuestRate = Convert.ToDecimal(dsCharge.Tables[0].Rows[0]["GuestRate"].ToString());
 
@@ -388,8 +383,8 @@ public partial class DiningBooking : System.Web.UI.Page
                        new SqlParameter() { ParameterName = "@TotalActual", SqlDbType = SqlDbType.NVarChar, Value = Convert.ToInt32(ddlDiner.SelectedValue) + Convert.ToInt32(ddlGuest.SelectedValue) }
                        );
 
-                
-                
+
+
                 WebMsgBox.Show("Dining Booking confirmed for " + ddlByDoorNo.SelectedItem.Text + " on " + dtpDiners.SelectedDate.Value.ToString("dd-MMM-yyyy") + " Session :" + ddlDinersSession.SelectedItem.Text);
 
                 Clear();
@@ -414,9 +409,9 @@ public partial class DiningBooking : System.Web.UI.Page
             lblamtcharged.Text = "";
             lbldiningmsg.Text = "";
 
-           
+
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
 
@@ -448,7 +443,7 @@ public partial class DiningBooking : System.Web.UI.Page
                 LoadResident(Convert.ToInt32(ddlforwhom.SelectedValue), 1);
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }

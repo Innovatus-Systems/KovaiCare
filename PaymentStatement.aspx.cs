@@ -1,17 +1,8 @@
-﻿using iTextSharp.text;
-using iTextSharp.text.html.simpleparser;
-using iTextSharp.text.pdf;
+﻿using ClsPaymentGatewayDet;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using Telerik.Web.UI;
-using ClsPaymentGatewayDet;
 
 public partial class PaymentStatement : System.Web.UI.Page
 {
@@ -26,7 +17,7 @@ public partial class PaymentStatement : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-            
+
             }
 
             LoadMonth();
@@ -75,11 +66,11 @@ public partial class PaymentStatement : System.Web.UI.Page
             payDetails.tilldate = tilldate.ToString("yyyy-MM-dd");
             ds = payDetails.GetDataAmtTxn();
 
-          
+
 
             rdgTxns.DataSource = ds.Tables[0];
             rdgTxns.DataBind();
-            if(ds.Tables[1].Rows.Count>0)
+            if (ds.Tables[1].Rows.Count > 0)
             {
                 if (!string.IsNullOrEmpty(Convert.ToString(ds.Tables[1].Rows[0]["OPENBAL"])))
                     LblOldBalance.Text = Math.Round(Convert.ToDouble(ds.Tables[1].Rows[0]["OPENBAL"])).ToString();
@@ -95,7 +86,7 @@ public partial class PaymentStatement : System.Web.UI.Page
                 else
                     LblNewBalance.Text = "0";
             }
-            if(ds.Tables[2].Rows.Count>0)
+            if (ds.Tables[2].Rows.Count > 0)
             {
                 LblInvoiceTo.Text = ds.Tables[2].Rows[0]["InvoiceTo"].ToString();
                 LblBillingAddress.Text = ds.Tables[2].Rows[0]["BillingAddress"].ToString();
@@ -119,7 +110,7 @@ public partial class PaymentStatement : System.Web.UI.Page
 
     protected void BtnHome_Click(object sender, EventArgs e)
     {
-        if(Session["HomePage"]!=null)
+        if (Session["HomePage"] != null)
             Response.Redirect(Session["HomePage"].ToString());
     }
 

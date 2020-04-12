@@ -45,6 +45,9 @@
             color: white;
             font-weight: bold;
         }
+        .auto-style1 {
+            height: 32px;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
@@ -54,7 +57,7 @@
 
                 <table style="width: 100%;" align="center">
                     <tr>
-                        <td align="center">
+                        <td align="center" class="auto-style1">
                             <%--<asp:LinkButton ID="lnktitle" runat="server" Font-Names="verdana" Font-Size="Medium" ForeColor="Green" Font-Bold="true" Font-Underline="false"></asp:LinkButton>--%>
                             <asp:Label ID="lnktitle" runat="server" Font-Names="verdana" Font-Size="Medium" ForeColor="Green" Font-Bold="true"></asp:Label>
                         </td>

@@ -1,26 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.IO;
+using System.Net;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Collections;
-using System.Configuration;
-using System.Data;
-using System.Web.Security;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml.Linq;
-using System.Data.SqlClient;
 using Telerik.Web.UI;
-using System.IO;
-using System.Text;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.html.simpleparser;
-using System.IO;
-using System.Globalization;
-using System.Net;
 
 public partial class TransactionLevelInd : System.Web.UI.Page
 {
@@ -70,7 +56,7 @@ public partial class TransactionLevelInd : System.Web.UI.Page
 
             dsDT = proc.ExecuteSP("GetServerDateTime");
 
-           
+
 
             DateTime dFirstDayOfThisMonth = Convert.ToDateTime(dsDT.Tables[0].Rows[0][0]).AddDays(-(DateTime.Today.Day - 1));
             var yr = Convert.ToDateTime(dsDT.Tables[0].Rows[0][0]).Year;
@@ -95,7 +81,7 @@ public partial class TransactionLevelInd : System.Web.UI.Page
             //YBToDate.SelectedDate = lastDay;
 
             LoadVillaNo();
-            
+
             //Session["ResidentRSN"] = Convert.ToInt32(ddlVillaNo.SelectedValue.ToString());
 
 
@@ -118,13 +104,13 @@ public partial class TransactionLevelInd : System.Web.UI.Page
 
             LoadGGeneralLedger();
 
-           
+
 
 
             rdoLedger.SelectedValue = "1";
 
             cmbResident.Visible = true;
-            cmbGeneral.Visible= false;
+            cmbGeneral.Visible = false;
             cmbGGenearl.Visible = false;
 
             //dtpCDate.SelectedDate = Convert.ToDateTime(dsDT.Tables[0].Rows[0][0]);
@@ -203,7 +189,7 @@ public partial class TransactionLevelInd : System.Web.UI.Page
             DataSet dsResident = new DataSet();
 
             dsResident = sqlobj.ExecuteSP("SP_GenDropDownList",
-                 new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 3});
+                 new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 3 });
             cmbGeneral.DataSource = dsResident.Tables[0];
             cmbGeneral.DataValueField = "AccountsMRSN";
             cmbGeneral.DataTextField = "RName";
@@ -217,7 +203,7 @@ public partial class TransactionLevelInd : System.Web.UI.Page
 
             dsResident.Dispose();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -257,17 +243,17 @@ public partial class TransactionLevelInd : System.Web.UI.Page
         try
         {
             DataSet dsCBP = null;
-            dsCBP = sqlobj.ExecuteSP("SP_GetCurrentBillingPeriod" );
-            
-        if (dsCBP.Tables[0].Rows.Count >0)
-        {
-            dtpCDate.MinDate = Convert.ToDateTime(dsCBP.Tables[0].Rows[0]["bpfrom"].ToString());
-            dtpCDate.MaxDate = DateTime.Now;
-        }
+            dsCBP = sqlobj.ExecuteSP("SP_GetCurrentBillingPeriod");
 
-       
+            if (dsCBP.Tables[0].Rows.Count > 0)
+            {
+                dtpCDate.MinDate = Convert.ToDateTime(dsCBP.Tables[0].Rows[0]["bpfrom"].ToString());
+                dtpCDate.MaxDate = DateTime.Now;
+            }
+
+
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -667,8 +653,8 @@ public partial class TransactionLevelInd : System.Web.UI.Page
                 decimal damount = Convert.ToDecimal(txtCAmount.Text);
                 decimal CAmount = Convert.ToDecimal(Session["BalAmount"]);
 
-                 if (ddlAmountType.SelectedValue == "2" || ddlAmountType.SelectedValue == "3")
-               
+                if (ddlAmountType.SelectedValue == "2" || ddlAmountType.SelectedValue == "3")
+
                 {
                     if (CAmount > 0)
                     {
@@ -690,11 +676,11 @@ public partial class TransactionLevelInd : System.Web.UI.Page
 
                     lblNewBalance.Text = "New Balance: " + NBAmount;
                 }
-                 else if (ddlAmountType.SelectedValue == "1" || ddlAmountType.SelectedValue == "4")
+                else if (ddlAmountType.SelectedValue == "1" || ddlAmountType.SelectedValue == "4")
                 {
                     if (CAmount > 0)
                     {
-                        CLAmount = CAmount - (damount );
+                        CLAmount = CAmount - (damount);
                     }
                     else
                     {
@@ -928,7 +914,7 @@ public partial class TransactionLevelInd : System.Web.UI.Page
                                       new SqlParameter() { ParameterName = "@BillingPeriod", SqlDbType = SqlDbType.NVarChar, Value = Session["CurrentBillingPeriod"].ToString() });
 
 
-                                if (TransType == "CR" && rdoLedger.SelectedValue == "1" )
+                                if (TransType == "CR" && rdoLedger.SelectedValue == "1")
                                 {
                                     if (dsRSN.Tables[0].Rows.Count > 0)
                                     {
@@ -967,7 +953,7 @@ public partial class TransactionLevelInd : System.Web.UI.Page
 
 
                 }
-                else if (rdoLedger.SelectedValue=="2")
+                else if (rdoLedger.SelectedValue == "2")
                 {
 
 
@@ -1057,12 +1043,12 @@ public partial class TransactionLevelInd : System.Web.UI.Page
 
 
                 }
-               
-                }
-            
-                
 
-            
+            }
+
+
+
+
 
         }
         catch (Exception ex)
@@ -3192,7 +3178,7 @@ public partial class TransactionLevelInd : System.Web.UI.Page
     {
         try
         {
-            if (rdoLedger.SelectedValue  == "1" )
+            if (rdoLedger.SelectedValue == "1")
             {
                 cmbResident.Visible = true;
                 cmbGeneral.Visible = false;
@@ -3219,7 +3205,7 @@ public partial class TransactionLevelInd : System.Web.UI.Page
             }
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -3247,13 +3233,13 @@ public partial class TransactionLevelInd : System.Web.UI.Page
                new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 2 },
                new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Int, Value = cmbResident.SelectedValue });
 
-           if (dsdeposit.Tables[0].Rows.Count >0)
-           {
-               lblAccountNo.Text = dsdeposit.Tables[0].Rows[0]["AccountNo"].ToString();
-           }
+            if (dsdeposit.Tables[0].Rows.Count > 0)
+            {
+                lblAccountNo.Text = dsdeposit.Tables[0].Rows[0]["AccountNo"].ToString();
+            }
 
-           dsdeposit.Dispose();
-            
+            dsdeposit.Dispose();
+
 
             DataSet dsTransactions = sqlobj.ExecuteSP("SP_LatestTransactions",
                 new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Decimal, Value = cmbResident.SelectedValue },
@@ -3278,7 +3264,7 @@ public partial class TransactionLevelInd : System.Web.UI.Page
 
             dsTransactions.Dispose();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -3299,7 +3285,7 @@ public partial class TransactionLevelInd : System.Web.UI.Page
 
 
             lblresidentname.Text = custname.ToString();
-           // lblDoorno.Text = doorno.ToString();
+            // lblDoorno.Text = doorno.ToString();
 
             DataSet dsdeposit = sqlobj.ExecuteSP("SP_GetDeposit",
               new SqlParameter() { ParameterName = "@iMode", SqlDbType = SqlDbType.Int, Value = 3 },
@@ -3335,7 +3321,7 @@ public partial class TransactionLevelInd : System.Web.UI.Page
             dsTransactions.Dispose();
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }

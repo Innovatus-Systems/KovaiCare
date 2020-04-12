@@ -6,8 +6,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script type="text/javascript" language="javascript">
         $(document).ready(function () {
-
-
             $(".allow_numeric").on("input", function (evt) {
                 var self = $(this);
                 self.val(self.val().replace(/[^\d].+/, ""));
@@ -34,17 +32,20 @@
                 return false;
             }
         }
+        
+        }
+        }
         function Validation() {
             debugger;
             var Res = document.getElementById('cmbResident').value;
             var Ser = document.getElementById('drpService').value;
             if (Res == "0" || Res == "" || Res == null)
             {               
-                alert('Oops! Plese select Resident.');
+                alert('Plese select Resident.');
                 return false;
             }
             else if (Ser == "0" || Ser == "" || Ser == null) {
-                alert('Oops! Plese select Invoice Type.');
+                alert('Plese select Invoice Type.');
                 return false;
             }
             else {
@@ -83,10 +84,7 @@
     height: 128px;
     width: 128px;
 }
-
     </style>
-    
-
     <style>
         .ddlstyle {
             /*display: block;*/
@@ -118,7 +116,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
      <div class="main_cnt">
         <div class="first_cnt">
-              <asp:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="UpPanel">
+<%--              <asp:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="UpPanel">
                 <ProgressTemplate>
                     <div class="Loadingdiv">
                         <div class="centerdiv">
@@ -127,7 +125,7 @@
                         </div>
                     </div>
                 </ProgressTemplate>
-            </asp:UpdateProgress>
+            </asp:UpdateProgress>--%>
             <asp:UpdatePanel ID="UpPanel" runat="server">
                 <ContentTemplate>
                     <div runat="server" style="width: 100%">
@@ -188,14 +186,19 @@
                                                        <td>
                                                         <asp:DropDownList ID="drpService" CssClass="ddlstyle"  AutoPostBack="true" runat="server" OnSelectedIndexChanged="drpService_SelectedIndexChanged" ></asp:DropDownList>&nbsp;&nbsp;&nbsp;
                                                  <asp:Button ID="btnSearch" runat="Server" Text="Search" CssClass="btn btn-success" OnClientClick="javascript:return Validation()"
-                                                    ToolTip="Click here to Search." ForeColor="White"  OnClick="btnSearch_Click"  />&nbsp;&nbsp;&nbsp;
-                                                            <asp:Button ID="btnClear" runat="Server" Text="Refresh" CssClass="btn btn-primary"
+                                                    ToolTip="Click here to Search." ForeColor="White"  OnClick="btnSearch_Click" width="80" />&nbsp;&nbsp;&nbsp;
+                                                            <asp:Button ID="btnClear" runat="Server" Text="Refresh" CssClass="btn btn-primary" width="80"
                                                     ToolTip="Click here to Clear selected data."  OnClick="btnClear_Click"  />
                                                        </td>
                                                        <td align="Right">
-                                                             <asp:Button ID="btnGenerate" runat="Server" Text="Generate Invoice" CssClass="btn btn-danger"
-                                                    ToolTip="Click here to Generate Invoice." ForeColor="White"  OnClick="btnGenerate_Click" OnClientClick="javascript:return ConfirmMsg()" />
+                                                           <asp:Button ID="btnPreviewInvoice" runat="Server" Text="Preview Invoice" CssClass="btn btn-primary" Width="120"
+                                                               ToolTip="Click here to Preview Invoice." ForeColor="White" OnClick="btnPreview_Click" OnClientClick="javascript:return ConfirmMsg()" />
                                                        </td>
+                                                       <td align="Right">
+                                                             <asp:Button ID="btnGenerate" runat="Server" Text="Generate Invoice" CssClass="btn btn-danger" width="120"
+                                                               ToolTip="Click here to Generate Invoice." ForeColor="White" OnClick="btnGenerate_Click" OnClientClick="javascript:return ConfirmMsg()" />
+                                                       </td>
+                                                          
                                                    </tr>
                                                 </table>
                                  
@@ -235,80 +238,69 @@
                                         </table>
                                     </td>
                                 </tr>
-                                <tr>                                    
-                                
-                            </tr> 
                                 </table>
                                 </td>                       
                             </table>
-                        <table style="width: 98%;">
-                           <tr><td><table>
-                                   <tr>    
-                                 <td vertical-align: top;" align="Left">
-                            <marquee direction="Left" runat="server" style=" width:820px;margin-left: 0px; height: 17px; margin-bottom: 0px;" onmouseover="this.stop()" onmouseout="this.start()">
-                                <strong>
-                                     <asp:Label ID="Label4" Font-Bold="true" Font-Size="Larger" runat="server" Text="Please click on Refresh Button after file downloaded." ForeColor="Red" ></asp:Label>
-                                   
-                                </strong>
-
-                            </marquee>    
-                                     </td>                       
-                                <td  vertical-align: top;" align="Right">                                    
-                                    <asp:CheckBox ID="chkShow" Text="View Billed txns. " runat="server" OnCheckedChanged="chkShow_CheckedChanged" AutoPostBack="true"/>&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <asp:LinkButton ID="lnkAudit" runat="server" Text="Invoice Audit Log" Font-Names="verdana" Font-Underline="true" ForeColor="#cc0000" Font-Bold="true" OnClick="lnkAudit_Click" ToolTip="Click to see invoice audit log."></asp:LinkButton>
-                                </td>  
-                            </tr>
-
-                                    </table></td></tr>
-                            <tr>
-                                <td vertical-align: top;" align="Center" >
-                                    <telerik:RadGrid ID="rgAdHoc" runat="server" AutoGenerateColumns="False" Skin="WebBlue"
-                                        Height="300px" Width="95%" AllowSorting="true" OnItemCreated="rgAdHoc_ItemCreated" OnItemDataBound="rgAdHoc_ItemDataBound" 
-                                        OnItemCommand="rgAdHoc_ItemCommand" AllowMultiRowSelection="true" AllowFilteringByColumn="true" OnInit="rgAdHoc_Init">
-                                        <%-- OnItemDataBound="RdGrd_TaskTrack_ItemDataBound"--%>
-
-                                        <ClientSettings>
+                            <table style="width: 98%;">
+                                    <tr>
+                                        <td>
+                                        <table>
+                                            <tr>
+                                                <td vertical-align: top;" align="Left">
+                                                    <marquee direction="Left" runat="server" style=" width:820px;margin-left: 0px; height: 17px; margin-bottom: 0px;" onmouseover="this.stop()" onmouseout="this.start()">
+                                                    <strong><asp:Label ID="Label4" Font-Bold="true" Font-Size="Larger" runat="server" Text="Please click on Refresh Button after file downloaded." ForeColor="Red" ></asp:Label></strong>
+                                                    </marquee>    
+                                                </td>                       
+                                                <td  vertical-align: top;" align="Right">                                    
+                                                    <asp:CheckBox ID="chkShow" Text="View Billed txns. " runat="server" OnCheckedChanged="chkShow_CheckedChanged" AutoPostBack="true"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <asp:LinkButton ID="lnkAudit" runat="server" Text="Invoice Audit Log" Font-Names="verdana" Font-Underline="true" ForeColor="#cc0000" Font-Bold="true" OnClick="lnkAudit_Click" ToolTip="Click to see invoice audit log."></asp:LinkButton>
+                                                </td>  
+                                            </tr>
+                                        </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td vertical-align: top;" align="Center" >
+                                            <telerik:RadGrid ID="rgAdHoc" runat="server" AutoGenerateColumns="False" Skin="WebBlue"
+                                            Height="300px" Width="95%" AllowSorting="true" OnItemCreated="rgAdHoc_ItemCreated" OnItemDataBound="rgAdHoc_ItemDataBound" 
+                                            OnItemCommand="rgAdHoc_ItemCommand" AllowMultiRowSelection="true" AllowFilteringByColumn="true" OnInit="rgAdHoc_Init">
+                                            <%-- OnItemDataBound="RdGrd_TaskTrack_ItemDataBound"--%>
                                             <%--<Resizing AllowColumnResize="True" AllowResizeToFit="true" AllowRowResize="false" ClipCellContentOnResize="true" EnableRealTimeResize="false" ResizeGridOnColumnResize="false" />--%>
-                                            <Scrolling AllowScroll="True" SaveScrollPosition="true" UseStaticHeaders="True" />
-                                        </ClientSettings>
-                                        <MasterTableView DataKeyNames="Ref" AllowSorting="true" AllowFilteringByColumn="true">
-                                            <NoRecordsTemplate>
-                                                No Record Found..
-                                            </NoRecordsTemplate>
-
-                                            <Columns>
-                                                 <telerik:GridClientSelectColumn UniqueName="ClientSelectColumn1" HeaderStyle-Width="20px" HeaderTooltip="Click here if you wish to update all. Uncheck whichever you do not want to update.">
-                                                </telerik:GridClientSelectColumn>
-                                                <telerik:GridBoundColumn HeaderText="Date" HeaderStyle-Width="80px" DataField="Date" ItemStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center" ReadOnly="true" AllowFiltering="true" FilterControlWidth="65px" HeaderTooltip="Sorted by ascending order of date."></telerik:GridBoundColumn>
-                                                <telerik:GridBoundColumn HeaderText="Txn.Cd" HeaderStyle-Width="80px" DataField="Group" ReadOnly="true" AllowFiltering="true" FilterControlWidth="65px" HeaderTooltip="This links to the transaction posting rules." ></telerik:GridBoundColumn>
-                                                <telerik:GridBoundColumn HeaderText="Ref" HeaderStyle-Width="80px" DataField="Ref" AllowFiltering="true" FilterControlWidth="85px" HeaderTooltip="Digits 1 to 14 – Batch ref.no,  Last two digits – Sequence no. within the batch , Last but one digit – No.of txns in the batch."></telerik:GridBoundColumn>
-                                                <telerik:GridBoundColumn HeaderText="Narration" HeaderStyle-Width="180px" DataField="Narration" ReadOnly="true" AllowFiltering="true" FilterControlWidth="135px" HeaderTooltip="Standard narration as set for the transaction code # additional remarks"></telerik:GridBoundColumn>
-                                                <%--<telerik:GridBoundColumn HeaderText="DR/CR" HeaderStyle-Width="40px" DataField="Type" ReadOnly="true" AllowFiltering="true" FilterControlWidth="25px" HeaderTooltip=""></telerik:GridBoundColumn>--%>
-                                                <telerik:GridBoundColumn HeaderText="Amt." HeaderStyle-Width="50px" DataField="DR" ItemStyle-HorizontalAlign="Right" HeaderStyle-HorizontalAlign="Right" ReadOnly="true" AllowFiltering="true" FilterControlWidth="55px" HeaderTooltip=""></telerik:GridBoundColumn>
-                                                <%--<telerik:GridBoundColumn HeaderText="Credit" HeaderStyle-Width="50px" DataField="CR" ItemStyle-HorizontalAlign="Right" HeaderStyle-HorizontalAlign="Right" ReadOnly="true" AllowFiltering="true" FilterControlWidth="55px" HeaderTooltip=""></telerik:GridBoundColumn>--%>
-                                               
-                                            </Columns>
-                                        </MasterTableView>
-                                        <ClientSettings>
-                                            <Scrolling AllowScroll="True" SaveScrollPosition="True"></Scrolling>
-                                            <Selecting AllowRowSelect="true"></Selecting>
-                                        </ClientSettings>
-                                    </telerik:RadGrid>
-                                  
-                                </td>
-                                </tr>
-                        </table>
+                                            <ClientSettings>
+                                                <Scrolling AllowScroll="True" SaveScrollPosition="true" UseStaticHeaders="True" />
+                                            </ClientSettings>
+                                            <MasterTableView DataKeyNames="Ref" AllowSorting="true" AllowFilteringByColumn="true">
+                                            <NoRecordsTemplate>No Record Found...</NoRecordsTemplate>
+                                                <Columns>
+                                                    <telerik:GridClientSelectColumn UniqueName="ClientSelectColumn1" HeaderStyle-Width="20px" HeaderTooltip="Click here if you wish to update all. Uncheck whichever you do not want to update.">
+                                                    </telerik:GridClientSelectColumn>
+                                                    <telerik:GridBoundColumn HeaderText="Date" HeaderStyle-Width="80px" DataField="Date" ItemStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center" ReadOnly="true" AllowFiltering="true" FilterControlWidth="65px" HeaderTooltip="Sorted by ascending order of date."></telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn HeaderText="Txn.Cd" HeaderStyle-Width="80px" DataField="Group" ReadOnly="true" AllowFiltering="true" FilterControlWidth="65px" HeaderTooltip="This links to the transaction posting rules." ></telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn HeaderText="Ref" HeaderStyle-Width="80px" DataField="Ref" AllowFiltering="true" FilterControlWidth="85px" HeaderTooltip="Digits 1 to 14 – Batch ref.no,  Last two digits – Sequence no. within the batch , Last but one digit – No.of txns in the batch."></telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn HeaderText="Narration" HeaderStyle-Width="180px" DataField="Narration" ReadOnly="true" AllowFiltering="true" FilterControlWidth="135px" HeaderTooltip="Standard narration as set for the transaction code # additional remarks"></telerik:GridBoundColumn>
+                                                    <%--<telerik:GridBoundColumn HeaderText="DR/CR" HeaderStyle-Width="40px" DataField="Type" ReadOnly="true" AllowFiltering="true" FilterControlWidth="25px" HeaderTooltip=""></telerik:GridBoundColumn>--%>
+                                                    <telerik:GridBoundColumn HeaderText="Amt." HeaderStyle-Width="50px" DataField="DR" ItemStyle-HorizontalAlign="Right" HeaderStyle-HorizontalAlign="Right" ReadOnly="true" AllowFiltering="true" FilterControlWidth="55px" HeaderTooltip=""></telerik:GridBoundColumn>
+                                                    <%--<telerik:GridBoundColumn HeaderText="Credit" HeaderStyle-Width="50px" DataField="CR" ItemStyle-HorizontalAlign="Right" HeaderStyle-HorizontalAlign="Right" ReadOnly="true" AllowFiltering="true" FilterControlWidth="55px" HeaderTooltip=""></telerik:GridBoundColumn>--%>
+                                                </Columns>
+                                                </MasterTableView>
+                                                    <ClientSettings>
+                                                        <Scrolling AllowScroll="True" SaveScrollPosition="True"></Scrolling>
+                                                        <Selecting AllowRowSelect="true"></Selecting>
+                                                    </ClientSettings>
+                                            </telerik:RadGrid>
+                                        </td>
+                                    </tr>
+                            </table>
                         </div>
                           </ContentTemplate>
                  <Triggers>
-            <asp:PostBackTrigger ControlID="btnClear" />
-            <asp:AsyncPostBackTrigger ControlID="btnSearch" />
-            <asp:PostBackTrigger ControlID="btnGenerate" />
-            <asp:AsyncPostBackTrigger ControlID="chkShow" />
-            
-        </Triggers>
-                        </asp:UpdatePanel>
-                      </div>
+                    <asp:PostBackTrigger ControlID="btnClear" />
+                    <asp:AsyncPostBackTrigger ControlID="btnSearch" />
+                    <asp:PostBackTrigger ControlID="btnGenerate" />
+                    <asp:AsyncPostBackTrigger ControlID="chkShow" />
+                </Triggers>
+            </asp:UpdatePanel>
          </div>
+     </div>
 </asp:Content>
 

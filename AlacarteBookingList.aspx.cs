@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
+using System.Web.UI;
 using Telerik.Web.UI;
 
 public partial class AlacarteBookingList : System.Web.UI.Page
@@ -20,16 +15,16 @@ public partial class AlacarteBookingList : System.Web.UI.Page
             if (!IsPostBack)
             {
                 LoadTitle();
-                
+
                 DateTime now = DateTime.Now;
                 radfromdate.SelectedDate = new DateTime(now.Year, now.Month, 1);
-               
+
                 radtilldate.SelectedDate = DateTime.Today;
                 LoadSession();
                 LoadDefault();
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -57,7 +52,7 @@ public partial class AlacarteBookingList : System.Web.UI.Page
         }
     }
 
-   
+
 
     private void LoadSession()
     {
@@ -73,7 +68,7 @@ public partial class AlacarteBookingList : System.Web.UI.Page
 
             ddlSession.Items.Insert(0, "All");
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -94,7 +89,7 @@ public partial class AlacarteBookingList : System.Web.UI.Page
             gvBookingameal.DataBind();
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -123,7 +118,7 @@ public partial class AlacarteBookingList : System.Web.UI.Page
         {
             LoadDefault();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -179,7 +174,7 @@ public partial class AlacarteBookingList : System.Web.UI.Page
             LoadDefault();
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -188,7 +183,7 @@ public partial class AlacarteBookingList : System.Web.UI.Page
     {
         GridFilterMenu menu = gvBookingameal.FilterMenu;
         int i = 0;
-        
+
         while (i < menu.Items.Count)
         {
             if (menu.Items[i].Text == "NoFilter" || menu.Items[i].Text == "Contains"

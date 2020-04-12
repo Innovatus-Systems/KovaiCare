@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
-using System.Globalization;
-using System.Drawing;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
-using System.IO;
 
 public partial class BillingPeriods : System.Web.UI.Page
 {
@@ -136,7 +129,7 @@ public partial class BillingPeriods : System.Web.UI.Page
                  new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 2 },
                   new SqlParameter() { ParameterName = "@RSN", SqlDbType = SqlDbType.NVarChar, Value = Session["BPRSN"] }
                 );
-            if(ds.Tables[0].Rows.Count>0)
+            if (ds.Tables[0].Rows.Count > 0)
             {
                 txtBMonth.Text = ds.Tables[0].Rows[0]["BPName"].ToString();
                 txtSplMsg.Text = ds.Tables[0].Rows[0]["BPSpecialMsg"].ToString();
@@ -150,7 +143,7 @@ public partial class BillingPeriods : System.Web.UI.Page
                 else
                 {
                     dtBDATE.SelectedDate = DateTime.Parse(ds.Tables[0].Rows[0]["BDate"].ToString());
-                }      
+                }
             }
             else
             {

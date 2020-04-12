@@ -1,22 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
-using System.Globalization;
-using System.Drawing;
-using Telerik.Web.UI;
-using Excel = Microsoft.Office.Interop.Excel;
-using System.Runtime.InteropServices;
-using OfficeOpenXml;
-using System.IO;
-using System.Data.OleDb;
 using System.Text;
-using System.Reflection;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using Telerik.Web.UI;
 
 public partial class DashBoard : System.Web.UI.Page
 {
@@ -109,7 +97,7 @@ public partial class DashBoard : System.Web.UI.Page
             }
             else
             {
-                Label2.Visible = false;              
+                Label2.Visible = false;
             }
             ds.Dispose();
         }
@@ -184,7 +172,7 @@ public partial class DashBoard : System.Web.UI.Page
             WebMsgBox.Show(ex.Message.ToString());
         }
     }
-    
+
 
     protected void rdgResidentDet_ItemCommand(object sender, Telerik.Web.UI.GridCommandEventArgs e)
     {
@@ -433,14 +421,14 @@ public partial class DashBoard : System.Web.UI.Page
     {
         try
         {
-           
+
             StringBuilder str = new StringBuilder();
             LinkButton lnkOpenProjBtn = (LinkButton)sender;
             GridDataItem row = (GridDataItem)lnkOpenProjBtn.NamingContainer;
             ViewState["RTRSN"] = row.Cells[2].Text;
             ScriptManager.RegisterStartupScript(this, this.GetType(), "win",
    "<script language='javascript'> var iMyWidth;var iMyHeight;  window.open('OutStandingPopUp.aspx?NO=" + ViewState["RTRSN"] + "','NewWin','status=no,height=250,width=400 ,resizable=No,left=200,top=100,screenX=250,screenY=250,toolbar=no,menubar=no,scrollbars=yes,location=no,directories=no,   NewWin.focus()')</script>", false);
-      
+
         }
         catch (Exception ex)
         {
@@ -703,12 +691,13 @@ public partial class DashBoard : System.Web.UI.Page
 
     protected void btnRenewal_Click(object sender, EventArgs e)
     {
-        try {
+        try
+        {
 
             RWRenewal.Visible = true;
             LoadRenewal();
         }
-        catch(Exception ex) { }
+        catch (Exception ex) { }
     }
     protected void LoadRenewal()
     {
@@ -718,7 +707,7 @@ public partial class DashBoard : System.Web.UI.Page
             DataSet dsRenewal = sqlobj.ExecuteSP("CC_TenantRenewal",
                new SqlParameter() { ParameterName = "@IMODE", SqlDbType = SqlDbType.Int, Value = 1 });
             if (dsRenewal.Tables[0].Rows.Count > 0)
-            {                
+            {
                 rgRenewal.DataSource = dsRenewal.Tables[0];
                 rgRenewal.DataBind();
             }
@@ -769,7 +758,7 @@ public partial class DashBoard : System.Web.UI.Page
                     itm.Cells[3].ForeColor = System.Drawing.Color.Maroon;
                     itm.Cells[3].BackColor = System.Drawing.Color.Yellow;
                     itm.Cells[3].Font.Bold = true;
-                }                
+                }
             }
 
         }

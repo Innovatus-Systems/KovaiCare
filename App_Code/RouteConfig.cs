@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web;
+﻿using Microsoft.AspNet.FriendlyUrls;
 using System.Web.Routing;
-using Microsoft.AspNet.FriendlyUrls;
 
 namespace CovaiSoftService
 {

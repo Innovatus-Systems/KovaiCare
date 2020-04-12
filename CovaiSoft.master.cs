@@ -1,23 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
-using System.Data.SqlClient;
-using System.Configuration;
-using System.Globalization;
-using System.Drawing;
 using Telerik.Web.UI;
-using Excel = Microsoft.Office.Interop.Excel;
-using System.Runtime.InteropServices;
-using OfficeOpenXml;
-using System.IO;
-using System.Data.OleDb;
-using System.Text;
-using System.Reflection;
-using System.Web.Services;
 
 
 public partial class CovaiSoft : System.Web.UI.MasterPage
@@ -57,7 +46,7 @@ public partial class CovaiSoft : System.Web.UI.MasterPage
                 string Authority = HttpContext.Current.Request.Url.Authority.ToString();
 
 
-              
+
 
 
 
@@ -70,7 +59,7 @@ public partial class CovaiSoft : System.Web.UI.MasterPage
                 //DateTime dt = Convert.ToDateTime(dsUserDetails.Tables[0].Rows[0]["lastloggedin"].ToString()); // get current date time
                 //lbllastlogin.Text = "You last logged in on  " + dt.ToString("ddd") + " " + string.Format("{0:dd-MMM-yyyy HH:mm 'Hrs'}", dt);
 
-               
+
 
 
                 if (Authority == "localhost:60163")
@@ -86,7 +75,8 @@ public partial class CovaiSoft : System.Web.UI.MasterPage
 
 
 
-                InsertMenuLog(absolutepath);
+                //InsertMenuLog(absolutepath); Modified by bala on 06.04.2020
+                InsertMenuLog(CurrentPage);
 
 
                 DataTable dt = GetData(0);
@@ -303,7 +293,10 @@ public partial class CovaiSoft : System.Web.UI.MasterPage
                 new SqlParameter() { ParameterName = "@IMODE", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Int, Value = 1 });
 
             lblCurrBillPeriod.Text = "Billing Period: Current-" + dsGroup.Tables[1].Rows[0]["CurrentPeriod"].ToString() + "";
-            Session["CurrentBillingPeriod"] = dsGroup.Tables[1].Rows[0]["CurrentPeriod"].ToString();
+            if (dsGroup.Tables[1].Rows.Count > 0)
+            { Session["CurrentBillingPeriod"] = dsGroup.Tables[1].Rows[0]["CurrentPeriod"].ToString(); }
+            else { Session["CurrentBillingPeriod"] = ""; }
+          
 
             if (dsGroup.Tables[2].Rows.Count > 0)
             {
@@ -1468,7 +1461,7 @@ public partial class CovaiSoft : System.Web.UI.MasterPage
             WebMsgBox.Show(ex.Message);
         }
     }
-   
+
     protected void lnkControlPanel_Click(object sender, EventArgs e)
     {
         try
@@ -1495,7 +1488,7 @@ public partial class CovaiSoft : System.Web.UI.MasterPage
             sb.Append(url);
             sb.Append("');");
             sb.Append("</script>");
-            Page.ClientScript.RegisterStartupScript(this.GetType(),"script", sb.ToString());            
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "script", sb.ToString());
         }
         catch (Exception ex)
         {

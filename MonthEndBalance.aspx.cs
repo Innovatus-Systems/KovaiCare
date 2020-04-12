@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 public partial class MonthEndBalance : System.Web.UI.Page
@@ -29,7 +24,7 @@ public partial class MonthEndBalance : System.Web.UI.Page
                 LoadYYMMDrp();
                 LoadAccountMaster();
                 LoadResidentDet();
-                
+
 
 
             }
@@ -85,7 +80,7 @@ public partial class MonthEndBalance : System.Web.UI.Page
     {
         try
         {
-            Decimal SalValue = 0, ClsValue = 0, NExist =0;
+            Decimal SalValue = 0, ClsValue = 0, NExist = 0;
 
 
             DataSet dsCategory = sqlobj.ExecuteSP("SP_MonthEndBalance",
@@ -129,7 +124,7 @@ public partial class MonthEndBalance : System.Web.UI.Page
                 {
                     if (!dr.IsNull("ClosingBalance"))
                         if (Convert.ToDecimal(dr["ClosingBalance"]) < 0)
-                            NExist = NExist + 1;                                
+                            NExist = NExist + 1;
                 }
             }
 
@@ -215,7 +210,7 @@ public partial class MonthEndBalance : System.Web.UI.Page
                 dg.DataSource = dsCategory.Tables[0];
                 dg.DataBind();
 
-                if(drpYYMM.SelectedItem.ToString() != "All")
+                if (drpYYMM.SelectedItem.ToString() != "All")
                     sDate = drpYYMM.SelectedItem.ToString();
                 else
                     sDate = string.Empty;
@@ -228,7 +223,7 @@ public partial class MonthEndBalance : System.Web.UI.Page
 
 
                 //string CDate = Convert.ToDateTime(dsDT.Tables[0].Rows[0][0].ToString()).ToString("ddd") + "   " + Convert.ToDateTime(dsDT.Tables[0].Rows[0][0].ToString()).ToString("dd-MMM-yyyy HH:mm 'Hrs'"); ;
-                string CDate =  Convert.ToDateTime(dsDT.Tables[0].Rows[0][0].ToString()).ToString("dd-MMM-yyyy HH:mm 'Hrs'"); ;
+                string CDate = Convert.ToDateTime(dsDT.Tables[0].Rows[0][0].ToString()).ToString("dd-MMM-yyyy HH:mm 'Hrs'"); ;
 
 
 

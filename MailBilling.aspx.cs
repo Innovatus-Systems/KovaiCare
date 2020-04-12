@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+﻿using iTextSharp.text;
+using iTextSharp.text.html.simpleparser;
+using iTextSharp.text.pdf;
+using System;
+using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Net.Mail;
-using System.Data.SqlClient;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.html.simpleparser;
-using System.Configuration;
 using System.Text;
+using System.Web.UI;
 
 public partial class MailBilling : System.Web.UI.Page
 {
@@ -26,7 +22,7 @@ public partial class MailBilling : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        
+
 
         if (!IsPostBack)
         {
@@ -87,13 +83,13 @@ public partial class MailBilling : System.Web.UI.Page
             dsDetails = sqlobj.ExecuteSP("SP_GetBillingPerioddetails");
             if (dsDetails.Tables[0].Rows.Count > 0)
             {
-               lblCurrentBillingMonth.Text = dsDetails.Tables[1].Rows[0]["CurrentBillingMonth"].ToString();
-               lblPreviousBillingMonth.Text = dsDetails.Tables[0].Rows[0]["PreviousBillingMonth"].ToString();
-               lblTotal.Text = dsDetails.Tables[2].Rows[0]["Total"].ToString();
+                lblCurrentBillingMonth.Text = dsDetails.Tables[1].Rows[0]["CurrentBillingMonth"].ToString();
+                lblPreviousBillingMonth.Text = dsDetails.Tables[0].Rows[0]["PreviousBillingMonth"].ToString();
+                lblTotal.Text = dsDetails.Tables[2].Rows[0]["Total"].ToString();
             }
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -223,12 +219,12 @@ public partial class MailBilling : System.Web.UI.Page
     }
 
     public void SendSA()
-    
-    
+
+
     {
         try
         {
-       
+
             DataSet dsBillingMonth = sqlobj.ExecuteSP("SP_GetBillingMonth");
 
             string strBillingMonth = dsBillingMonth.Tables[0].Rows[0]["BillingMonth"].ToString();
@@ -287,14 +283,14 @@ public partial class MailBilling : System.Web.UI.Page
 
             DataTable dtNew = new DataTable();
 
-            DataSet dsUsageBilling = sqlobj.ExecuteSP("SP_ReceiptsofDailyUsageBilling", 
+            DataSet dsUsageBilling = sqlobj.ExecuteSP("SP_ReceiptsofDailyUsageBilling",
                 new SqlParameter() { ParameterName = "@FromDate", SqlDbType = SqlDbType.DateTime, Value = dFrom.ToString("yyyy-MM-dd") },
                 new SqlParameter() { ParameterName = "@ToDate", SqlDbType = SqlDbType.DateTime, Value = dTo.ToString("yyyy-MM-dd") }
                 );
 
 
 
-            if (dsUsageBilling.Tables[0].Rows.Count>0)
+            if (dsUsageBilling.Tables[0].Rows.Count > 0)
             {
                 dtNew = dsUsageBilling.Tables[0];
             }
@@ -330,13 +326,13 @@ public partial class MailBilling : System.Web.UI.Page
                     sb.Append("<th style = 'background-color: #D20B0C;font-size:11px;font-family:Verdana;' align='right'>");
                 }
 
-                    sb.Append(column.ColumnName);
-                    sb.Append("</th>");
-               
+                sb.Append(column.ColumnName);
+                sb.Append("</th>");
+
             }
 
             sb.Append("</tr>");
-           
+
             foreach (DataRow row in dtNew.Rows)
             {
                 sb.Append("<tr>");
@@ -364,10 +360,10 @@ public partial class MailBilling : System.Web.UI.Page
                     {
                         sb.Append("<td style = 'font-size:10px;font-family:Verdana;' align='right'>");
                     }
-  
-                        sb.Append(row[column]);
-                        sb.Append("</td>");
-                    
+
+                    sb.Append(row[column]);
+                    sb.Append("</td>");
+
                 }
                 sb.Append("</tr>");
             }
@@ -406,85 +402,85 @@ public partial class MailBilling : System.Web.UI.Page
 
             StringReader sr = new StringReader(sb.ToString());
 
-              Document pdfDoc = new Document(PageSize.A4, 50f, 20f, 40f, 50f);
+            Document pdfDoc = new Document(PageSize.A4, 50f, 20f, 40f, 50f);
 
-                        //Document pdfDoc = new Document(PageSize.A4,50f,20f,)
-                        //pdfDoc.SetMargins(30f,20f,20f,20f);                        
+            //Document pdfDoc = new Document(PageSize.A4,50f,20f,)
+            //pdfDoc.SetMargins(30f,20f,20f,20f);                        
 
-                        HTMLWorker htmlparser = new HTMLWorker(pdfDoc);
-                        using (MemoryStream memoryStream = new MemoryStream())
-                        {
-                            PdfWriter writer = PdfWriter.GetInstance(pdfDoc, memoryStream);
-                            pdfDoc.Open();
-                            writer.PageEvent = new Footer();
-                            htmlparser.Parse(sr);
-                            pdfDoc.Close();
-                            byte[] bytes = memoryStream.ToArray();
-                            memoryStream.Close();
+            HTMLWorker htmlparser = new HTMLWorker(pdfDoc);
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, memoryStream);
+                pdfDoc.Open();
+                writer.PageEvent = new Footer();
+                htmlparser.Parse(sr);
+                pdfDoc.Close();
+                byte[] bytes = memoryStream.ToArray();
+                memoryStream.Close();
 
-                            string mailserver = string.Empty;
-                            string user = string.Empty;
-                            string pwd = string.Empty;
-                            string sentby = string.Empty;
+                string mailserver = string.Empty;
+                string user = string.Empty;
+                string pwd = string.Empty;
+                string sentby = string.Empty;
 
-                            SqlCommand cmd = new SqlCommand(string.Concat("SELECT * FROM cpmailcredentials"), con);
-                            SqlDataAdapter da = new SqlDataAdapter(cmd);
-                            DataSet dsCredential = new DataSet();
-                            da.Fill(dsCredential);
-                            // Write an informational entry to the event log.  
+                SqlCommand cmd = new SqlCommand(string.Concat("SELECT * FROM cpmailcredentials"), con);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet dsCredential = new DataSet();
+                da.Fill(dsCredential);
+                // Write an informational entry to the event log.  
 
-                            if (dsCredential != null && dsCredential.Tables.Count > 0)
-                            {
-                                foreach (DataRow row in dsCredential.Tables[0].Rows)
-                                {
-                                    mailserver = row["mailserver"].ToString();
-                                    user = row["username"].ToString();
-                                    pwd = row["password"].ToString();
-                                    sentby = row["sentbyuser"].ToString();
-                                }
-                            }
+                if (dsCredential != null && dsCredential.Tables.Count > 0)
+                {
+                    foreach (DataRow row in dsCredential.Tables[0].Rows)
+                    {
+                        mailserver = row["mailserver"].ToString();
+                        user = row["username"].ToString();
+                        pwd = row["password"].ToString();
+                        sentby = row["sentbyuser"].ToString();
+                    }
+                }
 
-                            SmtpClient mySmtpClient = new SmtpClient(mailserver, 587);
-                            MailAddress From = new MailAddress(user, "info@innovatussystems.com");
-                            MailMessage myMail = new System.Net.Mail.MailMessage();
-                            myMail.From = From;
-                            myMail.To.Add("varadharaj@innovatussystems.com");
+                SmtpClient mySmtpClient = new SmtpClient(mailserver, 587);
+                MailAddress From = new MailAddress(user, "info@innovatussystems.com");
+                MailMessage myMail = new System.Net.Mail.MailMessage();
+                myMail.From = From;
+                myMail.To.Add("varadharaj@innovatussystems.com");
 
 
 
-                            //myMail.CC.Add("rangan@innovatussystems.com");
+                //myMail.CC.Add("rangan@innovatussystems.com");
 
-                            //foreach (DataRow row in dsMails.Tables[0].Rows)
-                            //{
-                            //    //myMail.CC.Add(row[0].ToString());
-                            //    if (strCC == "")
-                            //    {
-                            //        strCC = row[0].ToString();
-                            //    }
-                            //    else
-                            //    {
-                            //        strCC = strCC + ";" + row[0].ToString();
-                            //    }
-                            //}Name of the resident -  Door No. -    Statement for mmm-yy -    Name of Community
+                //foreach (DataRow row in dsMails.Tables[0].Rows)
+                //{
+                //    //myMail.CC.Add(row[0].ToString());
+                //    if (strCC == "")
+                //    {
+                //        strCC = row[0].ToString();
+                //    }
+                //    else
+                //    {
+                //        strCC = strCC + ";" + row[0].ToString();
+                //    }
+                //}Name of the resident -  Door No. -    Statement for mmm-yy -    Name of Community
 
-                            string FileName = "Software usage - statement of account for" + strBillingMonth.ToString() + ".pdf";
+                string FileName = "Software usage - statement of account for" + strBillingMonth.ToString() + ".pdf";
 
-                            mySmtpClient.UseDefaultCredentials = false;
-                            System.Net.NetworkCredential basicauth = new System.Net.NetworkCredential(user, pwd);
-                            mySmtpClient.Credentials = basicauth;
-                            mySmtpClient.EnableSsl = true;
-                            myMail.SubjectEncoding = System.Text.Encoding.UTF8;
-                            myMail.BodyEncoding = System.Text.Encoding.UTF8;
-                            myMail.Attachments.Add(new Attachment(new MemoryStream(bytes), FileName));
-                            myMail.IsBodyHtml = true;
-                            myMail.Subject = "Software usage - statement of account for " + strBillingMonth.ToString() + ".pdf";
-                            myMail.Body = sbBody.ToString();
-                            mySmtpClient.Send(myMail);
+                mySmtpClient.UseDefaultCredentials = false;
+                System.Net.NetworkCredential basicauth = new System.Net.NetworkCredential(user, pwd);
+                mySmtpClient.Credentials = basicauth;
+                mySmtpClient.EnableSsl = true;
+                myMail.SubjectEncoding = System.Text.Encoding.UTF8;
+                myMail.BodyEncoding = System.Text.Encoding.UTF8;
+                myMail.Attachments.Add(new Attachment(new MemoryStream(bytes), FileName));
+                myMail.IsBodyHtml = true;
+                myMail.Subject = "Software usage - statement of account for " + strBillingMonth.ToString() + ".pdf";
+                myMail.Body = sbBody.ToString();
+                mySmtpClient.Send(myMail);
 
-                        }
+            }
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -534,7 +530,7 @@ public partial class MailBilling : System.Web.UI.Page
                         string strLastMonth = Lastmonth.ToString("F");
                         string strAmtPay = AmtPay.ToString("F");
 
-                        string  sBillDoneinthemonth = dBillDoneinthemonth.ToString("F");
+                        string sBillDoneinthemonth = dBillDoneinthemonth.ToString("F");
                         string sReceivedAmnt = dReceivedAmnt.ToString("F");
 
                         StringBuilder sb = new StringBuilder();
@@ -816,9 +812,9 @@ public partial class MailBilling : System.Web.UI.Page
                             MailMessage myMail = new System.Net.Mail.MailMessage();
                             myMail.From = From;
                             myMail.To.Add("varadharaj@innovatussystems.com");
-                            
-                            
-                            
+
+
+
                             //myMail.CC.Add("rangan@innovatussystems.com");
 
                             //foreach (DataRow row in dsMails.Tables[0].Rows)

@@ -1,0 +1,627 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="c:\program files (x86)\microsoft visual studio\2019\community\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
+<FxCopReport Version="16.0">
+ <Targets>
+  <Target Name="C:\Users\ADMIN\AppData\Local\Temp\tmp5ABF.tmp.cadir\bin\App_Code.dll">
+   <Modules>
+    <Module Name="app_code.dll">
+     <Namespaces>
+      <Namespace Name="">
+       <Types>
+        <Type Name="clcommon" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implement IDisposable on 'clcommon' because it creates members of the following IDisposable types: 'DataSet'. If 'clcommon' has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="SqlProcsNew" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#ExecuteNonQuery(System.String,System.Data.Common.DbParameter[])" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService\App_Code" File="SqlProcsNew.cs" Line="403">'SqlProcsNew.ExecuteNonQuery(string, params DbParameter[])' rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#ExecuteNonQuery(System.String,System.Data.Common.DbTransaction,System.Data.Common.DbParameter[])" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService\App_Code" File="SqlProcsNew.cs" Line="292">'SqlProcsNew.ExecuteNonQuery(string, DbTransaction, params DbParameter[])' rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#ExecuteSQLNonQuery(System.String,System.Data.SqlClient.SqlParameter[])" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService\App_Code" File="SqlProcsNew.cs" Line="59">Object 'con' can be disposed more than once in method 'SqlProcsNew.ExecuteSQLNonQuery(string, params SqlParameter[])'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 59</Issue>
+            </Message>
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService\App_Code" File="SqlProcsNew.cs" Line="49">The query string passed to 'SqlCommand.CommandText.set(string)' in 'SqlProcsNew.ExecuteSQLNonQuery(string, params SqlParameter[])' could contain the following variables 'query'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+  <Target Name="C:\Users\ADMIN\AppData\Local\Temp\tmp5ABF.tmp.cadir\bin\App_Web_0cu3ts0x.dll">
+   <Modules>
+    <Module Name="app_web_0cu3ts0x.dll">
+     <Namespaces>
+      <Namespace Name="">
+       <Types>
+        <Type Name="Calendar" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#CalCalendar()" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="Calendar.aspx.cs" Line="174">Object 'con' can be disposed more than once in method 'Calendar.CalCalendar()'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 174</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="DayCalendar" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#CalCalendar()" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="DayCalendar.aspx.cs" Line="422">Object 'con' can be disposed more than once in method 'DayCalendar.CalCalendar()'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 422</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#CalEvents()" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="DayCalendar.aspx.cs" Line="353">Object 'con' can be disposed more than once in method 'DayCalendar.CalEvents()'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 353</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#CalNotices()" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="DayCalendar.aspx.cs" Line="491">Object 'con' can be disposed more than once in method 'DayCalendar.CalNotices()'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 491</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#GetEvents()" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="DayCalendar.aspx.cs" Line="199">Object 'con' can be disposed more than once in method 'DayCalendar.GetEvents()'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 199</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#GetTaskClose()" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="DayCalendar.aspx.cs" Line="284">Object 'con' can be disposed more than once in method 'DayCalendar.GetTaskClose()'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 284</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+  <Target Name="C:\Users\ADMIN\AppData\Local\Temp\tmp5ABF.tmp.cadir\bin\App_Web_1we3rogh.dll">
+   <Modules>
+    <Module Name="app_web_1we3rogh.dll">
+     <Namespaces>
+      <Namespace Name="">
+       <Types>
+        <Type Name="OneTouchBooking" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#btnDinersList_Click(System.Object,System.EventArgs)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="OneTouchBooking.aspx.cs" Line="980">Object 'memoryStream' can be disposed more than once in method 'OneTouchBooking.btnDinersList_Click(object, EventArgs)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 980</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+  <Target Name="C:\Users\ADMIN\AppData\Local\Temp\tmp5ABF.tmp.cadir\bin\App_Web_2utgdqde.dll">
+   <Modules>
+    <Module Name="app_web_2utgdqde.dll">
+     <Namespaces>
+      <Namespace Name="">
+       <Types>
+        <Type Name="FoodMenu" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#btnPrintReceipt_Click(System.Object,System.EventArgs)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="FoodMenu.aspx.cs" Line="6108">Object 'sw' can be disposed more than once in method 'FoodMenu.btnPrintReceipt_Click(object, EventArgs)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 6108</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+  <Target Name="C:\Users\ADMIN\AppData\Local\Temp\tmp5ABF.tmp.cadir\bin\App_Web_4m5vo2fg.dll">
+   <Modules>
+    <Module Name="app_web_4m5vo2fg.dll">
+     <Namespaces>
+      <Namespace Name="">
+       <Types>
+        <Type Name="InvoiceAuditLog" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#ReprintInvoice(System.Data.DataTable,System.Data.DataTable,System.Data.DataTable)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="InvoiceAuditLog.aspx.cs" Line="437">Object 'memoryStream1' can be disposed more than once in method 'InvoiceAuditLog.ReprintInvoice(DataTable, DataTable, DataTable)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 437</Issue>
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="InvoiceAuditLog.aspx.cs" Line="443">Object 'sw' can be disposed more than once in method 'InvoiceAuditLog.ReprintInvoice(DataTable, DataTable, DataTable)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 443</Issue>
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="InvoiceAuditLog.aspx.cs" Line="444">Object 'this' can be disposed more than once in method 'InvoiceAuditLog.ReprintInvoice(DataTable, DataTable, DataTable)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 444</Issue>
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="InvoiceAuditLog.aspx.cs" Line="445">Object 'this' can be disposed more than once in method 'InvoiceAuditLog.ReprintInvoice(DataTable, DataTable, DataTable)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 445</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="MonthlyBilling" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#rdgCSEdit_Click(System.Object,System.EventArgs)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="MonthlyBilling.aspx.cs" Line="215">'MonthlyBilling.rdgCSEdit_Click(object, EventArgs)' rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+  <Target Name="C:\Users\ADMIN\AppData\Local\Temp\tmp5ABF.tmp.cadir\bin\App_Web_btmzkvuw.dll">
+   <Modules>
+    <Module Name="app_web_btmzkvuw.dll">
+     <Namespaces>
+      <Namespace Name="">
+       <Types>
+        <Type Name="FinancialTransactions" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#PopulateProductName()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="FinancialTransactions.aspx.cs" Line="793">Object 'conn' can be disposed more than once in method 'FinancialTransactions.PopulateProductName()'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 793</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+  <Target Name="C:\Users\ADMIN\AppData\Local\Temp\tmp5ABF.tmp.cadir\bin\App_Web_h1n5kpo1.dll">
+   <Modules>
+    <Module Name="app_web_h1n5kpo1.dll">
+     <Namespaces>
+      <Namespace Name="">
+       <Types>
+        <Type Name="AdHocInvoice" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#CabInv(System.Data.DataTable,System.Data.DataTable)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="AdHocInvoice.aspx.cs" Line="1844">Object 'memoryStream1' can be disposed more than once in method 'AdHocInvoice.CabInv(DataTable, DataTable)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 1844</Issue>
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="AdHocInvoice.aspx.cs" Line="1857">Object 'this' can be disposed more than once in method 'AdHocInvoice.CabInv(DataTable, DataTable)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 1857</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#DiningInv(System.Data.DataTable,System.Data.DataTable)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="AdHocInvoice.aspx.cs" Line="905">Object 'memoryStream1' can be disposed more than once in method 'AdHocInvoice.DiningInv(DataTable, DataTable)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 905</Issue>
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="AdHocInvoice.aspx.cs" Line="912">Object 'this' can be disposed more than once in method 'AdHocInvoice.DiningInv(DataTable, DataTable)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 912</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#MaintaningInv(System.Data.DataTable,System.Data.DataTable)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="AdHocInvoice.aspx.cs" Line="1375">Object 'memoryStream1' can be disposed more than once in method 'AdHocInvoice.MaintaningInv(DataTable, DataTable)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 1375</Issue>
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="AdHocInvoice.aspx.cs" Line="1383">Object 'this' can be disposed more than once in method 'AdHocInvoice.MaintaningInv(DataTable, DataTable)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 1383</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+  <Target Name="C:\Users\ADMIN\AppData\Local\Temp\tmp5ABF.tmp.cadir\bin\App_Web_ikfzoawd.dll">
+   <Modules>
+    <Module Name="app_web_ikfzoawd.dll">
+     <Namespaces>
+      <Namespace Name="">
+       <Types>
+        <Type Name="CalendarPendingTasks" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#CalCalendar()" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="CalendarPendingTasks.aspx.cs" Line="101">Object 'con' can be disposed more than once in method 'CalendarPendingTasks.CalCalendar()'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 101</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="DiningHealthCheck" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#LoadDiningDet()" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="DiningHealthCheck.aspx.cs" Line="119">'DiningHealthCheck.LoadDiningDet()' rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+  <Target Name="C:\Users\ADMIN\AppData\Local\Temp\tmp5ABF.tmp.cadir\bin\App_Web_jqjkxe5j.dll">
+   <Modules>
+    <Module Name="app_web_jqjkxe5j.dll">
+     <Namespaces>
+      <Namespace Name="">
+       <Types>
+        <Type Name="TransactionLevelInd" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#CreditNote(System.String,System.String,System.String,System.String,System.String)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="TransactionLevelInd.aspx.cs" Line="1142">Object 'objResponse.GetResponseStream()' can be disposed more than once in method 'TransactionLevelInd.CreditNote(string, string, string, string, string)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 1142</Issue>
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="TransactionLevelInd.aspx.cs" Line="1142">Object 'sr' can be disposed more than once in method 'TransactionLevelInd.CreditNote(string, string, string, string, string)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 1142</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+  <Target Name="C:\Users\ADMIN\AppData\Local\Temp\tmp5ABF.tmp.cadir\bin\App_Web_khflfh3m.dll">
+   <Modules>
+    <Module Name="app_web_khflfh3m.dll">
+     <Namespaces>
+      <Namespace Name="">
+       <Types>
+        <Type Name="WorkSchedule" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#btnMainbulkupdate_Click(System.Object,System.EventArgs)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="WorkSchedule.aspx.cs" Line="1206">'WorkSchedule.btnMainbulkupdate_Click(object, EventArgs)' rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+  <Target Name="C:\Users\ADMIN\AppData\Local\Temp\tmp5ABF.tmp.cadir\bin\App_Web_lcy0lydw.dll">
+   <Modules>
+    <Module Name="app_web_lcy0lydw.dll">
+     <Namespaces>
+      <Namespace Name="">
+       <Types>
+        <Type Name="KitchenCharts" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#BindChart()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="KitchenCharts.aspx.cs" Line="124">'KitchenCharts.BindChart()' rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+  <Target Name="C:\Users\ADMIN\AppData\Local\Temp\tmp5ABF.tmp.cadir\bin\App_Web_oq2v5oyz.dll">
+   <Modules>
+    <Module Name="app_web_oq2v5oyz.dll">
+     <Namespaces>
+      <Namespace Name="">
+       <Types>
+        <Type Name="SearchMenu" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#GetMenu(System.String)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="SearchMenu.aspx.cs" Line="50">Object 'conn' can be disposed more than once in method 'SearchMenu.GetMenu(string)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 50</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+  <Target Name="C:\Users\ADMIN\AppData\Local\Temp\tmp5ABF.tmp.cadir\bin\App_Web_t0kxnjff.dll">
+   <Modules>
+    <Module Name="app_web_t0kxnjff.dll">
+     <Namespaces>
+      <Namespace Name="">
+       <Types>
+        <Type Name="_Default" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#SendMail()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="ResidentAdd.aspx.cs" Line="284">The query string passed to 'SqlCommand.SqlCommand(string, SqlConnection)' in '_Default.SendMail()' could contain the following variables 'this.RTName.Text', 'this.ddlvillano.SelectedValue'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+  <Target Name="C:\Users\ADMIN\AppData\Local\Temp\tmp5ABF.tmp.cadir\bin\App_Web_u3tv2dbt.dll">
+   <Modules>
+    <Module Name="app_web_u3tv2dbt.dll">
+     <Namespaces>
+      <Namespace Name="">
+       <Types>
+        <Type Name="MonthEndBilling" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#AdminMail()" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="MonthEndBilling.aspx.cs" Line="1637">Object 'sw' can be disposed more than once in method 'MonthEndBilling.AdminMail()'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 1637</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#LocalSaving(System.Data.DataTable)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="MonthEndBilling.aspx.cs" Line="793">Object 'memoryStream1' can be disposed more than once in method 'MonthEndBilling.LocalSaving(DataTable)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 793</Issue>
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="MonthEndBilling.aspx.cs" Line="822">Object 'sw' can be disposed more than once in method 'MonthEndBilling.LocalSaving(DataTable)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 822</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#SendMail(System.Data.DataTable,System.Data.DataTable,System.Data.DataTable)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="MonthEndBilling.aspx.cs" Line="1015">Object 'memoryStream1' can be disposed more than once in method 'MonthEndBilling.SendMail(DataTable, DataTable, DataTable)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 1015</Issue>
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="MonthEndBilling.aspx.cs" Line="1017">Object 'sw' can be disposed more than once in method 'MonthEndBilling.SendMail(DataTable, DataTable, DataTable)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 1017</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#SendSA()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="MonthEndBilling.aspx.cs" Line="472">Object 'memoryStream' can be disposed more than once in method 'MonthEndBilling.SendSA()'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 472</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+  <Target Name="C:\Users\ADMIN\AppData\Local\Temp\tmp5ABF.tmp.cadir\bin\App_Web_vrwt24g2.dll">
+   <Modules>
+    <Module Name="app_web_vrwt24g2.dll">
+     <Namespaces>
+      <Namespace Name="">
+       <Types>
+        <Type Name="MailBilling" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#SendMail(System.Data.DataTable,System.Data.DataTable)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="MailBilling.aspx.cs" Line="847">Object 'memoryStream' can be disposed more than once in method 'MailBilling.SendMail(DataTable, DataTable)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 847</Issue>
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="MailBilling.aspx.cs" Line="847">Object 'sw' can be disposed more than once in method 'MailBilling.SendMail(DataTable, DataTable)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 847</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#SendSA()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="MailBilling.aspx.cs" Line="480">Object 'memoryStream' can be disposed more than once in method 'MailBilling.SendSA()'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 480</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="PreviewInvoice" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#Generate_PDF(System.Data.DataSet)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="PreviewInvoice.aspx.cs" Line="488">Object 'memoryStream1' can be disposed more than once in method 'PreviewInvoice.Generate_PDF(DataSet)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 488</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="VillaMaster" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#btnexcelimport_Click(System.Object,System.EventArgs)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="VillaMaster.aspx.cs" Line="750">Object 'dr' can be disposed more than once in method 'VillaMaster.btnexcelimport_Click(object, EventArgs)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 750</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+  <Target Name="C:\Users\ADMIN\AppData\Local\Temp\tmp5ABF.tmp.cadir\bin\App_Web_w40gjs0n.dll">
+   <Modules>
+    <Module Name="app_web_w40gjs0n.dll">
+     <Namespaces>
+      <Namespace Name="">
+       <Types>
+        <Type Name="PPlucsChart" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#DRPGROUP_SelectedIndexChanged(System.Object,System.EventArgs)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="PPlucsChart.aspx.cs" Line="172">'PPlucsChart.DRPGROUP_SelectedIndexChanged(object, EventArgs)' rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#Page_Load(System.Object,System.EventArgs)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="PPlucsChart.aspx.cs" Line="40">'PPlucsChart.Page_Load(object, EventArgs)' rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="TaskList" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#SentSMS()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="TaskList.aspx.cs" Line="429">Object 's' can be disposed more than once in method 'TaskList.SentSMS()'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 429</Issue>
+            </Message>
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="TaskList.aspx.cs" Line="431">The query string passed to 'SqlCommand.SqlCommand(string, SqlConnection)' in 'TaskList.SentSMS()' could contain the following variables 'dsCredential.Tables[0].Rows[i]["RSN"]'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#SentSMS(System.String,System.String)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2020-04-12 15:57:14Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="e:\Data\Balasubramani\Covaicare_ORIS\CovaiSoftService" File="TaskList.aspx.cs" Line="454">Object 's' can be disposed more than once in method 'TaskList.SentSMS(string, string)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 454</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+ </Targets>
+ <Rules>
+  <Rule TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202">
+   <Name>Do not dispose objects multiple times</Name>
+   <Description>A correctly implemented Dispose method can be called multiple times without throwing an exception. However, this is not guaranteed and to avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.</Description>
+   <Resolution Name="Default">Object {0} can be disposed more than once in method {1}. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 1857</Resolution>
+   <Owner>RuleOwner</Owner>
+   <Url>http://msdn.microsoft.com/library/ms182334.aspx</Url>
+   <Email />
+   <MessageLevel Certainty="75">Warning</MessageLevel>
+   <File Name="dataflowrules.dll" Version="16.0.0.0" />
+  </Rule>
+  <Rule TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200">
+   <Name>Rethrow to preserve stack details</Name>
+   <Description>Use the IL rethrow instruction to preserve original stack details when re-raising a caught exception.</Description>
+   <Resolution Name="Default">{0} rethrows a caught exception and specifies it explicitly as an argument. Use 'throw' without an argument instead, in order to preserve the stack location where the exception was initially raised.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182363.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="usagerules.dll" Version="16.0.0.0" />
+  </Rule>
+  <Rule TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100">
+   <Name>Review SQL queries for security vulnerabilities</Name>
+   <Description>A SQL command string built from user input is vulnerable to SQL injection attacks. Microsoft SQL Server and other database servers support stored procedures and parameterized SQL queries, which reduce the risk of injection attacks.</Description>
+   <Resolution Name="WithNonLiterals">The query string passed to {0} in {1} could contain the following variables {2}. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Resolution>
+   <Owner>RuleOwner</Owner>
+   <Url>http://msdn.microsoft.com/library/ms182310.aspx</Url>
+   <Email />
+   <MessageLevel Certainty="75">Warning</MessageLevel>
+   <File Name="dataflowrules.dll" Version="16.0.0.0" />
+  </Rule>
+  <Rule TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001">
+   <Name>Types that own disposable fields should be disposable</Name>
+   <Description>Types that declare disposable members should also implement IDisposable. If the type does not own any unmanaged resources, do not implement a finalizer on it.</Description>
+   <Resolution Name="DependsOnFix">Implement IDisposable on {0} because it creates members of the following IDisposable types: {1}. If {0} has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182172.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">CriticalError</MessageLevel>
+   <File Name="designrules.dll" Version="16.0.0.0" />
+  </Rule>
+ </Rules>
+ <Localized>
+  <String Key="Category">Category</String>
+  <String Key="Certainty">Certainty</String>
+  <String Key="CollapseAll">Collapse All</String>
+  <String Key="CheckId">Check Id</String>
+  <String Key="Error">Error</String>
+  <String Key="Errors">error(s)</String>
+  <String Key="ExpandAll">Expand All</String>
+  <String Key="Help">Help</String>
+  <String Key="Line">Line</String>
+  <String Key="Messages">message(s)</String>
+  <String Key="LocationNotStoredInPdb">[Location not stored in Pdb]</String>
+  <String Key="Project">Project</String>
+  <String Key="Resolution">Resolution</String>
+  <String Key="Rule">Rule</String>
+  <String Key="RuleFile">Rule File</String>
+  <String Key="RuleDescription">Rule Description</String>
+  <String Key="Source">Source</String>
+  <String Key="Status">Status</String>
+  <String Key="Target">Target</String>
+  <String Key="Warning">Warning</String>
+  <String Key="Warnings">warning(s)</String>
+  <String Key="ReportTitle">Code Analysis Report</String>
+ </Localized>
+</FxCopReport>

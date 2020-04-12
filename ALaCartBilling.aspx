@@ -24,30 +24,36 @@
 
         });
         function ConfirmMsg() {
-
             var result = confirm('Are you sure, you want to save?');
-
             if (result) {
-
-
                 return true;
             }
             else {
 
                 return false;
             }
-
         }
 
         function isNumberKey(evt) {
             var charCode = (evt.which) ? evt.which : event.keyCode
-
-
             if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
                 return false;
             }
             return true;
         }
+        //You can set the speed of flashing here
+        var speed = 500;
+        //Below method will create flashing effect with the help of Fade in and fade out effect
+        function effectFadeIn(classname) {
+            $("." + classname).fadeOut(speed).fadeIn(speed, effectFadeOut(classname))
+        }
+        function effectFadeOut(classname) {
+            $("." + classname).fadeIn(speed).fadeOut(speed, effectFadeIn(classname))
+        }
+        //Calling function on pageload
+        $(document).ready(function () {
+            effectFadeIn('flashingTextcss');
+        });
     </script>
     <style type="text/css">
         .RadGrid th.rgHeader {
@@ -97,6 +103,12 @@
             /*vertical-align: middle;*/
         }
     </style>
+    <style>
+        .auto-style1 {
+            width: 119px;
+        }
+
+    </style>
 
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
@@ -117,7 +129,6 @@
                 <ContentTemplate>
                     <div runat="server" style="width: 100%">
 
-
                         <table style="width: 100%;">
                             <tr>
                                 <td align="center">
@@ -131,13 +142,13 @@
                                 <td align="center">
 
                                     <telerik:RadWindow ID="rwDinCount" Width="820" Height="450" VisibleOnPageLoad="false" Title=""
-                                        runat="server" Modal="true">
+                                        runat="server" Modal="true" >
                                         <ContentTemplate>
 
                                             <div>
                                                 <table style="padding: 10px;" cellspacing="3px">
                                                     <tr>
-                                                        <td colspan="2">
+                                                        <td colspan="2" style="width: 62%">
                                                             <asp:Label ID="Label5" runat="server" Font-Names="verdana" ForeColor="Maroon" Font-Size="Medium" Font-Bold="true" Text="A La Carte Billing - Menu Item-Wise Split."></asp:Label>
                                                         </td>
                                                     </tr>
@@ -268,9 +279,9 @@
                                                                             <asp:SqlDataSource runat="server" ID="SqlDataSource1" ConnectionString='<%$ ConnectionStrings:CovaiSoft %>' SelectCommand="select convert(nvarchar(10),RTRSN) +', '+ RTVILLANO +', '+ RTName + ', ' + convert(nvarchar(10),RTRSN) as Customer,RTRSN from tblresident order by RTName asc"></asp:SqlDataSource>--%>
 
                                                                         <telerik:RadComboBox ID="cmbResident" runat="server" ForeColor="DarkBlue" AllowCustomText="true"
-                                                                            AutoPostBack="true" Font-Names="Arial" Font-Size="Small"
+                                                                            AutoPostBack="false" Font-Names="Arial" Font-Size="Small"
                                                                             Width="400px" ToolTip="" CssClass="form-control"
-                                                                            RenderMode="Lightweight" MarkFirstMatch="true" Filter="Contains" EmptyMessage="Type Resident Name/Door No. to search" OnSelectedIndexChanged="cmbResident_SelectedIndexChanged">
+                                                                            RenderMode="Lightweight" MarkFirstMatch="false" Filter="Contains" EmptyMessage="Type Resident Name/Door No. to search" OnSelectedIndexChanged="cmbResident_SelectedIndexChanged" CausesValidation="false">
                                                                         </telerik:RadComboBox>
 
                                                                         &nbsp;&nbsp;
@@ -453,9 +464,6 @@
 
                                         </tr>
 
-
-
-
                                     </table>
 
                                 </td>
@@ -480,12 +488,12 @@
                                             <td>
                                                 <table>
                                                     <tr>
-                                                        <td>
+                                                        <td class="auto-style1">
                                                             <asp:Button ID="lnkDinCount" runat="Server" Text="Item Split" CssClass="btn" BorderColor="#ff6600" BackColor="#ff6600" ForeColor="white" ToolTip="Show a pop-up of item-wise split for a given date range." Font-Names="Calibri" Font-Size="Medium" OnClick="lnkDinCount_Click" />
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>
+                                                        <td class="auto-style1">
                                                             <telerik:RadGrid ID="rgBookingameal" AutoGenerateColumns="false" runat="server">
                                                                 <MasterTableView>
                                                                     <Columns>
@@ -581,8 +589,14 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>
-                                                            <asp:Button ID="btnPreparetobill" runat="Server" Width="100px" Text="Save" ToolTip="Click here if the payment will be collected later." CssClass="btn btn-success" ForeColor="White" BackColor="Green" Font-Names="Calibri" Font-Size="Medium" OnClick="btnPreparetobill_Click" OnClientClick="javascript:return ConfirmPreparetobill()" Visible="false" />
+                                                        <td align="left" aria-multiline="True" style="width: 62%" >
+                                                            <asp:Label ID="lblPrompt" class="flashingTextcss" Visible="false" runat="server" Text="-" ForeColor="Green"
+                                                                Font-Names="verdana" Font-Size="Small">Please click save button, After completing selection</asp:Label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="auto-style1">
+                                                            <asp:Button ID="btnPreparetobill" runat="Server" Width="100px" Text="Save" ToolTip="Click here to confirm the payment" CssClass="btn btn-success" ForeColor="White" BackColor="Green" Font-Names="Calibri" Font-Size="Medium" OnClick="btnPreparetobill_Click" OnClientClick="javascript:return ConfirmPreparetobill()" Visible="false" />
                                                         </td>
                                                     </tr>
                                                 </table>

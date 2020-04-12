@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
-using System.Globalization;
-using System.Drawing;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
-using Excel = Microsoft.Office.Interop.Excel;
-using System.Runtime.InteropServices;
-using OfficeOpenXml;
-using System.IO;
 
 public partial class DailyFoodBillReport : System.Web.UI.Page
 {
@@ -59,7 +48,7 @@ public partial class DailyFoodBillReport : System.Web.UI.Page
         }
     }
 
-   
+
 
     protected void LoadResidentDet()
     {
@@ -157,10 +146,10 @@ public partial class DailyFoodBillReport : System.Web.UI.Page
                      new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.Decimal, Value = cmbResident.SelectedValue });
 
 
-                if (dsResidentdetails.Tables[0].Rows.Count >0)
+                if (dsResidentdetails.Tables[0].Rows.Count > 0)
                 {
-                    lblDoorNo.Text = dsResidentdetails.Tables[0].Rows[0]["rtvillano"].ToString(); 
-                    lblstatus.Text =  " ,"  + dsResidentdetails.Tables[0].Rows[0]["sdescription"].ToString();
+                    lblDoorNo.Text = dsResidentdetails.Tables[0].Rows[0]["rtvillano"].ToString();
+                    lblstatus.Text = " ," + dsResidentdetails.Tables[0].Rows[0]["sdescription"].ToString();
                     lblaccountname.Text = " ,Billed To:" + dsResidentdetails.Tables[0].Rows[0]["accountname"].ToString();
 
                 }
@@ -170,7 +159,7 @@ public partial class DailyFoodBillReport : System.Web.UI.Page
 
             }
 
-            
+
 
 
         }
@@ -248,7 +237,7 @@ public partial class DailyFoodBillReport : System.Web.UI.Page
                 else
                 {
                     Response.Redirect("Homemenu.aspx");
-                    WebMsgBox.Show("You have not permission to view resident module");
+                    WebMsgBox.Show("You have no permission to view resident module");
                 }
             }
             else
@@ -271,9 +260,9 @@ public partial class DailyFoodBillReport : System.Web.UI.Page
             DataSet dsDiningBills = sqlobj.ExecuteSP("SP_DiningBillsSummary",
                    new SqlParameter() { ParameterName = "@RTRSN", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.BigInt, Value = cmbResident.SelectedValue }
                    );
- 
 
-            if (dsDiningBills.Tables[0].Rows.Count >0)
+
+            if (dsDiningBills.Tables[0].Rows.Count > 0)
             {
                 rgDiningSummaryBills.DataSource = dsDiningBills;
                 rgDiningSummaryBills.DataBind();
@@ -287,7 +276,7 @@ public partial class DailyFoodBillReport : System.Web.UI.Page
 
             dsDiningBills.Dispose();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             WebMsgBox.Show(ex.Message);
         }
@@ -449,7 +438,7 @@ public partial class DailyFoodBillReport : System.Web.UI.Page
 
         try
         {
-            string strrsnfilter =cmbResident.SelectedItem.Text;
+            string strrsnfilter = cmbResident.SelectedItem.Text;
 
             if (cmbResident.SelectedValue != "0")
             {
@@ -501,9 +490,9 @@ public partial class DailyFoodBillReport : System.Web.UI.Page
         //           new SqlParameter() { ParameterName = "@ToDate", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.DateTime, Value = dtpuntildate.SelectedDate },
         //           new SqlParameter() { ParameterName = "@AcccountNo", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.NVarChar, Value = ddlAccountNumber.SelectedValue });
 
-       
 
-       
+
+
         if (cmbResident.SelectedValue == "0" && ddlAccountNumber.SelectedValue == "0")
         {
             dsStatementRPT = sqlobj.ExecuteSP("SP_GetStatementofAccount",
@@ -572,7 +561,7 @@ public partial class DailyFoodBillReport : System.Web.UI.Page
             }
             else
             {
-                 sFileName = "Statement of Account From " + sdate.ToString("dd/MM/yyyy") + " To " + edate.ToString("dd/MM/yyyy") + ".xls";
+                sFileName = "Statement of Account From " + sdate.ToString("dd/MM/yyyy") + " To " + edate.ToString("dd/MM/yyyy") + ".xls";
             }
 
             //string sFileName = "Statement of Account From " + sdate.ToString("dd/MM/yyyy") + " To " + edate.ToString("dd/MM/yyyy") + ".xls";
@@ -615,7 +604,7 @@ public partial class DailyFoodBillReport : System.Web.UI.Page
             {
                 Response.Write("<table><tr><td>Statement of Account From:" + sdate.ToString("dd/MM/yyyy") + "</td><td> To:" + edate.ToString("dd/MM/yyyy") + "</td></tr></table>");
             }
-           
+
             //Response.Write("<table><tr><td>Statement of Account</td><td> From :" + sdate.ToString("dd/MM/yyyy") + "</td><td> To :" + edate.ToString("dd/MM/yyyy") + "</td></tr></table>");
 
             // STYLE THE SHEET AND WRITE DATA TO IT.
@@ -644,7 +633,6 @@ public partial class DailyFoodBillReport : System.Web.UI.Page
 
     protected void RMKPlanner_ItemClick(object sender, RadMenuEventArgs e)
     {
-
 
         if (e.Item.Text == "Financial Transactions")
         {

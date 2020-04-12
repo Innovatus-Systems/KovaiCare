@@ -1,11 +1,10 @@
-﻿using System;
-using System.Data;
-using System.Configuration;
-
-using System.Data.Common;
+﻿using Microsoft.Practices.EnterpriseLibrary.Data;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
-using Microsoft.Practices.EnterpriseLibrary.Data;
 
 /// <summary>
 /// Summary description for SqlProcs
@@ -14,7 +13,7 @@ public class SqlProcsNew
 {
     clcommon objclcommon;
     Dictionary<String, DbParameter> InOutParameters;
-    private string conn = ConfigurationManager.ConnectionStrings["CovaiSoft"].ToString();
+    private string conn = ConfigurationManager.ConnectionStrings["constring"].ToString();
 
     //ClsIPMACAddress IpMac = new ClsIPMACAddress();
 
@@ -65,6 +64,7 @@ public class SqlProcsNew
     {
         clcommon objclcommon = new clcommon();
         Database db = DatabaseFactory.CreateDatabase("CovaiSoft");
+
         DataSet DS = new DataSet();
         DbCommand dbCommand = null;
 
@@ -78,7 +78,7 @@ public class SqlProcsNew
             }
             else if (objclcommon.databasetype().Trim() == "SQL")
             {
-                
+
                 dbCommand = db.GetStoredProcCommand(spName);
                 dbCommand.CommandTimeout = 120;
                 DS = db.ExecuteDataSet(dbCommand);
@@ -148,7 +148,7 @@ public class SqlProcsNew
     public int ExecuteNonQuery(string strQueryText)
     {
         clcommon objclcommon = new clcommon();
-        Database db = DatabaseFactory.CreateDatabase("CovaiSoft");
+        Database db = DatabaseFactory.CreateDatabase("covaisoft");
         DataSet DS = new DataSet();
         DbCommand dbCommand = null;
         int returnval = 0;
@@ -159,8 +159,6 @@ public class SqlProcsNew
             {
                 dbCommand = db.GetSqlStringCommand(strQueryText);
                 returnval = db.ExecuteNonQuery(dbCommand);
-
-
             }
 
             dbCommand.Parameters.Clear();
@@ -184,7 +182,7 @@ public class SqlProcsNew
     public DataSet ExecuteQuery(string strQuery)
     {
         clcommon objclcommon = new clcommon();
-        Database db = DatabaseFactory.CreateDatabase("CovaiSoft");
+        Database db = DatabaseFactory.CreateDatabase("constring");
         DataSet DS = new DataSet();
         DbCommand dbCommand = null;
 
@@ -219,7 +217,7 @@ public class SqlProcsNew
     public DataSet ExecuteSP(string spName, params DbParameter[] arguments)
     {
         clcommon objclcommon = new clcommon();
-        Database db = DatabaseFactory.CreateDatabase("CovaiSoft");
+        Database db = DatabaseFactory.CreateDatabase("constring");
         DataSet DS = new DataSet();
         DbCommand dbCommand = null;
 
@@ -269,7 +267,7 @@ public class SqlProcsNew
     public int ExecuteNonQuery(string spName, DbTransaction dbTran, params DbParameter[] arguments)
     {
         clcommon objclcommon = new clcommon();
-        Database db = DatabaseFactory.CreateDatabase("CovaiSoft");
+        Database db = DatabaseFactory.CreateDatabase("constring");
         DbCommand dbCommand = null;
         InOutParameters = new Dictionary<string, DbParameter>();
         try
@@ -308,7 +306,7 @@ public class SqlProcsNew
     public object ExecuteSP(int DataType, string spName, params DbParameter[] arguments)
     {
         clcommon objclcommon = new clcommon();
-        Database db = DatabaseFactory.CreateDatabase("CovaiSoft");
+        Database db = DatabaseFactory.CreateDatabase("constring");
         DataSet DS = new DataSet();
         System.Data.IDataReader DR = null;
         DbCommand dbCommand = null;
@@ -378,7 +376,7 @@ public class SqlProcsNew
     public int ExecuteNonQuery(string spName, params DbParameter[] arguments)
     {
         clcommon objclcommon = new clcommon();
-        Database db = DatabaseFactory.CreateDatabase("CovaiSoft");
+        Database db = DatabaseFactory.CreateDatabase("constring");
         DbCommand dbCommand = null;
         InOutParameters = new Dictionary<string, DbParameter>();
 
@@ -421,7 +419,7 @@ public class SqlProcsNew
         try
         {
             clcommon objclcommon = new clcommon();
-            Database db = DatabaseFactory.CreateDatabase("CovaiSoft");
+            Database db = DatabaseFactory.CreateDatabase("constring");
             DataSet DS = new DataSet();
             if (objclcommon.databasetype().Trim() == "ORACLE")
             {
@@ -450,7 +448,7 @@ public class SqlProcsNew
 
     public String GetSQLServerDate()
     {
-        String strConnection = ConfigurationManager.ConnectionStrings["CovaiSoft"].ConnectionString;
+        String strConnection = ConfigurationManager.ConnectionStrings["constring"].ConnectionString;
         SqlConnection connection = new SqlConnection(strConnection);
         connection.Open();
         SqlCommand com = new SqlCommand();

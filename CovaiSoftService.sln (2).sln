@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CovaiSoftService(3)", ".", "{94AC5E65-6820-4151-866B-15E718FE0D39}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CovaiSoftService", ".", "{94AC5E65-6820-4151-866B-15E718FE0D39}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.7.2"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_59678"
 		Debug.AspNetCompiler.PhysicalPath = "..\CovaiSoftService\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_59678\"
@@ -34,5 +34,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B51BB7AB-6EC9-4139-A546-279CC2BE833A}
 	EndGlobalSection
 EndGlobal

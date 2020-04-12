@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
+using System.Data.OleDb;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
-using System.Web;
+using System.Reflection;
+using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Telerik.Web.UI;
-using Excel = Microsoft.Office.Interop.Excel;
-using System.Runtime.InteropServices;
-using OfficeOpenXml;
-using System.IO;
-using System.Data.OleDb;
-using System.Text;
-using System.Reflection;
 
 public partial class VillaMaster : System.Web.UI.Page
 {
@@ -43,7 +37,7 @@ public partial class VillaMaster : System.Web.UI.Page
 
         if (!IsPostBack)
         {
-           
+
             LoadTitle();
             LoadUserGrid();
             LoadVillaStatus();
@@ -94,9 +88,9 @@ public partial class VillaMaster : System.Web.UI.Page
             DataSet dsTitle = sqlobj.ExecuteSP("SP_CHECKDOORNOCOUNT");
 
 
-            if (dsTitle.Tables[0].Rows.Count > 0 && dsTitle.Tables[1].Rows.Count >0)
+            if (dsTitle.Tables[0].Rows.Count > 0 && dsTitle.Tables[1].Rows.Count > 0)
             {
-               if(Convert.ToDecimal(dsTitle.Tables[0].Rows[0]["DOORNO"].ToString()) <= Convert.ToDecimal(dsTitle.Tables[1].Rows[0]["COUNTDOORNO"].ToString()))
+                if (Convert.ToDecimal(dsTitle.Tables[0].Rows[0]["DOORNO"].ToString()) <= Convert.ToDecimal(dsTitle.Tables[1].Rows[0]["COUNTDOORNO"].ToString()))
                 {
                     btnSave.Visible = false;
                 }
@@ -171,7 +165,7 @@ public partial class VillaMaster : System.Web.UI.Page
                     ddlType.SelectedValue = dsRes.Tables[0].Rows[0]["Type"].ToString();
                     ddlFloors.SelectedValue = dsRes.Tables[0].Rows[0]["Floor"].ToString();
                     txtdesc.Text = dsRes.Tables[0].Rows[0]["Description"].ToString();
-                    if (dsRes.Tables[0].Rows[0]["ConstructionYear"].ToString()=="0")
+                    if (dsRes.Tables[0].Rows[0]["ConstructionYear"].ToString() == "0")
                     {
                         txtConstructionYear.Text = "";
                     }
@@ -179,7 +173,7 @@ public partial class VillaMaster : System.Web.UI.Page
                     {
                         txtConstructionYear.Text = dsRes.Tables[0].Rows[0]["ConstructionYear"].ToString();
                     }
-                    
+
                     txtBlockName.Text = dsRes.Tables[0].Rows[0]["BlockName"].ToString();
                     ddlStatus.SelectedValue = dsRes.Tables[0].Rows[0]["status"].ToString();
                     txtcstatus.Text = dsRes.Tables[0].Rows[0]["status"].ToString();
@@ -350,7 +344,7 @@ public partial class VillaMaster : System.Web.UI.Page
 
             //if (CnfResult.Value == "true")
             //{
-            if(ddlStatus.SelectedValue=="99")
+            if (ddlStatus.SelectedValue == "99")
             {
                 ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please select Status and Try again.');", true);
                 return;
@@ -360,76 +354,76 @@ public partial class VillaMaster : System.Web.UI.Page
                 ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('Please Enter Door Number.');", true);
                 return;
             }
-                string strCstatus = ddlStatus.SelectedItem.Text;
+            string strCstatus = ddlStatus.SelectedItem.Text;
 
-                string status = "";
-
-
-                if (txtNewStatus.Text == "")
-                {
-                    status = txtcstatus.Text;
-                }
-                else
-                {
-                    status = txtNewStatus.Text;
-                }
-
-              
-                sqlobj.ExecuteSP("Proc_VillaMaster",
-                 new SqlParameter() { ParameterName = "@i", SqlDbType = SqlDbType.Int, Value = 2 },
-                 new SqlParameter() { ParameterName = "@RSN", SqlDbType = SqlDbType.BigInt, Value = hbtnRSN.Value },
-                 new SqlParameter() { ParameterName = "@DoorNo", SqlDbType = SqlDbType.NVarChar, Value = txtDoorno.Text },
-                 new SqlParameter() { ParameterName = "@Type", SqlDbType = SqlDbType.NVarChar, Value = ddlType.SelectedValue.ToString() },
-                 new SqlParameter() { ParameterName = "@Floor", SqlDbType = SqlDbType.NVarChar, Value = ddlFloors.SelectedValue.ToString() },
-                 new SqlParameter() { ParameterName = "@Description", SqlDbType = SqlDbType.NVarChar, Value = txtdesc.Text == "" ? null : txtdesc.Text },
-                 new SqlParameter() { ParameterName = "@status", SqlDbType = SqlDbType.NVarChar, Value = ddlStatus.SelectedValue },
-                 new SqlParameter() { ParameterName = "@ContructionYear", SqlDbType = SqlDbType.BigInt, Value = txtConstructionYear.Text == "" ? 0 : Convert.ToInt32(txtConstructionYear.Text) },
-                 new SqlParameter() { ParameterName = "@BlockName", SqlDbType = SqlDbType.NVarChar, Value = txtBlockName.Text },
-                 new SqlParameter() { ParameterName = "@SqrFt", SqlDbType = SqlDbType.NVarChar, Value = txtSqure.Text == "" ? null : txtSqure.Text }
-                 );
+            string status = "";
 
 
-
-                // -- UnAssigned
-
-                if (txtcstatus.Text == "Occupied" && ddlStatus.SelectedItem.Text == "Vacant")
-                {
-                    sqlobj.ExecuteSP("SP_UpdateDoorNo",
-                    new SqlParameter() { ParameterName = "@Mode", SqlDbType = SqlDbType.Int, Value = 1 },
-                    new SqlParameter() { ParameterName = "@OldStatus", SqlDbType = SqlDbType.NVarChar, Value = txtcstatus.Text },
-                    new SqlParameter() { ParameterName = "@NewStatus", SqlDbType = SqlDbType.NVarChar, Value = status.ToString() },
-                    new SqlParameter() { ParameterName = "@DoorNo", SqlDbType = SqlDbType.NVarChar, Value = txtDoorno.Text }
-                 );
-
-                }
-                else
-                {
+            if (txtNewStatus.Text == "")
+            {
+                status = txtcstatus.Text;
+            }
+            else
+            {
+                status = txtNewStatus.Text;
+            }
 
 
-                    if (txtNewStatus.Text != "")
-                    {
-
-                        if (txtcstatus.Text != txtNewStatus.Text)
-                        {
-
-                            sqlobj.ExecuteSP("SP_UpdateDoorNo",
-                        new SqlParameter() { ParameterName = "@Mode", SqlDbType = SqlDbType.Int, Value = 2 },
-                        new SqlParameter() { ParameterName = "@OldStatus", SqlDbType = SqlDbType.NVarChar, Value = txtcstatus.Text },
-                        new SqlParameter() { ParameterName = "@NewStatus", SqlDbType = SqlDbType.NVarChar, Value = status.ToString() },
-                        new SqlParameter() { ParameterName = "@DoorNo", SqlDbType = SqlDbType.NVarChar, Value = txtDoorno.Text });
-                        }
-                    }
-                }
-
-                Clear();
-                LoadUserGrid();
-                CHECKDOORNOCOUNT();
-                btnUpdate.Visible = false;
+            sqlobj.ExecuteSP("Proc_VillaMaster",
+             new SqlParameter() { ParameterName = "@i", SqlDbType = SqlDbType.Int, Value = 2 },
+             new SqlParameter() { ParameterName = "@RSN", SqlDbType = SqlDbType.BigInt, Value = hbtnRSN.Value },
+             new SqlParameter() { ParameterName = "@DoorNo", SqlDbType = SqlDbType.NVarChar, Value = txtDoorno.Text },
+             new SqlParameter() { ParameterName = "@Type", SqlDbType = SqlDbType.NVarChar, Value = ddlType.SelectedValue.ToString() },
+             new SqlParameter() { ParameterName = "@Floor", SqlDbType = SqlDbType.NVarChar, Value = ddlFloors.SelectedValue.ToString() },
+             new SqlParameter() { ParameterName = "@Description", SqlDbType = SqlDbType.NVarChar, Value = txtdesc.Text == "" ? null : txtdesc.Text },
+             new SqlParameter() { ParameterName = "@status", SqlDbType = SqlDbType.NVarChar, Value = ddlStatus.SelectedValue },
+             new SqlParameter() { ParameterName = "@ContructionYear", SqlDbType = SqlDbType.BigInt, Value = txtConstructionYear.Text == "" ? 0 : Convert.ToInt32(txtConstructionYear.Text) },
+             new SqlParameter() { ParameterName = "@BlockName", SqlDbType = SqlDbType.NVarChar, Value = txtBlockName.Text },
+             new SqlParameter() { ParameterName = "@SqrFt", SqlDbType = SqlDbType.NVarChar, Value = txtSqure.Text == "" ? null : txtSqure.Text }
+             );
 
 
-                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Alert", "alert('Villa details updated successfully');", true);
+
+            // -- UnAssigned
+
+            if (txtcstatus.Text == "Occupied" && ddlStatus.SelectedItem.Text == "Vacant")
+            {
+                sqlobj.ExecuteSP("SP_UpdateDoorNo",
+                new SqlParameter() { ParameterName = "@Mode", SqlDbType = SqlDbType.Int, Value = 1 },
+                new SqlParameter() { ParameterName = "@OldStatus", SqlDbType = SqlDbType.NVarChar, Value = txtcstatus.Text },
+                new SqlParameter() { ParameterName = "@NewStatus", SqlDbType = SqlDbType.NVarChar, Value = status.ToString() },
+                new SqlParameter() { ParameterName = "@DoorNo", SqlDbType = SqlDbType.NVarChar, Value = txtDoorno.Text }
+             );
 
             }
+            else
+            {
+
+
+                if (txtNewStatus.Text != "")
+                {
+
+                    if (txtcstatus.Text != txtNewStatus.Text)
+                    {
+
+                        sqlobj.ExecuteSP("SP_UpdateDoorNo",
+                    new SqlParameter() { ParameterName = "@Mode", SqlDbType = SqlDbType.Int, Value = 2 },
+                    new SqlParameter() { ParameterName = "@OldStatus", SqlDbType = SqlDbType.NVarChar, Value = txtcstatus.Text },
+                    new SqlParameter() { ParameterName = "@NewStatus", SqlDbType = SqlDbType.NVarChar, Value = status.ToString() },
+                    new SqlParameter() { ParameterName = "@DoorNo", SqlDbType = SqlDbType.NVarChar, Value = txtDoorno.Text });
+                    }
+                }
+            }
+
+            Clear();
+            LoadUserGrid();
+            CHECKDOORNOCOUNT();
+            btnUpdate.Visible = false;
+
+
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Alert", "alert('Villa details updated successfully');", true);
+
+        }
         //}
         catch (Exception ex)
         {

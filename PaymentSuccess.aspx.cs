@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using ClsPaymentGatewayDet;
+using iTextSharp.text;
+using iTextSharp.text.html.simpleparser;
+using iTextSharp.text.pdf;
+using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
-using iTextSharp.text;
-using iTextSharp.text.html;
-using iTextSharp.text.html.simpleparser;
-using iTextSharp.text.pdf;
-using System.Net;
-using ClsPaymentGatewayDet;
 
 public partial class PaymentSuccess : System.Web.UI.Page
 {
@@ -25,7 +18,7 @@ public partial class PaymentSuccess : System.Web.UI.Page
 
     string strProductName = "";
     string strBeforeBalance = "";
-    
+
     protected void Page_Load(object sender, EventArgs e)
     {
         try
@@ -48,7 +41,7 @@ public partial class PaymentSuccess : System.Web.UI.Page
                 string order_id = string.Empty;
                 string hash_seq = payDetails.GetAdminParamsDetails().Rows[0]["HashSequence"].ToString();
                 //"key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
-                
+
                 if (Request.Form["status"] == "success")
                 {
                     merc_hash_vars_seq = hash_seq.Split('|');
@@ -71,8 +64,8 @@ public partial class PaymentSuccess : System.Web.UI.Page
                         Session["NewBal"] = bal;
                         LblAmount.Text = "Rs." + Request.Form["Amount"];
                         LblNewBal.Text = "New Balance : Rs." + Math.Round(bal).ToString();
-                        double a = Math.Round(bal/10);
-                        LblGoodFor.Text = "Good for : " + a.ToString()+" CCC Ids";
+                        double a = Math.Round(bal / 10);
+                        LblGoodFor.Text = "Good for : " + a.ToString() + " CCC Ids";
                         //LblOldBalance.Text = Request.Form["udf5"];
                         LblTotAmt.Text = Math.Round(Convert.ToDouble(Request.Form["Amount"])).ToString();
                         LblServiceTax.Text = Request.Form["udf1"];
@@ -81,7 +74,7 @@ public partial class PaymentSuccess : System.Web.UI.Page
                         //LblNewBalance.Text = Math.Round(bal).ToString();
                         LblInvoiceNo.Text = Request.Form["Txnid"];
                         LblDate.Text = DateTime.Now.ToString("dd-MMM-yyyy ddd HH:mm") + " Hrs.";
-                        
+
                         DataSet dsDet = new DataSet();
                         dsDet = payDetails.GetData();
                         if (payDetails.billingDetails.Rows.Count > 0)
@@ -143,8 +136,8 @@ public partial class PaymentSuccess : System.Web.UI.Page
                     payDetails.MailBody += "<table><tr><td style=\"font-name:verdana;\" align='right'>Payment Date:" + LblDate.Text + "</td></tr></table><br/>";
                     payDetails.MailBody += "<table ><tr><td>After adjusting the taxes, the amount that will be credited to your account Rs" + strFinalAmt + "</td></tr></table><br/>";
                     payDetails.MailBody += "<table ><tr><td>New account balance is: Rs " + strBeforeBalance.ToString() + "</td></tr></table>";
-                    
-                    
+
+
                     //payDetails.MailBody += "<table ><tr><td>Greetings. We thank you for your continued patronage. Given below are the details of your account recharge.<br/><br/></td></tr></table><br/>";
                     //payDetails.MailBody += "<table ><tr><td>(All amount in Indian Rupees)</td></tr></table><br/>";
                     //payDetails.MailBody += "<table ><tr><td>Your account is now recharged for " + strFinalAmt.ToString() + "</td></tr></table>";
@@ -174,7 +167,7 @@ public partial class PaymentSuccess : System.Web.UI.Page
 
 
                     payDetails.MailBody += "<table><tr><td><span>For any clarifications, please contact us at info@innovatussystems.com or +91 422 2604370/9487104370 between 9AM to 6PM Mon to Fri.</span><br/></td></tr></table><br/>";
-                    
+
                     payDetails.MailBody += "<table><tr><td><span>Assuring our best services always.</span><br/></td></tr></table>";
 
 
@@ -185,15 +178,15 @@ public partial class PaymentSuccess : System.Web.UI.Page
                     else
                         payDetails.CreatedBy = Session["PayUser"].ToString();
                     payDetails.Senton = DateTime.Now.ToString("yyyy-MM-dd");
-                    if (Session["USERID"]!=null)
-                         payDetails.Sentby = Session["USERID"].ToString();
+                    if (Session["USERID"] != null)
+                        payDetails.Sentby = Session["USERID"].ToString();
                     else
                         payDetails.Sentby = Session["PayUser"].ToString();
 
                     payDetails.SendMail();
 
 
-                    string strMessage="Txn ID : "+LblInvoiceNo.Text+"\r\nDescription:"+strDescription+"\r\nRecharge Amt : "+strTotAmt+"\r\nService Tax : "+strSrvTax+"\r\nSwachhBharath CESS : "+strSBCess+"\r\nTotal Amount : "+strFinalAmt+"\r\n";
+                    string strMessage = "Txn ID : " + LblInvoiceNo.Text + "\r\nDescription:" + strDescription + "\r\nRecharge Amt : " + strTotAmt + "\r\nService Tax : " + strSrvTax + "\r\nSwachhBharath CESS : " + strSBCess + "\r\nTotal Amount : " + strFinalAmt + "\r\n";
 
                     //string contactno=payDetails.billingDetails.Rows[0]["CONTACTNO"].ToString();
                     payDetails.MobileNo = payDetails.billingDetails.Rows[0]["CONTACTNO"].ToString();
