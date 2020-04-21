@@ -69,7 +69,7 @@ public partial class BillingPeriods : System.Web.UI.Page
             }
             else
             {
-                sqlobj.ExecuteSQLNonQuery("SP_InsertBPeriodDtls",
+                sqlobj.ExecuteSQLNonQuery("SP_InsertInBillingPeriods",
                             new SqlParameter() { ParameterName = "@BPName", SqlDbType = SqlDbType.NVarChar, Value = txtBMonth.Text.ToString() },
                             new SqlParameter() { ParameterName = "@BPFrom", SqlDbType = SqlDbType.DateTime, Value = BPFrom.SelectedDate },
                             new SqlParameter() { ParameterName = "@BPTill", SqlDbType = SqlDbType.DateTime, Value = BPTill.SelectedDate },

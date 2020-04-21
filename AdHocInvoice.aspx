@@ -111,6 +111,25 @@
             color: white;
             font-weight: bold;
         }
+         .auto-style1 {
+             width: 599px;
+         }
+         .auto-style2 {
+             width: 594px;
+         }
+         .auto-style3 {
+             width: 611px;
+         }
+         .auto-style4 {
+             width: 5px;
+         }
+         .auto-style5 {
+             width: 550px;
+         }
+         .auto-style6 {
+             width: 550px;
+             height: 30px;
+         }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
@@ -139,10 +158,10 @@
                         <table style="width: 98%;">
                             <tr>
                                  
-                                <td style="width:65%">
-                               <table>
+                                <td class="auto-style3">
+                               <table class="auto-style6">
                                    <tr>
-                                       <td align="left">
+                                       <td align="left" class="auto-style5">
                                        
                                     <asp:Label ID="Label59" runat="server" Text="For which Resident?Search by" CssClass="style3" Font-Names="verdana" Font-Size="Small"></asp:Label>
                                 </td>
@@ -152,17 +171,18 @@
                     </td>--%>
                             </tr>
                             <tr>
-                                <td>                                                          
+                                <td class="auto-style5">                                                          
                                     <telerik:RadComboBox ID="cmbResident" runat="server" ForeColor="DarkBlue" AllowCustomText="true"
                                         AutoPostBack="true" Font-Names="Arial" Font-Size="Small"
                                         Width="400px" ToolTip="Type Resident Name/Door No. to search"
                                         RenderMode="Lightweight" MarkFirstMatch="true" Filter="Contains" EmptyMessage="Type Resident Name/Door No. to search" OnSelectedIndexChanged="cmbResident_SelectedIndexChanged">
                                     </telerik:RadComboBox>
+                                    <asp:CheckBox ID="chkRegenerate" runat="server" Text="Regenerate Prf. Inv. " ToolTip="Check to Regenarate Proforma Invoice" />
                                 </td>
-                               
+                                
                                 </tr>
                             <tr>
-                                <td>
+                                <td class="auto-style6">
                                     <div style="border: 1px thin maroon;">                                       
                                         <asp:Label ID="lblDrNo" runat="server" Font-Bold="false" Font-Names="verdana" ForeColor="DarkBlue" Text="-"></asp:Label>
                                         <asp:Label ID="lblSpace" runat="server" Font-Bold="false" Font-Names="verdana" ForeColor="Maroon" Text=" - "></asp:Label>
@@ -174,28 +194,29 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>
+                                <td class="auto-style5">
                                     <table>
                                         <tr>
-                                            <td>
-                                     <asp:Label ID="Label1" runat="server" Text="Select Inv. Type:" CssClass="style3" Font-Names="verdana" Font-Size="Small"></asp:Label>
+                                            <td class="auto-style9">
+                                                <asp:Label ID="Label1" runat="server" Text="Select Inv. Type:" CssClass="style3" Font-Names="verdana" Font-Size="Small"></asp:Label>
                                             </td>
-                                            <td>
+                                            <td class="auto-style2">
                                                 <table>
                                                    <tr>
-                                                       <td>
-                                                        <asp:DropDownList ID="drpService" CssClass="ddlstyle"  AutoPostBack="true" runat="server" OnSelectedIndexChanged="drpService_SelectedIndexChanged" ></asp:DropDownList>&nbsp;&nbsp;&nbsp;
-                                                 <asp:Button ID="btnSearch" runat="Server" Text="Search" CssClass="btn btn-success" OnClientClick="javascript:return Validation()"
-                                                    ToolTip="Click here to Search." ForeColor="White"  OnClick="btnSearch_Click" width="80" />&nbsp;&nbsp;&nbsp;
-                                                            <asp:Button ID="btnClear" runat="Server" Text="Refresh" CssClass="btn btn-primary" width="80"
-                                                    ToolTip="Click here to Clear selected data."  OnClick="btnClear_Click"  />
+                                                       <td class="auto-style4">
+                                                           <td><asp:DropDownList ID="drpService" CssClass="ddlstyle"  AutoPostBack="true" runat="server" OnSelectedIndexChanged="drpService_SelectedIndexChanged" ></asp:DropDownList>
+                                                        </td>   <td> <asp:Button ID="btnSearch" runat="Server" Text="Search" CssClass="btn btn-success" OnClientClick="javascript:return Validation()"
+                                                    ToolTip="Click here to Search." ForeColor="White"  OnClick="btnSearch_Click" width="68" /></td>     
+                                                           <td> <asp:Button ID="btnClear" runat="Server" Text="Refresh" CssClass="btn btn-primary" width="68"
+                                                    ToolTip="Click here to Clear selected data."  OnClick="btnClear_Click"  /></td>      
                                                        </td>
-                                                       <td align="Right">
-                                                           <asp:Button ID="btnPreviewInvoice" runat="Server" Text="Preview Invoice" CssClass="btn btn-primary" Width="120"
+                                                       
+                                                       <td align="Right" class="auto-style1">
+                                                           <asp:Button ID="btnPreviewInvoice" runat="Server" Text="Proforma Invoice" CssClass="btn btn-primary" Width="122"
                                                                ToolTip="Click here to Preview Invoice." ForeColor="White" OnClick="btnPreview_Click" OnClientClick="javascript:return ConfirmMsg()" />
                                                        </td>
-                                                       <td align="Right">
-                                                             <asp:Button ID="btnGenerate" runat="Server" Text="Generate Invoice" CssClass="btn btn-danger" width="120"
+                                                       <td align="Right" class="auto-style8">
+                                                             <asp:Button ID="btnGenerate" runat="Server" Text="Generate Invoice" CssClass="btn btn-danger" width="122"
                                                                ToolTip="Click here to Generate Invoice." ForeColor="White" OnClick="btnGenerate_Click" OnClientClick="javascript:return ConfirmMsg()" />
                                                        </td>
                                                           

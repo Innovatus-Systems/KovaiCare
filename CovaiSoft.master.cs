@@ -292,16 +292,21 @@ public partial class CovaiSoft : System.Web.UI.MasterPage
             dsGroup = sqlobj.ExecuteSP("SP_FetchBillingPeriods",
                 new SqlParameter() { ParameterName = "@IMODE", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Int, Value = 1 });
 
-            lblCurrBillPeriod.Text = "Billing Period: Current-" + dsGroup.Tables[1].Rows[0]["CurrentPeriod"].ToString() + "";
+          
             if (dsGroup.Tables[1].Rows.Count > 0)
-            { Session["CurrentBillingPeriod"] = dsGroup.Tables[1].Rows[0]["CurrentPeriod"].ToString(); }
-            else { Session["CurrentBillingPeriod"] = ""; }
+            { lblCurrBillPeriod.Text = "Billing Period: Current-" + dsGroup.Tables[1].Rows[0]["CurrentPeriod"].ToString() + "";
+                Session["CurrentBillingPeriod"] = dsGroup.Tables[1].Rows[0]["CurrentPeriod"].ToString(); }
+            else { Session["CurrentBillingPeriod"] = ""; lblCurrBillPeriod.Text = ""; }
           
 
             if (dsGroup.Tables[2].Rows.Count > 0)
             {
-
                 lblBilledPeriod.Text = "Previous-" + dsGroup.Tables[2].Rows[0]["BilledPeriod"].ToString();
+                if ((string)Session["CurrentBillingPeriod"] == "" && lblCurrBillPeriod.Text == "")
+                {
+                    Session["CurrentBillingPeriod"] = dsGroup.Tables[2].Rows[0]["BilledPeriod"].ToString();
+                    lblCurrBillPeriod.Text = Session["CurrentBillingPeriod"].ToString();
+                }
             }
 
             lblcomName.Text = dsGroup.Tables[3].Rows[0]["CommunityName"].ToString();

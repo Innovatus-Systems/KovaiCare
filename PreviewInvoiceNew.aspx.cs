@@ -1,4 +1,5 @@
 ﻿using iTextSharp.text;
+using iTextSharp.text.html.simpleparser;
 using iTextSharp.text.pdf;
 using System;
 using System.Configuration;
@@ -6,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Text;
+using System.Web;
 using Font = iTextSharp.text.Font;
 
 struct TblInvoiceFormat_B
@@ -114,9 +116,15 @@ public partial class PreviewInvoiceNew : System.Web.UI.Page
         get; set;
 
     }
+    private string Rgn1
+    {
+        get; set;
+
+    }
     protected void Page_Load(object sender, EventArgs e)
     {
         ResidentId1 = Request.QueryString["Resident"];
+        Rgn1 = Request.QueryString["Rgn"];
         lblPrompt.Visible = false;
         if (ResidentId1 != string.Empty)
         {
@@ -124,12 +132,11 @@ public partial class PreviewInvoiceNew : System.Web.UI.Page
             {
                 try
                 {
-                    DataSet dataset = GetDataSet1();
+                    DataSet dataset = GetDataSet1(Rgn1);
                     if (dataset != null)
                     {
                         lblPrompt.Visible = false;
                         Generate_PDF(dataset);
-
                     }
                     else { lblPrompt.Visible = true; }
                 }
@@ -140,9 +147,9 @@ public partial class PreviewInvoiceNew : System.Web.UI.Page
 
             }
         }
-
+     
     }
-    private DataSet GetDataSet1()
+    private DataSet GetDataSet1(string Rgn1)
     {
         BLNGPRD = Get_Month_Year();
         string conString = ConfigurationManager.ConnectionStrings["CovaiSoft"].ConnectionString;
@@ -158,15 +165,26 @@ public partial class PreviewInvoiceNew : System.Web.UI.Page
         cmd1.Parameters.Add(Prm1);
 
         Prm1 = cmd1.CreateParameter();
+
         Prm1.ParameterName = "@BLNGPRD";
         Prm1.Value = BLNGPRD;
+        Prm1.SqlDbType = SqlDbType.VarChar;
         cmd1.Parameters.Add(Prm1);
 
         Prm1 = cmd1.CreateParameter();
+
         Prm1.ParameterName = "@C_ID";
         Prm1.Value = Session["UserId"];
+        Prm1.SqlDbType = SqlDbType.VarChar;
         cmd1.Parameters.Add(Prm1);
 
+        Prm1 = cmd1.CreateParameter();
+
+        Prm1.ParameterName = "@Rgn1";
+        Prm1.Value = Rgn1;
+        Prm1.SqlDbType = SqlDbType.Char;
+        cmd1.Parameters.Add(Prm1);
+    
         Prm1 = cmd1.CreateParameter();
         Prm1.ParameterName = "@Message";
         Prm1.Value = string.Empty;
@@ -197,7 +215,9 @@ public partial class PreviewInvoiceNew : System.Web.UI.Page
         return DateTime1;
     }
 
-    private void Generate_PDF(DataSet Ds1)
+
+    [Obsolete]
+    private void Generate_PDF(DataSet Ds1, string Rgn1 = "")
     {
         try
         {
@@ -261,15 +281,53 @@ public partial class PreviewInvoiceNew : System.Web.UI.Page
                         { tblInvoiceFormat_A.PAN_NO = fieldValue; }
                     }
                 }
-
                 Document doc = new Document(PageSize.A4);
                 PdfPTable tableLayout = new PdfPTable(8);
                 string FileName1 = tblInvoiceFormat_A.BMonth + "_" + tblInvoiceFormat_A.NameOfResident + "MEB.pdf";
-                PdfWriter.GetInstance(doc, new FileStream(Server.MapPath(@"~\PDFDocuments\" + FileName1), FileMode.OpenOrCreate));
+             
+                if (Rgn1 == "0")
+                { PdfWriter.GetInstance(doc, new FileStream(Server.MapPath(@"~\PDFDocuments\" + FileName1), FileMode.OpenOrCreate)); }
+                else { PdfWriter.GetInstance(doc, new FileStream(Server.MapPath(@"~\PDFDocuments\" + FileName1), FileMode.Create)); }
                 doc.Open();
                 doc.Add(Add_Content_To_PDF(tableLayout, Ds1));
                 doc.Close();
-                //Process.Start(Server.MapPath(@"~\PDFDocuments\" + FileName1));
+
+                //   string FileName1 = invNo + "_" + Villa + "_" + Resident + "_" + NARATION + ".pdf";
+                //Document pdfDoc1 = new Document(PageSize.A4, 60f, 30f, 10f, 5f);
+                //  Document pdfDoc2 = new Document(PageSize.A4, 60f, 30f, 10f, 5f);
+                //HttpContext.Current.Response.Clear();
+                //HttpContext.Current.Response.ContentType = "application/pdf";
+                //HttpContext.Current.Response.AddHeader("content-disposition", "attachment;filename=" + FileName1 + "");
+                //HttpContext.Current.Response.Cache.SetCacheability(HttpCacheability.NoCache);
+                //HTMLWorker htmlparser1 = new HTMLWorker(pdfDoc1);
+                //HTMLWorker htmlparser2 = new HTMLWorker(doc);
+
+                //using (MemoryStream memoryStream1 = new MemoryStream())
+                //{
+
+                //    string replace = FileName1.Replace(@"/", "_");
+                //    PdfWriter writer2 = PdfWriter.GetInstance(pdfDoc2, new FileStream(@"F:\Dhinesh\Files" + @"\" + replace, FileMode.Create));
+                //    PdfWriter writer2 = PdfWriter.GetInstance(doc, Response.OutputStream);
+                //    PdfWriter writer1 = PdfWriter.GetInstance(pdfDoc1, memoryStream1);
+                //    pdfDoc1.Open();
+                //    writer1.PageEvent = new Footer();
+                //    htmlparser1.Parse(sr1);
+                //    pdfDoc1.Close();
+
+                //    doc.Open();
+                //    //writer2.PageEvent = new Footer();
+                //    htmlparser2.Parse(tableLayout);
+                //    doc.Close();
+
+                //    Response.Write(doc);
+                //    HttpContext.Current.Response.Flush();
+                //    byte[] bytes1 = memoryStream1.ToArray();
+                //    memoryStream1.Close();
+                //  //  File = replace;
+                //    //myMail.Attachments.Add(new Attachment(new MemoryStream(bytes1), FileName1));
+                //}
+
+
                 DownloadFile(@"~\PDFDocuments\" + FileName1);
             }
             else { WebMsgBox.Show("No Such data exists..."); }
@@ -356,18 +414,14 @@ public partial class PreviewInvoiceNew : System.Web.UI.Page
         Topaddress.Append(tblInvoiceFormat_A.CommunityName + Environment.NewLine + tblInvoiceFormat_A.CompanyAddress1 + Environment.NewLine + tblInvoiceFormat_A.CompanyAddress2 +
             Environment.NewLine + tblInvoiceFormat_A.GSTIn_UIN + tblInvoiceFormat_A.StateNameWithCode + Environment.NewLine + Environment.NewLine);
         AddCellToBody(tableLayout, Topaddress.ToString(), 7, AlignCell.TopLeft, 0, 35, FontStyles.Big);
-        AddCellToBody(tableLayout, string.Empty, 1, AlignCell.TopLeft, 0, 17);
-        AddCellToBody(tableLayout, string.Empty, 1, AlignCell.TopLeft, 0, 17);
-        AddCellToBody(tableLayout, string.Empty, 1, AlignCell.TopLeft, 0, 17);
-        AddCellToBody(tableLayout, string.Empty, 1, AlignCell.TopLeft, 0, 17);
-        AddCellToBody(tableLayout, "INVOICE", 4, AlignCell.MiddleLeft, 0, 17, FontStyles.BigBold);
+        AddCellToBody(tableLayout, "PROFORMA INVOICE", 8, AlignCell.MiddleCeter, 0, 17, FontStyles.BigBold);
 
         ResidentAddress.Append("To." + Environment.NewLine + Environment.NewLine + tblInvoiceFormat_A.VillaNo + " - " + tblInvoiceFormat_A.NameOfResident + "," + Environment.NewLine +
             tblInvoiceFormat_A.RTAddress1 + "," + Environment.NewLine + tblInvoiceFormat_A.CityName + ", " + tblInvoiceFormat_A.Pincode + "," + Environment.NewLine + "Mobile No. : " + tblInvoiceFormat_A.ContactcellNo +
             Environment.NewLine + "EMail ID : " + tblInvoiceFormat_A.ContactMail + ".");
 
         AddCellToBody(tableLayout, ResidentAddress.ToString(), 4, AlignCell.MiddleLeft, 1, 60);
-        AddCellToBody(tableLayout, "Invoice No." + Environment.NewLine + tblInvoiceFormat_A.InvoiceNo, 2, AlignCell.TopLeft, 1, 60);
+        AddCellToBody(tableLayout, "Proforma Invoice No." + Environment.NewLine + tblInvoiceFormat_A.InvoiceNo, 2, AlignCell.TopLeft, 1, 60);
         AddCellToBody(tableLayout, "Dated" + Environment.NewLine + tblInvoiceFormat_A.InvoiceDate, 2, AlignCell.TopLeft, 1, 60);
 
         AddCellToBody(tableLayout, "Sl.No.", 1, AlignCell.MiddleCeter, 1, 17);
@@ -504,7 +558,7 @@ public partial class PreviewInvoiceNew : System.Web.UI.Page
         AddCellToBody(tableLayout, "Branch & IFSC Code : ", 1, AlignCell.MiddleLeft, 0, 17);
         AddCellToBody(tableLayout, tblInvoiceFormat_A.BranchName.ToString() + " & " + tblInvoiceFormat_A.IFSCCode.ToString(), 2, AlignCell.MiddleLeft, 0, 17);
 
-        AddCellToBody(tableLayout, "Declaration : ", 2, AlignCell.MiddleLeft, 0, 17);
+        AddCellToBodyWithUL(tableLayout, "Declaration : ", 2, AlignCell.MiddleLeft, 0, 17);
         AddCellToBody(tableLayout, string.Empty, 1, AlignCell.MiddleRight, 0, 17);
         AddCellToBody(tableLayout, string.Empty, 1, AlignCell.MiddleRight, 0, 17);
         AddCellToBody(tableLayout, string.Empty, 1, AlignCell.MiddleRight, 0, 17);
@@ -512,9 +566,14 @@ public partial class PreviewInvoiceNew : System.Web.UI.Page
 
 
         AddCellToBody(tableLayout, "We declare that this Invoice shows the actual price of "
-            + "goods described and that all particulars are true and correct.", 5, AlignCell.MiddleLeft, 0, 17);
+            + "goods described and that all particulars are true and correct.", 8, AlignCell.MiddleLeft, 0, 17);
+        AddCellToBody(tableLayout, string.Empty, 8, AlignCell.MiddleRight, 0, 17);
 
-        AddCellToBody(tableLayout, "for Covai Senior Citizens Services Pvt. Ltd.,", 3, AlignCell.MiddleRight, 0, 17);
+        AddCellToBody(tableLayout, string.Empty, 1, AlignCell.MiddleRight, 0, 17);
+        AddCellToBody(tableLayout, string.Empty, 1, AlignCell.MiddleRight, 0, 17);
+        AddCellToBody(tableLayout, string.Empty, 1, AlignCell.MiddleRight, 0, 17);
+        AddCellToBody(tableLayout, string.Empty, 1, AlignCell.MiddleRight, 0, 17);
+        AddCellToBody(tableLayout, "for Covai Senior Citizens Services Pvt. Ltd.,", 4, AlignCell.MiddleRight, 0, 17);
 
         AddCellToBody(tableLayout, string.Empty, 8, AlignCell.MiddleRight, 0, 17);
         AddCellToBody(tableLayout, string.Empty, 8, AlignCell.MiddleRight, 0, 17);
@@ -522,6 +581,8 @@ public partial class PreviewInvoiceNew : System.Web.UI.Page
         AddCellToBody(tableLayout, string.Empty, 8, AlignCell.MiddleRight, 0, 17);
         AddCellToBody(tableLayout, string.Empty, 8, AlignCell.MiddleRight, 0, 17);
         AddCellToBody(tableLayout, "This is a Computer Generated Invoice", 8, AlignCell.MiddleCeter, 0, 17);
+
+
 
         return tableLayout;
     }
@@ -672,11 +733,8 @@ public partial class PreviewInvoiceNew : System.Web.UI.Page
         catch (Exception ex)
         { WebMsgBox.Show(ex.Message); }
 
-
     }
-
-
-    private static void AddCellToHeader(PdfPTable tableLayout, string cellText)
+    private static void AddCellToBodyWithUL(PdfPTable tableLayout, string cellText, byte CSpan, AlignCell alignCell, float BorderWidth, byte MinimumHeight, FontStyles Fs = FontStyles.Normal)
     {
         tableLayout.AddCell(new PdfPCell(new Phrase(cellText, new Font(Font.NORMAL, 8, 1, iTextSharp.text.BaseColor.BLACK)))
         {
@@ -684,7 +742,15 @@ public partial class PreviewInvoiceNew : System.Web.UI.Page
             HorizontalAlignment = Element.ALIGN_CENTER,
             Padding = 0,
             BackgroundColor = new iTextSharp.text.BaseColor(255, 255, 255),
-            BorderWidth = 0
+            BorderWidth = 0,
+            BorderColorBottom = BaseColor.BLACK,
+            Colspan = CSpan,
+            PaddingBottom = 1,
+            PaddingTop = 1,
+            PaddingLeft = 1,
+            PaddingRight = 1,
+            MinimumHeight = MinimumHeight,
+            BorderWidthBottom=1
         });
 
     }

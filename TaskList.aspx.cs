@@ -379,13 +379,14 @@ public partial class TaskList : System.Web.UI.Page
                    new SqlParameter() { ParameterName = "@Targetdate", SqlDbType = SqlDbType.DateTime, Value = dtpTargetDt.SelectedDate }
                    );
 
-                SentSMS();
+              
                 ClearTaskDet();
                 WebMsgBox.Show("Service Request details saved");
 
                 pnlSecond.Visible = false;
                 pnlThird.Visible = true;
                 BtnnExcelExport.Visible = true;
+                SentSMS();
             }
             catch (Exception ex)
             {
@@ -405,7 +406,7 @@ public partial class TaskList : System.Web.UI.Page
         //string constring = @"data source=111.118.188.128\SQLEXPRESS;initial catalog=CovaiSoft;persist security info=True;user id=cpc;password=C0vaipr0p";
         string constring = ConfigurationManager.AppSettings["constring"].ToString();
         SqlConnection conObj = new SqlConnection(constring);
-        SqlCommand cmd = new SqlCommand("SELECT * FROM SendSMS where status != 'NotSent'", conObj);
+        SqlCommand cmd = new SqlCommand("SELECT * FROM SendSMS where status = 'NotSent'", conObj);
         SqlDataAdapter da = new SqlDataAdapter(cmd);
         DataSet dsCredential = new DataSet();
         da.Fill(dsCredential);

@@ -5079,7 +5079,7 @@ public partial class FoodMenu : System.Web.UI.Page
                             new SqlParameter() { ParameterName = "@Date", SqlDbType = SqlDbType.DateTime, Value = sdate },
 
                             new SqlParameter() { ParameterName = "@RTRSN", SqlDbType = SqlDbType.BigInt, Value = iRTRSN.ToString() },
-                            new SqlParameter() { ParameterName = "@DiningRSN", SqlDbType = SqlDbType.BigInt, Value = null },
+                            new SqlParameter() { ParameterName = "@DiningRSN", SqlDbType = SqlDbType.BigInt, Value = 0 },
                             new SqlParameter() { ParameterName = "@MenuItemCode", SqlDbType = SqlDbType.NVarChar, Value = strItemCode.ToString() },
                             new SqlParameter() { ParameterName = "@Rate", SqlDbType = SqlDbType.Decimal, Value = dRate },
                             new SqlParameter() { ParameterName = "@Persons", SqlDbType = SqlDbType.Int, Value = ipersons },

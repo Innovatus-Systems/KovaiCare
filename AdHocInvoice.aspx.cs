@@ -2209,14 +2209,19 @@ public partial class AdHocInvoice : System.Web.UI.Page
     protected void btnPreview_Click(object sender, EventArgs e)
     {
 
-        if (cmbResident.SelectedValue.ToString() != "0")
+        if (cmbResident.SelectedIndex!=-1)
         {
-            { Response.Redirect("PreviewInvoiceNew.aspx?Resident=" + cmbResident.SelectedValue.ToString()); }
-
+            byte IsToRegenerate = 0;
+            if (chkRegenerate.Checked == true)
+            {
+                IsToRegenerate = 1;
+            }
+            else { IsToRegenerate = 0; }
+            Response.Redirect(String.Format("PreviewInvoiceNew.aspx?Resident={0}&Rgn={1}", cmbResident.SelectedValue.ToString(), IsToRegenerate));
         }
         else
         {
-            WebMsgBox.Show("No data exists for the selected Resident!");
+            WebMsgBox.Show("Please select the Resident!");
             return;
         }
 

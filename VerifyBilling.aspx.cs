@@ -120,8 +120,7 @@ public partial class VerifyBilling : System.Web.UI.Page
                     //GridDataItem row = (GridDataItem)lnkOpenProjBtn.NamingContainer;
                     AccCd = ditem.Cells[3].Text;
                     DInAmt = lnkRSN.Text.ToString();
-                    DataSet dsCount = sqlobj.ExecuteSP("CC_VerifyBilling",
-                       new SqlParameter() { ParameterName = "@IMode", SqlDbType = SqlDbType.Int, Value = 2 },
+                    DataSet dsCount = sqlobj.ExecuteSP("CC_VerifyBilling_1",
                        new SqlParameter() { ParameterName = "@AccCd", SqlDbType = SqlDbType.NVarChar, Value = AccCd },
                        new SqlParameter() { ParameterName = "@BMnth", SqlDbType = SqlDbType.NVarChar, Value = lblBMonth.Text }
                        );
@@ -141,6 +140,8 @@ public partial class VerifyBilling : System.Web.UI.Page
                     }
                     else
                     {
+                        rdDinCount.DataSource = null;
+                        rdDinCount.DataBind();
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('No Data for selected Resident.');", true);
                     }
                 }                   
@@ -216,8 +217,6 @@ public partial class VerifyBilling : System.Web.UI.Page
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alert", "alert('"+ex.Message.ToString()+"');", true);
         }
     }
-
-
 
     protected void btnReturn_Click(object sender, EventArgs e)
     {

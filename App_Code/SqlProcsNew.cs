@@ -225,8 +225,6 @@ public class SqlProcsNew
 
         try
         {
-
-
             if (objclcommon.databasetype().Trim() == "SQL")
             {
                 dbCommand = db.GetStoredProcCommand(spName);
@@ -264,6 +262,51 @@ public class SqlProcsNew
         }
     }
 
+    public DataTable ExecuteSP_DT(string spName, params DbParameter[] arguments)
+    {
+        Database db = DatabaseFactory.CreateDatabase("constring");
+        DbCommand dbCommand = null;
+        clcommon objclcommon = new clcommon();
+        InOutParameters = new Dictionary<string, DbParameter>();
+        DataTable Table1 = null;
+        DbDataReader Reader1 = null;
+        try
+        {
+            if (objclcommon.databasetype().Trim() == "SQL")
+            {
+                dbCommand = db.GetStoredProcCommand(spName);
+                for (int i = 0; i < arguments.Length; i++)
+                {
+                    dbCommand.Parameters.Add(arguments[i]);
+                }
+                dbCommand.CommandTimeout = 0;
+                Table1 = new DataTable();
+                dbCommand.Connection = db.CreateConnection();
+                dbCommand.Connection.Open();
+                Reader1 = dbCommand.ExecuteReader();
+                Table1.Load(Reader1);
+                Reader1.Close();
+                dbCommand.Connection.Close();
+               
+
+            }
+          
+        }
+        catch (Exception sqe)
+        {
+            throw new Exception(sqe.Message.ToString());
+         }
+        finally
+        {
+            objclcommon = null;
+            db = null;
+            Table1.Dispose();
+            Reader1.Dispose();
+            dbCommand.Dispose();
+
+        }
+        return Table1;
+    }
     public int ExecuteNonQuery(string spName, DbTransaction dbTran, params DbParameter[] arguments)
     {
         clcommon objclcommon = new clcommon();

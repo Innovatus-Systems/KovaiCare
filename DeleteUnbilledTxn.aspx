@@ -156,10 +156,11 @@
                             <tr>
                                 <td>                                                          
                                     <telerik:RadComboBox ID="cmbResident" runat="server" ForeColor="DarkBlue" AllowCustomText="true"
-                                        AutoPostBack="true" Font-Names="Arial" Font-Size="Small"
+                                        AutoPostBack="false" Font-Names="Arial" Font-Size="Small"
                                         Width="400px" ToolTip="Type Resident Name/Door No. to search"
                                         RenderMode="Lightweight" MarkFirstMatch="true" Filter="Contains" EmptyMessage="Type Resident Name/Door No. to search" OnSelectedIndexChanged="cmbResident_SelectedIndexChanged">
                                     </telerik:RadComboBox>
+                                   <%-- changed by bala on 8.4.2020--%>
                                 </td>
                                
                                 </tr>

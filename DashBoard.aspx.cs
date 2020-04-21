@@ -159,13 +159,21 @@ public partial class DashBoard : System.Web.UI.Page
         try
         {
 
+            //SqlProcsNew sqlobj = new SqlProcsNew();
+            //DataSet dsGroup = null;
+            //dsGroup = sqlobj.ExecuteSP_DT("SP_FetchDashboardDet",
+            //    new SqlParameter() { ParameterName = "@IMODE", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Int, Value = 1 });
+            //rdgResidentDet.DataSource = dsGroup.Tables[0];
+            //rdgResidentDet.DataBind();
+            //dsGroup.Dispose();
+
             SqlProcsNew sqlobj = new SqlProcsNew();
-            DataSet dsGroup = null;
-            dsGroup = sqlobj.ExecuteSP("SP_FetchDashboardDet",
+            DataTable dtGroup = null;
+            dtGroup = sqlobj.ExecuteSP_DT("SP_FetchDashboardDet",
                 new SqlParameter() { ParameterName = "@IMODE", Direction = ParameterDirection.Input, SqlDbType = SqlDbType.Int, Value = 1 });
-            rdgResidentDet.DataSource = dsGroup.Tables[0];
+            rdgResidentDet.DataSource = dtGroup;
             rdgResidentDet.DataBind();
-            dsGroup.Dispose();
+            dtGroup.Dispose();
         }
         catch (Exception ex)
         {
